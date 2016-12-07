@@ -240,3 +240,5 @@ ModelManifest.xml
 
 # FAKE - F# Make
 .fake/
+/src/Shipwreck.Phash.TestApp/*/*.bmp
+/src/Shipwreck.Phash.TestApp/*/*.jpg
