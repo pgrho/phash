@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
-namespace Shipwreck.Phash
+namespace Shipwreck.Phash.Imaging
 {
     public sealed class FloatImage
     {
