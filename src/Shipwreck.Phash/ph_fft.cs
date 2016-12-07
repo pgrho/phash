@@ -21,6 +21,7 @@ Evan Klinger - eklinger@phash.org
 David Starkweather - dstarkweather@phash.org
 
 */
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,65 +30,47 @@ using System.Threading.Tasks;
 
 namespace Shipwreck.Phash
 {
-    // ph_fft.h
+    public static class Fft
+    {
+        public static unsafe void fft_calc(int N, double* x, Complexd* X, Complexd* P, int step, Complexd* twids)
+        {
+            int k;
+            Complexd* S = P + N / 2;
+            if (N == 1)
+            {
+                X[0].re = x[0];
+                X[0].im = 0;
+                return;
+            }
 
-    //# ifndef _FFT_H
-    //#define _FFT_H
+            fft_calc(N / 2, x, S, X, 2 * step, twids);
+            fft_calc(N / 2, x + step, P, X, 2 * step, twids);
 
-    //#define PI 3.1415926535897932
+            for (k = 0; k < N / 2; k++)
+            {
+                P[k] = Complexd.mult_complex(P[k], twids[k * step]);
+                X[k] = Complexd.add_complex(S[k], P[k]);
+                X[k + N / 2] = Complexd.sub_complex(S[k], P[k]);
+            }
+        }
 
-    //# include <math.h>
-    //# include "phcomplex.h"
+        public static unsafe int fft(double* x, int N, Complexd* X)
+        {
+            var twiddle_factors = new Complexd[N / 2];
+            var Xt = new Complexd[N];
+            int k;
+            for (k = 0; k < N / 2; k++)
+            {
+                twiddle_factors[k] = Complexd.polar_to_complex(1.0, 2.0 * Math.PI * k / N);
+            }
 
-    //int fft(const double* x, const int N, Complexd* X);
+            fixed (Complexd* tfp = twiddle_factors)
+            fixed (Complexd* xtp = Xt)
+            {
+                fft_calc(N, x, X, xtp, 1, tfp);
+            }
 
-    //#endif
-
-    // ph_fft.c
-
-    //# include "ph_fft.h"
-
-
-    //void fft_calc(const int N, const double* x, Complexd* X, Complexd* P, const int step, const Complexd* twids)
-    //{
-    //    int k;
-    //    Complexd* S = P + N / 2;
-    //    if (N == 1)
-    //    {
-    //        X[0].re = x[0];
-    //        X[0].im = 0;
-    //        return;
-    //    }
-
-    //    fft_calc(N / 2, x, S, X, 2 * step, twids);
-    //    fft_calc(N / 2, x + step, P, X, 2 * step, twids);
-
-    //    for (k = 0; k < N / 2; k++)
-    //    {
-    //        P[k] = mult_complex(P[k], twids[k * step]);
-    //        X[k] = add_complex(S[k], P[k]);
-    //        X[k + N / 2] = sub_complex(S[k], P[k]);
-    //    }
-
-    //}
-
-
-    //int fft(const double* x, const int N, Complexd* X)
-    //{
-
-    //    Complexd* twiddle_factors = (Complexd*)malloc(sizeof(Complexd) * (N / 2));
-    //    Complexd* Xt = (Complexd*)malloc(sizeof(Complexd) * N);
-    //    int k;
-    //    for (k = 0; k < N / 2; k++)
-    //    {
-    //        twiddle_factors[k] = polar_to_complex(1.0, 2.0 * PI * k / N);
-    //    }
-    //    fft_calc(N, x, X, Xt, 1, twiddle_factors);
-
-    //    free(twiddle_factors);
-    //    free(Xt);
-
-    //    return 0;
-
-    //}
+            return 0;
+        }
+    }
 }

@@ -766,7 +766,7 @@ namespace Shipwreck.Phash
 
     //    for (int k = 0; k < N / 4 + 1; k++)
     //    {
-    //        double theta = k * cimg::PI / N;
+    //        double theta = k * cimg::Math.PI / N;
     //        double alpha = std::tan(theta);
     //        for (int x = 0; x < D; x++)
     //        {
@@ -787,7 +787,7 @@ namespace Shipwreck.Phash
     //    int j = 0;
     //    for (int k = 3 * N / 4; k < N; k++)
     //    {
-    //        double theta = k * cimg::PI / N;
+    //        double theta = k * cimg::Math.PI / N;
     //        double alpha = std::tan(theta);
     //        for (int x = 0; x < D; x++)
     //        {
@@ -875,7 +875,7 @@ namespace Shipwreck.Phash
     //        double sum = 0.0;
     //        for (int n = 0; n < N; n++)
     //        {
-    //            double temp = R[n] * Math.Cos((cimg::PI * (2 * n + 1) * k) / (2 * N));
+    //            double temp = R[n] * Math.Cos((cimg::Math.PI * (2 * n + 1) * k) / (2 * N));
     //            sum += temp;
     //        }
     //        if (k == 0)
@@ -1051,7 +1051,7 @@ namespace Shipwreck.Phash
     //    {
     //        for (int y = 1; y < N; y++)
     //        {
-    //            *ptr_matrix->data(x, y) = c1 * (float)Math.Cos((cimg::PI / 2 / N) * y * (2 * x + 1));
+    //            *ptr_matrix->data(x, y) = c1 * (float)Math.Cos((cimg::Math.PI / 2 / N) * y * (2 * x + 1));
     //        }
     //    }
     //    return ptr_matrix;
