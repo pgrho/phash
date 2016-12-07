@@ -875,7 +875,7 @@ namespace Shipwreck.Phash
     //        double sum = 0.0;
     //        for (int n = 0; n < N; n++)
     //        {
-    //            double temp = R[n] * cos((cimg::PI * (2 * n + 1) * k) / (2 * N));
+    //            double temp = R[n] * Math.Cos((cimg::PI * (2 * n + 1) * k) / (2 * N));
     //            sum += temp;
     //        }
     //        if (k == 0)
@@ -1051,7 +1051,7 @@ namespace Shipwreck.Phash
     //    {
     //        for (int y = 1; y < N; y++)
     //        {
-    //            *ptr_matrix->data(x, y) = c1 * (float)cos((cimg::PI / 2 / N) * y * (2 * x + 1));
+    //            *ptr_matrix->data(x, y) = c1 * (float)Math.Cos((cimg::PI / 2 / N) * y * (2 * x + 1));
     //        }
     //    }
     //    return ptr_matrix;

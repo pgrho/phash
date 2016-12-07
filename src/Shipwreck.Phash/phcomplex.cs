@@ -6,62 +6,39 @@ using System.Threading.Tasks;
 
 namespace Shipwreck.Phash
 {
-    // phcomplexd.h
+    // TODO Replace with System.Numerics.Complex
+    public struct Complexd
+    {
+        public double re;
+        public double im;
 
-    //# include <stdlib.h>
-    //# include <math.h>
-
-    //# ifndef _PH_COMPLEX_H
-    //#define _PH_COMPLEX_H
-
-    //typedef struct phcomplex
-    //{
-    //    double re;
-    //    double im;
-    //}
-    //Complexd;
-
-    //Complexd polar_to_complex(const double r, const double theta);
-
-    //Complexd add_complex(const Complexd a, const Complexd b);
-
-    //Complexd sub_complex(const Complexd a, const Complexd b);
-
-    //Complexd mult_complex(const Complexd a, const Complexd b);
-
-    //#endif
-
-
-    // phcomplexd.c
-
-    //# include "phcomplex.h"
-
-    //Complexd polar_to_complex(const double r, const double theta)
-    //{
-    //    Complexd result;
-    //    result.re = r * cos(theta);
-    //    result.im = r * sin(theta);
-    //    return result;
-    //}
-    //Complexd add_complex(const Complexd a, const Complexd b)
-    //{
-    //    Complexd result;
-    //    result.re = a.re + b.re;
-    //    result.im = a.im + b.im;
-    //    return result;
-    //}
-    //Complexd sub_complex(const Complexd a, const Complexd b)
-    //{
-    //    Complexd result;
-    //    result.re = a.re - b.re;
-    //    result.im = a.im - b.im;
-    //    return result;
-    //}
-    //Complexd mult_complex(const Complexd a, const Complexd b)
-    //{
-    //    Complexd result;
-    //    result.re = (a.re * b.re) - (a.im * b.im);
-    //    result.im = (a.re * b.im) + (a.im * b.re);
-    //    return result;
-    //} 
+        public static Complexd polar_to_complex(double r, double theta)
+        {
+            Complexd result;
+            result.re = r * Math.Cos(theta);
+            result.im = r * Math.Sin(theta);
+            return result;
+        }
+        public static Complexd add_complex(Complexd a, Complexd b)
+        {
+            Complexd result;
+            result.re = a.re + b.re;
+            result.im = a.im + b.im;
+            return result;
+        }
+        public static Complexd sub_complex(Complexd a, Complexd b)
+        {
+            Complexd result;
+            result.re = a.re - b.re;
+            result.im = a.im - b.im;
+            return result;
+        }
+        public static Complexd mult_complex(Complexd a, Complexd b)
+        {
+            Complexd result;
+            result.re = (a.re * b.re) - (a.im * b.im);
+            result.im = (a.re * b.im) + (a.im * b.re);
+            return result;
+        }
+    }
 }
