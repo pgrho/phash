@@ -9,54 +9,8 @@ using System.Windows.Media.Imaging;
 
 namespace Shipwreck.Phash.Imaging
 {
-    public sealed class ByteImage
+    public sealed partial class ByteImage
     {
-        private readonly int _Width;
-        private readonly int _Height;
-        private readonly byte[] _Data;
-
-        public ByteImage(int width, int height)
-        {
-            _Width = width;
-            _Height = height;
-            _Data = new byte[width * height];
-        }
-
-        public ByteImage(int width, int height, byte value)
-        {
-            _Width = width;
-            _Height = height;
-            _Data = new byte[width * height];
-            for (var i = 0; i < _Data.Length; i++)
-            {
-                _Data[i] = value;
-            }
-        }
-
-        public ByteImage(int width, int height, byte[] data)
-        {
-            _Width = width;
-            _Height = height;
-            _Data = data;
-        }
-
-        public int Width => _Width;
-        public int Height => _Height;
-
-        public byte this[int x, int y]
-        {
-            get
-            {
-                var i = x + y * _Width;
-                return _Data[i];
-            }
-            set
-            {
-                var i = x + y * _Width;
-                _Data[i] = value;
-            }
-        }
-
         public FloatImage Convolve(FloatImage k)
         {
             var kw = k.Width;
@@ -65,6 +19,7 @@ namespace Shipwreck.Phash.Imaging
             var kys = kh >> 1;
 
             var r = new FloatImage(_Width, _Height);
+            float total = k.Sum();
 
             for (var dy = 0; dy < _Height; dy++)
             {
@@ -94,11 +49,14 @@ namespace Shipwreck.Phash.Imaging
                         }
                     }
 
-                    r[dx, dy] = v / sum;
+                    r[dx, dy] = total == sum ? v : (v * total / sum);
                 }
             }
 
             return r;
         }
+
+        public FloatImage Blur(double sigma)
+            => Convolve(FloatImage.CreateGaussian(3, sigma));
     }
 }

@@ -42,17 +42,38 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Digest.cs" />
+    <Compile Include="Features.cs" />
     <Compile Include="Imaging\BitmapSourceExtensions.cs" />
     <Compile Include="Imaging\ByteImage.cs" />
     <Compile Include="dirent.cs" />
     <Compile Include="Imaging\FloatImage.cs" />
+    <Compile Include="Imaging\Generated Codes\Images.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Images.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Imaging\IArrayImage.cs" />
+    <Compile Include="Imaging\IImage.cs" />
+    <Compile Include="Imaging\ImageExtensions.cs" />
     <Compile Include="pHash.cs" />
     <Compile Include="phcomplex.cs" />
     <Compile Include="ph_fft.cs" />
+    <Compile Include="Projections.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Imaging\Generated Codes\Images.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Images.cs</LastGenOutput>
+      <LastOutputs>.\Images.cs</LastOutputs>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

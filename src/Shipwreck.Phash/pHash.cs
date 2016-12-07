@@ -22,6 +22,7 @@ D Grant Starkweather - dstarkweather@phash.org
 
 */
 
+using Shipwreck.Phash.Imaging;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -30,10 +31,23 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using Shipwreck.Phash.Imaging;
 
 namespace Shipwreck.Phash
 {
+    //typedef struct ph_hash_point
+    //{
+    //    ulong hash;
+    //    off_t index; /*pos of hash in orig file */
+    //}
+    //TxtHashPoint;
+
+    //typedef struct ph_match
+    //{
+    //    off_t first_index; /* offset into first file */
+    //    off_t second_index; /* offset into second file */
+    //    uint32_t length;    /*length of match between 2 files */
+    //}
+    //TxtMatch;
     public class pHash
     {
         // pHash.h
@@ -79,13 +93,16 @@ namespace Shipwreck.Phash
 
         //using namespace std;
 
-        //#define SQRT_TWO 1.4142135623730950488016887242097
+        private const double SQRT_TWO = 1.4142135623730950488016887242097;
 
         //#ifndef ULLONG_MAX
         //#define ULLONG_MAX 18446744073709551615ULL
         //#endif
 
-        //#define ROUNDING_FACTOR(x) (((x) >= 0) ? 0.5 : -0.5)
+        private static float ROUNDING_FACTOR(float x)
+            => x >= 0 ? 0.5f : -0.5f;
+        private static double ROUNDING_FACTOR(double x)
+            => x >= 0 ? 0.5 : -0.5;
 
         //#ifndef _WIN32
         //typedef unsigned _uint64 ulong;
@@ -160,58 +177,13 @@ namespace Shipwreck.Phash
         //BinHash* _ph_bmb_new(uint32_t bytelength);
         //void ph_bmb_free(BinHash* binHash);
 
-        // /*! /brief Radon Projection info
-        // */
-        //#ifdef HAVE_IMAGE_HASH
-        //typedef struct ph_projections
-        //{
-        //    CImg<byte>* R;           //contains projections of image of angled lines through center
-        //    int* nb_pix_perline;        //the head of int array denoting the number of pixels of each line
-        //    int size;                   //the size of nb_pix_perline
-        //}
-        //Projections;
-        //#endif
-
-        // /*! /brief feature vector info
-        // */
-        //typedef struct ph_feature_vector
-        //{
-        //    double* features;           //the head of the feature array of double's
-        //    int size;                   //the size of the feature array
-        //}
-        //Features;
-
-        // /*! /brief Digest info
-        // */
-        //typedef struct ph_digest
-        //{
-        //    char* id;                   //hash id
-        //    byte* coeffs;            //the head of the digest integer coefficient array
-        //    int size;                   //the size of the coeff array
-        //}
-        //Digest;
-
         ///* variables for textual hash */
-        //const int KgramLength = 50;
-        //const int WindowLength = 100;
-        //const int delta = 1;
+        private const int KgramLength = 50;
+
+        private const int WindowLength = 100;
+        private const int delta = 1;
 
         //#define ROTATELEFT(x, bits)  (((x)<<(bits)) | ((x)>>(64-bits)))
-
-        //typedef struct ph_hash_point
-        //{
-        //    ulong hash;
-        //    off_t index; /*pos of hash in orig file */
-        //}
-        //TxtHashPoint;
-
-        //typedef struct ph_match
-        //{
-        //    off_t first_index; /* offset into first file */
-        //    off_t second_index; /* offset into second file */
-        //    uint32_t length;    /*length of match between 2 files */
-        //}
-        //TxtMatch;
 
         //#ifdef HAVE_PTHREAD
         //int ph_num_threads();
@@ -231,89 +203,9 @@ namespace Shipwreck.Phash
         // */
         //const char* ph_about();
 
-        // /*! /brief radon function
-        // *  Find radon projections of N lines running through the image center for lines angled 0
-        // *  to 180 degrees from horizontal.
-        // *  /param img - CImg src image
-        // *  /param  N  - int number of angled lines to consider.
-        // *  /param  projs - (out) Projections struct
-        // *  /return int value - less than 0 for error
-        // */
-        //#ifdef HAVE_IMAGE_HASH
-        //int ph_radon_projections(const CImg<byte> &img, int N, Projections &projs);
 
-        // /*! /brief feature vector
-        // *         compute the feature vector from a radon projection map.
-        // *  /param  projs - Projections struct
-        // *  /param  fv    - (out) Features struct
-        // *  /return int value - less than 0 for error
-        //*/
-        //int ph_feature_vector(const Projections &projs, Features &fv);
 
-        // /*! /brief dct
-        // *  Compute the dct of a given vector
-        // *  /param R - vector of input series
-        // *  /param D - (out) the dct of R
-        // *  /return  int value - less than 0 for error
-        //*/
-        //int ph_dct(const Features &fv, Digest &digest);
 
-        // /*! /brief cross correlation for 2 series
-        // *  Compute the cross correlation of two series vectors
-        // *  /param x - Digest struct
-        // *  /param y - Digest struct
-        // *  /param pcc - double value the peak of cross correlation
-        // *  /param threshold - double value for the threshold value for which 2 images
-        // *                     are considered the same or different.
-        // *  /return - int value - 1 (true) for same, 0 (false) for different, < 0 for error
-        // */
-
-        //int ph_crosscorr(const Digest &x,const Digest &y, double &pcc, double threshold = 0.90);
-
-        // /*! /brief image digest
-        // *  Compute the image digest for an image given the input image
-        // *  /param img - CImg object representing an input image
-        // *  /param sigma - double value for the deviation for a gaussian filter function
-        // *  /param gamma - double value for gamma correction on the input image
-        // *  /param digest - (out) Digest struct
-        // *  /param N      - int value for the number of angles to consider.
-        // *  /return       - less than 0 for error
-        // */
-        //int _ph_image_digest(const CImg<byte> &img, double sigma, double gamma, Digest &digest, int N = 180);
-
-        // /*! /brief image digest
-        // *  Compute the image digest given the file name.
-        // *  /param file - string value for file name of input image.
-        // *  /param sigma - double value for the deviation for gaussian filter
-        // *  /param gamma - double value for gamma correction on the input image.
-        // *  /param digest - Digest struct
-        // *  /param N      - int value for number of angles to consider
-        // */
-        //int ph_image_digest(const char* file, double sigma, double gamma, Digest &digest, int N = 180);
-
-        // /*! /brief compare 2 images
-        // *  /param imA - CImg object of first image
-        // *  /param imB - CImg object of second image
-        // *  /param pcc   - (out) double value for peak of cross correlation
-        // *  /param sigma - double value for the deviation of gaussian filter
-        // *  /param gamma - double value for gamma correction of images
-        // *  /param N     - int number for the number of angles of radon projections
-        // *  /param theshold - double value for the threshold
-        // *  /return int 0 (false) for different images, 1 (true) for same image, less than 0 for error
-        // */
-        //int _ph_compare_images(const CImg<byte> &imA,const CImg<byte> &imB, double &pcc, double sigma = 3.5, double gamma = 1.0, int N = 180, double threshold = 0.90);
-
-        // /*! /brief compare 2 images
-        // *  Compare 2 images given the file names
-        // *  /param file1 - char string of first image file
-        // *  /param file2 - char string of second image file
-        // *  /param pcc   - (out) double value for peak of cross correlation
-        // *  /param sigma - double value for deviation of gaussian filter
-        // *  /param gamma - double value for gamma correction of images
-        // *  /param N     - int number for number of angles
-        // *  /return int 0 (false) for different image, 1 (true) for same images, less than 0 for error
-        // */
-        //int ph_compare_images(const char* file1, const char* file2, double &pcc, double sigma = 3.5, double gamma = 1.0, int N = 180, double threshold = 0.90);
 
 
         // /*! /brief compute dct robust image hash
@@ -322,7 +214,6 @@ namespace Shipwreck.Phash
         // *  /return int value - -1 for failure, 1 for success
         // */
         //int ph_dct_imagehash(const char* file, ulong &hash);
-
 
         //int ph_bmb_imagehash(const char* file, byte method, BinHash** ret_hash);
         //#endif
@@ -678,15 +569,13 @@ namespace Shipwreck.Phash
         //# ifdef HAVE_PTHREAD
         //# include <pthread.h>
 
-        int ph_num_threads()
+        private int ph_num_threads()
             => Environment.ProcessorCount;
 
         //#endif
 
-
-
-        const string phash_project = "{0}. Copyright 2008-2010 Aetilius, Inc.";
-        const string phash_version = "0";
+        private const string phash_project = "{0}. Copyright 2008-2010 Aetilius, Inc.";
+        private const string phash_version = "0";
 
         public string ph_about()
         {
@@ -701,250 +590,261 @@ namespace Shipwreck.Phash
         }
 
         //#ifdef HAVE_IMAGE_HASH
-        //int ph_radon_projections(const CImg<byte> &img, int N, Projections &projs)
-        //{
-        //    int width = img.width();
-        //    int height = img.height();
-        //    int D = (width > height) ? width : height;
-        //    float x_center = (float)width / 2;
-        //    float y_center = (float)height / 2;
-        //    int x_off = (int)std::floor(x_center + ROUNDING_FACTOR(x_center));
-        //    int y_off = (int)std::floor(y_center + ROUNDING_FACTOR(y_center));
 
-        //    projs.R = new CImg<byte>(N, D, 1, 1, 0);
-        //    projs.nb_pix_perline = (int*)calloc(N, sizeof(int));
+        /// <summary>
+        /// Find radon projections of N lines running through the image center for lines angled 0 to 180 degrees from horizontal.
+        /// </summary>
+        /// <param name="img">CImg src image</param>
+        /// <param name="N">int number of angled lines to consider.</param>
+        /// <returns>Projections struct</returns>
+        private static Projections ph_radon_projections(FloatImage img, int N)
+        {
+            int width = img.Width;
+            int height = img.Height;
+            int D = (width > height) ? width : height;
+            var x_center = width / 2f;
+            var y_center = height / 2f;
+            int x_off = (int)Math.Floor(x_center + ROUNDING_FACTOR(x_center));
+            int y_off = (int)Math.Floor(y_center + ROUNDING_FACTOR(y_center));
 
-        //    if (!projs.R || !projs.nb_pix_perline)
-        //        return EXIT_FAILURE;
+            var projs = new Projections();
+            projs.R = new FloatImage(N, D);
+            projs.nb_pix_perline = new int[N];
 
-        //    projs.size = N;
+            var ptr_radon_map = projs.R;
+            var nb_per_line = projs.nb_pix_perline;
 
-        //    CImg<byte>* ptr_radon_map = projs.R;
-        //    int* nb_per_line = projs.nb_pix_perline;
+            for (int k = 0; k < N / 4 + 1; k++)
+            {
+                double theta = k * Math.PI / N;
+                double alpha = Math.Tan(theta);
+                for (int x = 0; x < D; x++)
+                {
+                    double y = alpha * (x - x_off);
+                    int yd = (int)Math.Floor(y + ROUNDING_FACTOR(y));
+                    if ((yd + y_off >= 0) && (yd + y_off < height) && (x < width))
+                    {
+                        ptr_radon_map[k, x] = img[x, yd + y_off];
+                        nb_per_line[k] += 1;
+                    }
+                    if ((yd + x_off >= 0) && (yd + x_off < width) && (k != N / 4) && (x < height))
+                    {
+                        ptr_radon_map[N / 2 - k, x] = img[yd + x_off, x];
+                        nb_per_line[N / 2 - k] += 1;
+                    }
+                }
+            }
+            int j = 0;
+            for (int k = 3 * N / 4; k < N; k++)
+            {
+                double theta = k * Math.PI / N;
+                double alpha = Math.Tan(theta);
+                for (int x = 0; x < D; x++)
+                {
+                    double y = alpha * (x - x_off);
+                    int yd = (int)Math.Floor(y + ROUNDING_FACTOR(y));
+                    if ((yd + y_off >= 0) && (yd + y_off < height) && (x < width))
+                    {
+                        ptr_radon_map[k, x] = img[x, yd + y_off];
+                        nb_per_line[k] += 1;
+                    }
+                    if ((y_off - yd >= 0) && (y_off - yd < width) && (2 * y_off - x >= 0) && (2 * y_off - x < height) && (k != 3 * N / 4))
+                    {
+                        ptr_radon_map[k - j, x] = img[-yd + y_off, -(x - y_off) + y_off];
+                        nb_per_line[k - j] += 1;
+                    }
 
-        //    for (int k = 0; k < N / 4 + 1; k++)
-        //    {
-        //        double theta = k * cimg::Math.PI / N;
-        //        double alpha = std::tan(theta);
-        //        for (int x = 0; x < D; x++)
-        //        {
-        //            double y = alpha * (x - x_off);
-        //            int yd = (int)std::floor(y + ROUNDING_FACTOR(y));
-        //            if ((yd + y_off >= 0) && (yd + y_off < height) && (x < width))
-        //            {
-        //                *ptr_radon_map->data(k, x) = img(x, yd + y_off);
-        //                nb_per_line[k] += 1;
-        //            }
-        //            if ((yd + x_off >= 0) && (yd + x_off < width) && (k != N / 4) && (x < height))
-        //            {
-        //                *ptr_radon_map->data(N / 2 - k, x) = img(yd + x_off, x);
-        //                nb_per_line[N / 2 - k] += 1;
-        //            }
-        //        }
-        //    }
-        //    int j = 0;
-        //    for (int k = 3 * N / 4; k < N; k++)
-        //    {
-        //        double theta = k * cimg::Math.PI / N;
-        //        double alpha = std::tan(theta);
-        //        for (int x = 0; x < D; x++)
-        //        {
-        //            double y = alpha * (x - x_off);
-        //            int yd = (int)std::floor(y + ROUNDING_FACTOR(y));
-        //            if ((yd + y_off >= 0) && (yd + y_off < height) && (x < width))
-        //            {
-        //                *ptr_radon_map->data(k, x) = img(x, yd + y_off);
-        //                nb_per_line[k] += 1;
-        //            }
-        //            if ((y_off - yd >= 0) && (y_off - yd < width) && (2 * y_off - x >= 0) && (2 * y_off - x < height) && (k != 3 * N / 4))
-        //            {
-        //                *ptr_radon_map->data(k - j, x) = img(-yd + y_off, -(x - y_off) + y_off);
-        //                nb_per_line[k - j] += 1;
-        //            }
+                }
+                j += 2;
+            }
 
-        //        }
-        //        j += 2;
-        //    }
+            return projs;
+        }
 
-        //    return EXIT_SUCCESS;
+        /// <summary>
+        /// compute the feature vector from a radon projection map.
+        /// </summary>
+        /// <param name="projs">Projections struct</param>
+        /// <returns>Features struct</returns>
+        private static Features ph_feature_vector(Projections projs)
+        {
+            var ptr_map = projs.R;
+            var nb_perline = projs.nb_pix_perline;
+            int N = projs.nb_pix_perline.Length;
+            int D = ptr_map.Height;
 
-        //}
-        //int ph_feature_vector(const Projections &projs, Features &fv)
-        //{
-        //    CImg<byte>* ptr_map = projs.R;
-        //    CImg<byte> projection_map = *ptr_map;
-        //    int* nb_perline = projs.nb_pix_perline;
-        //    int N = projs.size;
-        //    int D = projection_map.height();
+            var fv = new Features();
+            fv.features = new double[N];
 
-        //    fv.features = (double*)malloc(N * sizeof(double));
-        //    fv.size = N;
-        //    if (!fv.features)
-        //        return EXIT_FAILURE;
+            var feat_v = fv.features;
+            double sum = 0.0;
+            double sum_sqd = 0.0;
+            for (int k = 0; k < N; k++)
+            {
+                double line_sum = 0.0;
+                double line_sum_sqd = 0.0;
+                int nb_pixels = nb_perline[k];
+                for (int i = 0; i < D; i++)
+                {
+                    line_sum += ptr_map[k, i];
+                    line_sum_sqd += ptr_map[k, i] * ptr_map[k, i];
+                }
+                feat_v[k] = (line_sum_sqd / nb_pixels) - (line_sum * line_sum) / (nb_pixels * nb_pixels);
+                sum += feat_v[k];
+                sum_sqd += feat_v[k] * feat_v[k];
+            }
+            double mean = sum / N;
+            double var = Math.Sqrt((sum_sqd / N) - (sum * sum) / (N * N));
 
-        //    double* feat_v = fv.features;
-        //    double sum = 0.0;
-        //    double sum_sqd = 0.0;
-        //    for (int k = 0; k < N; k++)
-        //    {
-        //        double line_sum = 0.0;
-        //        double line_sum_sqd = 0.0;
-        //        int nb_pixels = nb_perline[k];
-        //        for (int i = 0; i < D; i++)
-        //        {
-        //            line_sum += projection_map(k, i);
-        //            line_sum_sqd += projection_map(k, i) * projection_map(k, i);
-        //        }
-        //        feat_v[k] = (line_sum_sqd / nb_pixels) - (line_sum * line_sum) / (nb_pixels * nb_pixels);
-        //        sum += feat_v[k];
-        //        sum_sqd += feat_v[k] * feat_v[k];
-        //    }
-        //    double mean = sum / N;
-        //    double var = Math.Sqrt((sum_sqd / N) - (sum * sum) / (N * N));
+            for (int i = 0; i < N; i++)
+            {
+                feat_v[i] = (feat_v[i] - mean) / var;
+            }
 
-        //    for (int i = 0; i < N; i++)
-        //    {
-        //        feat_v[i] = (feat_v[i] - mean) / var;
-        //    }
+            return fv;
+        }
 
-        //    return EXIT_SUCCESS;
-        //}
-        //int ph_dct(const Features &fv, Digest &digest)
-        //{
-        //    int N = fv.size;
-        //    const int nb_coeffs = 40;
+        /// <summary>
+        /// Compute the dct of a given vector
+        /// </summary>
+        /// <param name="fv">vector of input series</param>
+        /// <returns>the dct of R</returns>
+        public static Digest ph_dct(Features fv)
+        {
+            var N = fv.features.Length;
+            const int nb_coeffs = 40;
 
-        //    digest.coeffs = (byte*)malloc(nb_coeffs * sizeof(byte));
-        //    if (!digest.coeffs)
-        //        return EXIT_FAILURE;
+            var digest = new Digest();
+            digest.coeffs = new byte[nb_coeffs];
 
-        //    digest.size = nb_coeffs;
+            var R = fv.features;
+            var D = digest.coeffs;
 
-        //    double* R = fv.features;
+            var D_temp = new double[nb_coeffs];
+            double max = 0.0;
+            double min = 0.0;
+            for (int k = 0; k < nb_coeffs; k++)
+            {
+                double sum = 0.0;
+                for (int n = 0; n < N; n++)
+                {
+                    double temp = R[n] * Math.Cos((Math.PI * (2 * n + 1) * k) / (2 * N));
+                    sum += temp;
+                }
+                if (k == 0)
+                {
+                    D_temp[k] = sum / Math.Sqrt((double)N);
+                }
+                else
+                {
+                    D_temp[k] = sum * SQRT_TWO / Math.Sqrt((double)N);
+                }
+                if (D_temp[k] > max)
+                {
+                    max = D_temp[k];
+                }
+                if (D_temp[k] < min)
+                {
+                    min = D_temp[k];
+                }
+            }
 
-        //    byte* D = digest.coeffs;
+            for (int i = 0; i < nb_coeffs; i++)
+            {
+                D[i] = (byte)(byte.MaxValue * (D_temp[i] - min) / (max - min));
+            }
 
-        //    double D_temp[nb_coeffs];
-        //    double max = 0.0;
-        //    double min = 0.0;
-        //    for (int k = 0; k < nb_coeffs; k++)
-        //    {
-        //        double sum = 0.0;
-        //        for (int n = 0; n < N; n++)
-        //        {
-        //            double temp = R[n] * Math.Cos((cimg::Math.PI * (2 * n + 1) * k) / (2 * N));
-        //            sum += temp;
-        //        }
-        //        if (k == 0)
-        //            D_temp[k] = sum / Math.Sqrt((double)N);
-        //        else
-        //            D_temp[k] = sum * SQRT_TWO / Math.Sqrt((double)N);
-        //        if (D_temp[k] > max)
-        //            max = D_temp[k];
-        //        if (D_temp[k] < min)
-        //            min = D_temp[k];
-        //    }
+            return digest;
+        }
 
-        //    for (int i = 0; i < nb_coeffs; i++)
-        //    {
-        //        D[i] = (byte)(UCHAR_MAX * (D_temp[i] - min) / (max - min));
+        /// <summary>
+        /// cross correlation for 2 series. Compute the cross correlation of two series vectors
+        /// </summary>
+        /// <param name="x">Digest struct</param>
+        /// <param name="y">Digest struct</param>
+        /// <param name="pcc">double value the peak of cross correlation</param>
+        /// <param name="threshold">double value for the threshold value for which 2 images are considered the same or different.</param>
+        /// <returns>int value - 1 (true) for same, 0 (false) for different, < 0 for error</returns>
+        public static int ph_crosscorr(Digest x, Digest y, out double pcc, double threshold = 0.9)
+        {
+            int N = y.coeffs.Length;
+            int result = 0;
 
-        //    }
+            var x_coeffs = x.coeffs;
+            var y_coeffs = y.coeffs;
 
-        //    return EXIT_SUCCESS;
-        //}
+            var r = new double[N];
+            var sumx = 0.0;
+            var sumy = 0.0;
+            for (int i = 0; i < N; i++)
+            {
+                sumx += x_coeffs[i];
+                sumy += y_coeffs[i];
+            }
+            double meanx = sumx / N;
+            double meany = sumy / N;
+            double max = 0;
+            for (int d = 0; d < N; d++)
+            {
+                double num = 0.0;
+                double denx = 0.0;
+                double deny = 0.0;
+                for (int i = 0; i < N; i++)
+                {
+                    num += (x_coeffs[i] - meanx) * (y_coeffs[(N + i - d) % N] - meany);
+                    denx += Math.Pow((x_coeffs[i] - meanx), 2);
+                    deny += Math.Pow((y_coeffs[(N + i - d) % N] - meany), 2);
+                }
+                r[d] = num / Math.Sqrt(denx * deny);
+                if (r[d] > max)
+                    max = r[d];
+            }
 
-        //int ph_crosscorr(const Digest &x,const Digest &y, double &pcc, double threshold)
-        //{
-        //    int N = y.size;
-        //    int result = 0;
+            pcc = max;
+            if (max > threshold)
+                result = 1;
 
-        //    byte* x_coeffs = x.coeffs;
-        //    byte* y_coeffs = y.coeffs;
-
-        //    double* r = new double[N];
-        //    double sumx = 0.0;
-        //    double sumy = 0.0;
-        //    for (int i = 0; i < N; i++)
-        //    {
-        //        sumx += x_coeffs[i];
-        //        sumy += y_coeffs[i];
-        //    }
-        //    double meanx = sumx / N;
-        //    double meany = sumy / N;
-        //    double max = 0;
-        //    for (int d = 0; d < N; d++)
-        //    {
-        //        double num = 0.0;
-        //        double denx = 0.0;
-        //        double deny = 0.0;
-        //        for (int i = 0; i < N; i++)
-        //        {
-        //            num += (x_coeffs[i] - meanx) * (y_coeffs[(N + i - d) % N] - meany);
-        //            denx += pow((x_coeffs[i] - meanx), 2);
-        //            deny += pow((y_coeffs[(N + i - d) % N] - meany), 2);
-        //        }
-        //        r[d] = num / Math.Sqrt(denx * deny);
-        //        if (r[d] > max)
-        //            max = r[d];
-        //    }
-        //    delete[] r;
-        //    pcc = max;
-        //    if (max > threshold)
-        //        result = 1;
-
-        //    return result;
-        //}
+            return result;
+        }
 
         //#ifdef max
         //#undef max
         //#endif
 
-        //int _ph_image_digest(const CImg<byte> &img, double sigma, double gamma, Digest &digest, int N)
-        //{
-        //    int result = EXIT_FAILURE;
-        //    CImg<byte> graysc;
-        //    if (img.spectrum() >= 3)
-        //    {
-        //        graysc = img.get_RGBtoYCbCr().channel(0);
-        //    }
-        //    else if (img.spectrum() == 1)
-        //    {
-        //        graysc = img;
-        //    }
-        //    else
-        //    {
-        //        return result;
-        //    }
 
-        //    graysc.blur((float)sigma);
+        // /*! /brief image digest
+        // *  Compute the image digest for an image given the input image
+        // *  /param img - CImg object representing an input image
+        // *  /param sigma - double value for the deviation for a gaussian filter function
+        // *  /param gamma - double value for gamma correction on the input image
+        // *  /param digest - (out) Digest struct
+        // *  /param N      - int value for the number of angles to consider.
+        // *  /return       - less than 0 for error
+        // */
+        private static Digest _ph_image_digest(ByteImage img, double sigma, double gamma, int N = 180)
+        {
+            var blurred = img.Blur(sigma);
 
-        //    (graysc / graysc.max()).pow(gamma);
+            blurred.DiviveInplace(blurred.Max());
+            blurred.ApplyGamma(gamma);
 
-        //    Projections projs;
-        //    if (ph_radon_projections(graysc, N, projs) < 0)
-        //        goto cleanup;
+            var projs = ph_radon_projections(blurred, N);
+            var features = ph_feature_vector(projs);
 
-        //    Features features;
-        //    if (ph_feature_vector(projs, features) < 0)
-        //        goto cleanup;
-
-        //    if (ph_dct(features, digest) < 0)
-        //        goto cleanup;
-
-        //    result = EXIT_SUCCESS;
-
-        //    cleanup:
-        //    free(projs.nb_pix_perline);
-        //    free(features.features);
-
-        //    delete projs.R;
-        //    return result;
-        //}
+            return ph_dct(features);
+        }
 
         //#define max(a,b) (((a)>(b))?(a):(b))
 
-        //int ph_image_digest(const char* file, double sigma, double gamma, Digest &digest, int N)
+        // /*! /brief image digest
+        // *  Compute the image digest given the file name.
+        // *  /param file - string value for file name of input image.
+        // *  /param sigma - double value for the deviation for gaussian filter
+        // *  /param gamma - double value for gamma correction on the input image.
+        // *  /param digest - Digest struct
+        // *  /param N      - int value for number of angles to consider
+        // */
+        //int ph_image_digest(const char* file, double sigma, double gamma, Digest digest, int N = 180)
         //{
         //    CImg<byte>* src = new CImg<byte>(file);
         //    int res = -1;
@@ -957,29 +857,42 @@ namespace Shipwreck.Phash
         //    return res;
         //}
 
-        //int _ph_compare_images(const CImg<byte> &imA,const CImg<byte> &imB, double &pcc, double sigma, double gamma, int N, double threshold)
-        //{
-        //    int result = 0;
-        //    Digest digestA;
-        //    if (_ph_image_digest(imA, sigma, gamma, digestA, N) < 0)
-        //        goto cleanup;
 
-        //    Digest digestB;
-        //    if (_ph_image_digest(imB, sigma, gamma, digestB, N) < 0)
-        //        goto cleanup;
 
-        //    if (ph_crosscorr(digestA, digestB, pcc, threshold) < 0)
-        //        goto cleanup;
+        // /*! /brief compare 2 images
+        // *  /param imA - CImg object of first image
+        // *  /param imB - CImg object of second image
+        // *  /param pcc   - (out) double value for peak of cross correlation
+        // *  /param sigma - double value for the deviation of gaussian filter
+        // *  /param gamma - double value for gamma correction of images
+        // *  /param N     - int number for the number of angles of radon projections
+        // *  /param theshold - double value for the threshold
+        // *  /return int 0 (false) for different images, 1 (true) for same image, less than 0 for error
+        // */
 
-        //    if (pcc > threshold)
-        //        result = 1;
 
-        //    cleanup:
+        public static bool _ph_compare_images(BitmapSource imA, BitmapSource imB, out double pcc, double sigma = 3.5, double gamma = 1.0, int N = 180, double threshold = 0.90)
+        {
+            Digest digestA = _ph_image_digest(imA.ToByteImageOfYOrB(), sigma, gamma, N);
 
-        //    free(digestA.coeffs);
-        //    free(digestB.coeffs);
-        //    return result;
-        //}
+            Digest digestB = _ph_image_digest(imB.ToByteImageOfYOrB(), sigma, gamma, N);
+
+            return ph_crosscorr(digestA, digestB, out pcc, threshold) >= 0;
+        }
+
+
+        // /*! /brief compare 2 images
+        // *  Compare 2 images given the file names
+        // *  /param file1 - char string of first image file
+        // *  /param file2 - char string of second image file
+        // *  /param pcc   - (out) double value for peak of cross correlation
+        // *  /param sigma - double value for deviation of gaussian filter
+        // *  /param gamma - double value for gamma correction of images
+        // *  /param N     - int number for number of angles
+        // *  /return int 0 (false) for different image, 1 (true) for same images, less than 0 for error
+        // */
+        //int ph_compare_images(const char* file1, const char* file2, double &pcc, double sigma = 3.5, double gamma = 1.0, int N = 180, double threshold = 0.90);
+
 
         //int ph_compare_images(const char* file1, const char* file2, double &pcc, double sigma, double gamma, int N, double threshold)
         //{
@@ -1011,6 +924,7 @@ namespace Shipwreck.Phash
             }
             return ptr_matrix;
         }
+
         //BinHash* _ph_bmb_new(uint32_t bytelength)
         //{
         //    BinHash* bh = (BinHash*)malloc(sizeof(BinHash));
@@ -1173,9 +1087,9 @@ namespace Shipwreck.Phash
         //}
 
         // /*! /
-        // *  /param 
-        // *  /param 
-        // *  /return 
+        // *  /param
+        // *  /param
+        // *  /return
         // */
 
         /// <summary>
@@ -1188,22 +1102,7 @@ namespace Shipwreck.Phash
         {
             var src = BitmapFrame.Create(file);
 
-            var meanFilter = new FloatImage(7, 7, 1);
-
-            FloatImage img;
-            if (src.Format == PixelFormats.BlackWhite
-                  || src.Format == PixelFormats.Gray2
-                  || src.Format == PixelFormats.Gray4
-                  || src.Format == PixelFormats.Gray8
-                  || src.Format == PixelFormats.Gray16
-                  || src.Format == PixelFormats.Gray32Float)
-            {
-                img = src.ToByteImage().Convolve(meanFilter);
-            }
-            else
-            {
-                img = src.ToByteImageOfY().Convolve(meanFilter);
-            }
+            var img = src.ToByteImageOfYOrB().Convolve(new FloatImage(7, 7, 1));
 
             var resized = img.Resize(32, 32);
             var C = ph_dct_matrix(32);
@@ -1691,15 +1590,15 @@ namespace Shipwreck.Phash
         //*/
         //CImg<float>* GetMHKernel(float alpha, float level)
         //{
-        //    int sigma = (int)(4 * pow((float)alpha, (float)level));
+        //    int sigma = (int)(4 * Math.Pow((float)alpha, (float)level));
         //    static CImg<float>* pkernel = null;
         //    float xpos, ypos, A;
         //    if (!pkernel)
         //    {
         //        pkernel = new CImg<float>(2 * sigma + 1, 2 * sigma + 1, 1, 1, 0);
         //        cimg_forXY(*pkernel, X, Y){
-        //            xpos = pow(alpha, -level) * (X - sigma);
-        //            ypos = pow(alpha, -level) * (Y - sigma);
+        //            xpos = Math.Pow(alpha, -level) * (X - sigma);
+        //            ypos = Math.Pow(alpha, -level) * (Y - sigma);
         //            A = xpos * xpos + ypos * ypos;
         //            pkernel->atXY(X, Y) = (2 - A) * exp(-A / 2);
         //        }

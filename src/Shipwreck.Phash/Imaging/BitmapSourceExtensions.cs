@@ -54,5 +54,13 @@ namespace Shipwreck.Phash.Imaging
 
             return r;
         }
+
+        public static ByteImage ToByteImageOfYOrB(this BitmapSource src)
+            => src.Format == PixelFormats.BlackWhite
+                  || src.Format == PixelFormats.Gray2
+                  || src.Format == PixelFormats.Gray4
+                  || src.Format == PixelFormats.Gray8
+                  || src.Format == PixelFormats.Gray16
+                  || src.Format == PixelFormats.Gray32Float ? src.ToByteImage() : src.ToByteImageOfY();
     }
 }
