@@ -765,46 +765,10 @@ namespace Shipwreck.Phash
         /// <param name="pcc">double value the peak of cross correlation</param>
         /// <param name="threshold">double value for the threshold value for which 2 images are considered the same or different.</param>
         /// <returns>int value - 1 (true) for same, 0 (false) for different, < 0 for error</returns>
-        public static int ph_crosscorr(Digest x, Digest y, out double pcc, double threshold = 0.9)
+        public static bool ph_crosscorr(Digest x, Digest y, out double pcc, double threshold = 0.9)
         {
-            int N = y.coeffs.Length;
-            int result = 0;
-
-            var x_coeffs = x.coeffs;
-            var y_coeffs = y.coeffs;
-
-            var r = new double[N];
-            var sumx = 0.0;
-            var sumy = 0.0;
-            for (int i = 0; i < N; i++)
-            {
-                sumx += x_coeffs[i];
-                sumy += y_coeffs[i];
-            }
-            double meanx = sumx / N;
-            double meany = sumy / N;
-            double max = 0;
-            for (int d = 0; d < N; d++)
-            {
-                double num = 0.0;
-                double denx = 0.0;
-                double deny = 0.0;
-                for (int i = 0; i < N; i++)
-                {
-                    num += (x_coeffs[i] - meanx) * (y_coeffs[(N + i - d) % N] - meany);
-                    denx += Math.Pow((x_coeffs[i] - meanx), 2);
-                    deny += Math.Pow((y_coeffs[(N + i - d) % N] - meany), 2);
-                }
-                r[d] = num / Math.Sqrt(denx * deny);
-                if (r[d] > max)
-                    max = r[d];
-            }
-
-            pcc = max;
-            if (max > threshold)
-                result = 1;
-
-            return result;
+            pcc = ImagePhash.GetCrossCorrelation(x, y);
+            return pcc > threshold;
         }
 
         //#ifdef max
@@ -812,52 +776,28 @@ namespace Shipwreck.Phash
         //#endif
 
 
-        // /*! /brief image digest
-        // *  Compute the image digest for an image given the input image
-        // *  /param img - CImg object representing an input image
-        // *  /param sigma - double value for the deviation for a gaussian filter function
-        // *  /param gamma - double value for gamma correction on the input image
-        // *  /param digest - (out) Digest struct
-        // *  /param N      - int value for the number of angles to consider.
-        // *  /return       - less than 0 for error
-        // */
-        private static Digest _ph_image_digest(ByteImage img, double sigma, double gamma, int N = 180)
+        /// <summary>
+        /// Compute the image digest for an image given the input image
+        /// </summary>
+        /// <param name="img">CImg object representing an input image</param>
+        /// <param name="sigma">double value for the deviation for a gaussian filter function</param>
+        /// <param name="gamma">double value for gamma correction on the input image</param>
+        /// <param name="numberOfAngles">int value for the number of angles to consider.</param>
+        /// <returns></returns>
+        internal static Digest _ph_image_digest(ByteImage img, double sigma, double gamma, int numberOfAngles = 180)
         {
             var blurred = img.Blur(sigma);
 
             blurred.DiviveInplace(blurred.Max());
             blurred.ApplyGamma(gamma);
 
-            var projs = ph_radon_projections(blurred, N);
+            var projs = ph_radon_projections(blurred, numberOfAngles);
             var features = ph_feature_vector(projs);
 
             return ph_dct(features);
         }
 
         //#define max(a,b) (((a)>(b))?(a):(b))
-
-        // /*! /brief image digest
-        // *  Compute the image digest given the file name.
-        // *  /param file - string value for file name of input image.
-        // *  /param sigma - double value for the deviation for gaussian filter
-        // *  /param gamma - double value for gamma correction on the input image.
-        // *  /param digest - Digest struct
-        // *  /param N      - int value for number of angles to consider
-        // */
-        //int ph_image_digest(const char* file, double sigma, double gamma, Digest digest, int N = 180)
-        //{
-        //    CImg<byte>* src = new CImg<byte>(file);
-        //    int res = -1;
-        //    if (src)
-        //    {
-        //        int result = _ph_image_digest(*src, sigma, gamma, digest, N);
-        //        delete src;
-        //        res = result;
-        //    }
-        //    return res;
-        //}
-
-
 
         // /*! /brief compare 2 images
         // *  /param imA - CImg object of first image
@@ -877,7 +817,7 @@ namespace Shipwreck.Phash
 
             Digest digestB = _ph_image_digest(imB.ToByteImageOfYOrB(), sigma, gamma, N);
 
-            return ph_crosscorr(digestA, digestB, out pcc, threshold) >= 0;
+            return ph_crosscorr(digestA, digestB, out pcc, threshold);
         }
 
 

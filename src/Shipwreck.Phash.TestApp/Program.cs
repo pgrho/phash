@@ -15,7 +15,7 @@ namespace Shipwreck.Phash.TestApp
         {
             var dirs = new string[] { "compr", "blur", "rotd", "misc" };
 
-            var hashes = new Dictionary<string, ulong>();
+            var hashes = new Dictionary<string, Digest>();
             using (var sw = new StreamWriter("result.html"))
             {
                 sw.WriteLine("<!DOCTYPE html>");
@@ -30,7 +30,7 @@ namespace Shipwreck.Phash.TestApp
                     {
                         using (var fs = fi.OpenRead())
                         {
-                            var hash = pHash.ph_dct_imagehash(fs);
+                            var hash = ImagePhash.GetDigest(fs);
 
                             Console.WriteLine(" - {0}: {1:X16}", fi.Name, hash);
 
@@ -51,12 +51,12 @@ namespace Shipwreck.Phash.TestApp
                                 sw.WriteLine("\" />");
 
                                 sw.Write("<p>");
-                                sw.Write(hash.ToString("X16"));
+                                sw.Write(hash.ToString());
                                 sw.WriteLine("</p>");
 
-                                foreach (var m in hashes.Select(kv => new { kv.Key, kv.Value, D = pHash.ph_hamming_distance(hash, kv.Value) }).OrderBy(_ => _.D))
+                                foreach (var m in hashes.Select(kv => new { kv.Key, kv.Value, D = ImagePhash.GetCrossCorrelation(hash, kv.Value) }).OrderBy(_ => _.D))
                                 {
-                                    Console.WriteLine(" - - {0}: {1:D2}", Path.GetFileName(m.Key), m.D);
+                                    Console.WriteLine(" - - {0}: {1}", Path.GetFileName(m.Key), m.D);
 
                                     sw.Write("<img width='64' height='64' src=\"");
                                     sw.Write(new Uri(m.Key));

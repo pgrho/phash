@@ -24,5 +24,16 @@ namespace Shipwreck.Phash
         /// the digest integer coefficient array
         /// </summary>
         public byte[] coeffs;
+
+        public override string ToString()
+        {
+            var sb = new StringBuilder(coeffs.Length * 2 + 2);
+            sb.Append("0x");
+            foreach (var b in coeffs)
+            {
+                sb.Append(b.ToString("X2"));
+            }
+            return sb.ToString();
+        }
     }
 }

@@ -44,6 +44,7 @@
   <ItemGroup>
     <Compile Include="Digest.cs" />
     <Compile Include="Features.cs" />
+    <Compile Include="ImagePhash.cs" />
     <Compile Include="Imaging\BitmapSourceExtensions.cs" />
     <Compile Include="Imaging\ByteImage.cs" />
     <Compile Include="dirent.cs" />
