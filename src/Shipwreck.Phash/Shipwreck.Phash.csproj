@@ -42,6 +42,9 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\Shipwreck.Phash.CrossCorrelation\CrossCorrelation.cs">
+      <Link>CrossCorrelation.cs</Link>
+    </Compile>
     <Compile Include="Digest.cs" />
     <Compile Include="Features.cs" />
     <Compile Include="ImagePhash.cs" />

@@ -335,44 +335,11 @@ namespace Shipwreck.Phash
         /// <param name="x">Digest struct</param>
         /// <param name="y">Digest struct</param>
         /// <returns>double value the peak of cross correlation</returns>
-        public static double GetCrossCorrelation(Digest x, Digest y) 
+        public static double GetCrossCorrelation(Digest x, Digest y)
             => GetCrossCorrelation(x.Coefficents, y.Coefficents);
 
-        public static double GetCrossCorrelation(byte[] x_coeffs, byte[] y_coeffs)
-        {
-            var N = x_coeffs.Length;
-             
-            var r = new double[N];
-            var sumx = 0.0;
-            var sumy = 0.0;
-            for (int i = 0; i < N; i++)
-            {
-                sumx += x_coeffs[i];
-                sumy += y_coeffs[i];
-            }
-            var meanx = sumx / N;
-            var meany = sumy / N;
-            var max = 0.0;
-            for (int d = 0; d < N; d++)
-            {
-                var num = 0.0;
-                var denx = 0.0;
-                var  deny = 0.0;
-                for (int i = 0; i < N; i++)
-                {
-                    num += (x_coeffs[i] - meanx) * (y_coeffs[(N + i - d) % N] - meany);
-                    denx += Math.Pow((x_coeffs[i] - meanx), 2);
-                    deny += Math.Pow((y_coeffs[(N + i - d) % N] - meany), 2);
-                }
-                r[d] = num / Math.Sqrt(denx * deny);
-                if (r[d] > max)
-                {
-                    max = r[d];
-                }
-            }
-
-            return max;
-        }
+        public static double GetCrossCorrelation(byte[] coefficients1, byte[] coefficients2)
+            => CrossCorrelation.GetCrossCorrelation(coefficients1, coefficients2);
 
         internal static FloatImage CreateMHKernel(float alpha, float level)
         {

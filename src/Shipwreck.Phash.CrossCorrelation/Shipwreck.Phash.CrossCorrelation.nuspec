@@ -1,0 +1,14 @@
+﻿<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>priHash CrossCorrelation</title>
+    <authors>shipwreck.jp</authors>
+    <owners>shipwreck.jp</owners>
+    <licenseUrl>http://www.gnu.org/licenses/</licenseUrl>
+    <projectUrl>https://github.com/pgrho/phash</projectUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>C# Implementation of phash-0.9.4 that provides Only GetCrossCorrelation functionality. Intended to be referenced from SQL CLR.</description>
+  </metadata>
+</package>
