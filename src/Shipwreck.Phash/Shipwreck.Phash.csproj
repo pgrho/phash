@@ -68,11 +68,11 @@
     <None Include="Shipwreck.Phash.nuspec" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Imaging\Generated Codes\Images.tt">
+    <None Include="Imaging\Generated Codes\Images.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>Images.cs</LastGenOutput>
       <LastOutputs>.\Images.cs</LastOutputs>
-    </Content>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
