@@ -1,0 +1,11 @@
+﻿<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>shipwreck.jp</authors>
+    <owners>shipwreck.jp</owners>
+    <description>Provides Stored Function Implementations for pHash Digests</description>
+  </metadata>
+</package>
