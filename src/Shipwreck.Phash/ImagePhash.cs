@@ -335,13 +335,13 @@ namespace Shipwreck.Phash
         /// <param name="x">Digest struct</param>
         /// <param name="y">Digest struct</param>
         /// <returns>double value the peak of cross correlation</returns>
-        public static double GetCrossCorrelation(Digest x, Digest y)
+        public static double GetCrossCorrelation(Digest x, Digest y) 
+            => GetCrossCorrelation(x.Coefficents, y.Coefficents);
+
+        public static double GetCrossCorrelation(byte[] x_coeffs, byte[] y_coeffs)
         {
-            var N = y.Coefficents.Length;
-
-            var x_coeffs = x.Coefficents;
-            var y_coeffs = y.Coefficents;
-
+            var N = x_coeffs.Length;
+             
             var r = new double[N];
             var sumx = 0.0;
             var sumy = 0.0;
@@ -350,14 +350,14 @@ namespace Shipwreck.Phash
                 sumx += x_coeffs[i];
                 sumy += y_coeffs[i];
             }
-            double meanx = sumx / N;
-            double meany = sumy / N;
-            double max = 0;
+            var meanx = sumx / N;
+            var meany = sumy / N;
+            var max = 0.0;
             for (int d = 0; d < N; d++)
             {
-                double num = 0.0;
-                double denx = 0.0;
-                double deny = 0.0;
+                var num = 0.0;
+                var denx = 0.0;
+                var  deny = 0.0;
                 for (int i = 0; i < N; i++)
                 {
                     num += (x_coeffs[i] - meanx) * (y_coeffs[(N + i - d) % N] - meany);

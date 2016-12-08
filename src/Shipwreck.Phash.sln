@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shipwreck.Phash", "Shipwrec
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shipwreck.Phash.TestApp", "Shipwreck.Phash.TestApp\Shipwreck.Phash.TestApp.csproj", "{DEBCF36D-A95A-48CA-ACF2-3ADDC5188E82}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shipwreck.Phash.Data", "Shipwreck.Phash.Data\Shipwreck.Phash.Data.csproj", "{32793FFE-10F6-45A9-879F-D9F3447A949C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{DEBCF36D-A95A-48CA-ACF2-3ADDC5188E82}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DEBCF36D-A95A-48CA-ACF2-3ADDC5188E82}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DEBCF36D-A95A-48CA-ACF2-3ADDC5188E82}.Release|Any CPU.Build.0 = Release|Any CPU
+		{32793FFE-10F6-45A9-879F-D9F3447A949C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32793FFE-10F6-45A9-879F-D9F3447A949C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32793FFE-10F6-45A9-879F-D9F3447A949C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32793FFE-10F6-45A9-879F-D9F3447A949C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
