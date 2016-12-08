@@ -18,6 +18,8 @@ namespace Shipwreck.Phash.Data
                 + ")\r\n"
                 + "RETURNS FLOAT\r\n"
                 + "BEGIN\r\n"
+                + "    IF @x IS NULL OR @y IS NULL\r\n"
+                + "        RETURN 0;"
                 + "    DECLARE @n INT, @i INT, @d INT;\r\n"
                 + "    SET @n = LEN(@x);\r\n"
                 + "    DECLARE @sumx FLOAT = 0;\r\n"
