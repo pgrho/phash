@@ -48,132 +48,62 @@ namespace Shipwreck.Phash
     //    uint32_t length;    /*length of match between 2 files */
     //}
     //TxtMatch;
+    //typedef struct ph_file_offset
+    //{
+    //    off_t offset;
+    //    byte fileno;
+    //}
+    //FileIndex;
+
+    ///* structure for a single hash */
+    //typedef struct ph_datapoint
+    //{
+    //    char* id;
+    //    void* hash;
+    //    float* path;
+    //    uint32_t hash_length;
+    //    byte hash_type;
+    //}
+    //DP;
+
+    //typedef struct ph_slice
+    //{
+    //    DP** hash_p;
+    //    int n;
+    //    void* hash_params;
+    //}
+    //slice;
+
+    //struct BinHash
+    //{
+    //    byte* hash;
+    //    uint32_t bytelength;
+    //    uint32_t byteidx; // used by addbit()
+    //    byte bitmask;  // used by addbit()
+
+    //    /*
+    //	 * add a single bit to hash. the bits are
+    //	 * written from left to right.
+    //	 */
+    //    int addbit(byte bit)
+    //    {
+    //        if (bitmask == 0)
+    //        {
+    //            bitmask = 128; // reset bitmask to "10000000"
+    //            byteidx++;     // jump to next byte in array
+    //        }
+
+    //        if (byteidx >= bytelength) return -1;
+
+    //        if (bit == 1) *(hash + byteidx) |= bitmask;
+    //        bitmask >>= 1;
+    //        return 0;
+    //    }
+    //};
+
+    [Obsolete]
     public class pHash
     {
-        // pHash.h
-
-        //#ifndef _PHASH_H
-        //#define _PHASH_H
-
-        //#ifndef _WIN32
-        //#include <pHash-config.h>
-        //#include <unistd.h>
-        //#include <sys/mman.h>
-        //#include <stdint.h>
-        //#endif
-
-        //#include <limits.h>
-        //#include <math.h>
-        //#include "dirent.h"
-        //#include <errno.h>
-        //#include <sys/types.h>
-        //#include <sys/stat.h>
-        //#include <fcntl.h>
-        //#include <string.h>
-        //#include <stdio.h>
-        //#include <stdlib.h>
-
-        //#define __STDC_CONSTANT_MACROS
-
-        //#if defined(HAVE_IMAGE_HASH) || defined(HAVE_VIDEO_HASH)
-        //#define cimg_debug 0
-        //#define cimg_display 0
-        //#include "CImg.h"
-        //using namespace cimg_library;
-        //#endif
-
-        //#ifdef HAVE_PTHREAD
-        //#include <pthread.h>
-        //#endif
-
-        //#if !defined(__GLIBC__) && !defined(_WIN32)
-        //#include <sys/param.h>
-        //#include <sys/sysctl.h>
-        //#endif
-
-        //using namespace std;
-
-        private const double SQRT_TWO = 1.4142135623730950488016887242097;
-
-        //#ifndef ULLONG_MAX
-        //#define ULLONG_MAX 18446744073709551615ULL
-        //#endif
-
-        private static float ROUNDING_FACTOR(float x)
-            => x >= 0 ? 0.5f : -0.5f;
-        private static double ROUNDING_FACTOR(double x)
-            => x >= 0 ? 0.5 : -0.5;
-
-        //#ifndef _WIN32
-        //typedef unsigned _uint64 ulong;
-        //typedef signed _int64 long64;
-        //#else
-        //typedef unsigned long long ulong;
-        //typedef signed long long long64;
-        //typedef unsigned char byte;
-        //typedef unsigned int uint32_t;
-        //#endif
-
-        //#ifdef __cplusplus
-        //extern "C" {
-        //#endif
-
-        //const int MaxFileSize = (1 << 30); /* 1GB file size limit (for mvp files) */
-        //const off_t HeaderSize = 64;     /* header size for mvp file */
-
-        //typedef struct ph_file_offset
-        //{
-        //    off_t offset;
-        //    byte fileno;
-        //}
-        //FileIndex;
-
-        ///* structure for a single hash */
-        //typedef struct ph_datapoint
-        //{
-        //    char* id;
-        //    void* hash;
-        //    float* path;
-        //    uint32_t hash_length;
-        //    byte hash_type;
-        //}
-        //DP;
-
-        //typedef struct ph_slice
-        //{
-        //    DP** hash_p;
-        //    int n;
-        //    void* hash_params;
-        //}
-        //slice;
-
-        //struct BinHash
-        //{
-        //    byte* hash;
-        //    uint32_t bytelength;
-        //    uint32_t byteidx; // used by addbit()
-        //    byte bitmask;  // used by addbit()
-
-        //    /*
-        //	 * add a single bit to hash. the bits are
-        //	 * written from left to right.
-        //	 */
-        //    int addbit(byte bit)
-        //    {
-        //        if (bitmask == 0)
-        //        {
-        //            bitmask = 128; // reset bitmask to "10000000"
-        //            byteidx++;     // jump to next byte in array
-        //        }
-
-        //        if (byteidx >= bytelength) return -1;
-
-        //        if (bit == 1) *(hash + byteidx) |= bitmask;
-        //        bitmask >>= 1;
-        //        return 0;
-        //    }
-        //};
-
         //BinHash* _ph_bmb_new(uint32_t bytelength);
         //void ph_bmb_free(BinHash* binHash);
 
@@ -185,10 +115,6 @@ namespace Shipwreck.Phash
 
         //#define ROTATELEFT(x, bits)  (((x)<<(bits)) | ((x)>>(64-bits)))
 
-        //#ifdef HAVE_PTHREAD
-        //int ph_num_threads();
-        //#endif
-
         ///* /brief alloc a single data point
         // *  allocates path array, does nto set id or path
         // */
@@ -198,13 +124,6 @@ namespace Shipwreck.Phash
         // *
         // */
         //void ph_free_datapoint(DP* dp);
-
-        // /*! /brief copyright information
-        // */
-        //const char* ph_about();
-
-
-
 
 
 
@@ -218,19 +137,7 @@ namespace Shipwreck.Phash
         //int ph_bmb_imagehash(const char* file, byte method, BinHash** ret_hash);
         //#endif
 
-        //#ifdef HAVE_PTHREAD
-        //DP** ph_dct_image_hashes(char* files[], int count, int threads = 0);
-        //#endif
 
-        //#ifdef HAVE_VIDEO_HASH
-        //static CImgList<byte>* ph_getKeyFramesFromVideo(const char* filename);
-
-        //ulong* ph_dct_videohash(const char* filename, int &Length);
-
-        //DP** ph_dct_video_hashes(char* files[], int count, int threads = 0);
-
-        //double ph_dct_videohash_dist(ulong* hashA, int N1, ulong* hashB, int N2, int threshold = 21);
-        //#endif
 
         ///* ! /brief dct video robust hash
         // *   Compute video hash based on the dct of normalized video 32x32x64 cube
@@ -241,33 +148,8 @@ namespace Shipwreck.Phash
         //#ifdef HAVE_IMAGE_HASH
         //int ph_hamming_distance(const ulong hash1,const ulong hash2);
 
-        ///** /brief create a list of datapoint's directly from a directory of image files
-        // *  /param dirname - path and name of directory containg all image file names
-        // *  /param capacity - int value for upper limit on number of hashes
-        // *  /param count - number of hashes created (out param)
-        // *  /return pointer to a list of DP pointers (null for error)
-        // */
-
-        //DP** ph_read_imagehashes(const char* dirname, int capacity, int &count);
-
-        ///** /brief create MH image hash for filename image
-        //*   /param filename - string name of image file
-        //*   /param N - (out) int value for length of image hash returned
-        //*   /param alpha - int scale factor for marr wavelet (default=2)
-        //*   /param lvl   - int level of scale factor (default = 1)
-        //*   /return byte array
-        //**/
-        //byte* ph_mh_imagehash(const char* filename, int &N, float alpha = 2.0f, float lvl = 1.0f);
         //#endif
 
-        ///** /brief get all the filenames in specified directory
-        // *  /param dirname - string value for path and filename
-        // *  /param cap - int value for upper limit to number of files
-        // *  /param count - int value for number of file names returned
-        // *  /return array of pointers to string file names (null for error)
-        // **/
-
-        //char** ph_readfilenames(const char* dirname, int &count);
 
         ///** /brief textual hash for file
         // *  /param filename - char* name of file
@@ -548,322 +430,40 @@ namespace Shipwreck.Phash
             11569021017716162560UL
         };
 
-        //#ifdef __cplusplus
-        //}
-        //#endif
+        [Obsolete]
+        internal static Projections ph_radon_projections(FloatImage img, int N)
+            => ImagePhash.FindRadonProjections(img, N);
 
-        //#endif
+        [Obsolete]
+        internal static Features ph_feature_vector(Projections projs)
+            => ImagePhash.ComputeFeatureVector(projs);
 
-        // pHash.cpp
-
-        //# include "pHash.h"
-        //# ifndef _WIN32
-        //# include "config.h"
-        //#else
-        //#define snprintf _snprintf
-        //#endif
-        //# ifdef HAVE_VIDEO_HASH
-        //# include "cimgffmpeg.h"
-        //#endif
-
-        //# ifdef HAVE_PTHREAD
-        //# include <pthread.h>
-
-        private int ph_num_threads()
-            => Environment.ProcessorCount;
-
-        //#endif
-
-        private const string phash_project = "{0}. Copyright 2008-2010 Aetilius, Inc.";
-        private const string phash_version = "0";
-
-        public string ph_about()
-        {
-            if (phash_version != "0")
-            {
-#pragma warning disable CS0162 // 到達できないコードが検出されました
-                return phash_version;
-#pragma warning restore CS0162 // 到達できないコードが検出されました
-            }
-            Console.WriteLine(phash_version, "pHash 0.9.4");
-            return phash_version;
-        }
-
-        //#ifdef HAVE_IMAGE_HASH
-
-        /// <summary>
-        /// Find radon projections of N lines running through the image center for lines angled 0 to 180 degrees from horizontal.
-        /// </summary>
-        /// <param name="img">CImg src image</param>
-        /// <param name="N">int number of angled lines to consider.</param>
-        /// <returns>Projections struct</returns>
-        private static Projections ph_radon_projections(FloatImage img, int N)
-        {
-            int width = img.Width;
-            int height = img.Height;
-            int D = (width > height) ? width : height;
-            var x_center = width / 2f;
-            var y_center = height / 2f;
-            int x_off = (int)Math.Floor(x_center + ROUNDING_FACTOR(x_center));
-            int y_off = (int)Math.Floor(y_center + ROUNDING_FACTOR(y_center));
-
-            var projs = new Projections();
-            projs.R = new FloatImage(N, D);
-            projs.nb_pix_perline = new int[N];
-
-            var ptr_radon_map = projs.R;
-            var nb_per_line = projs.nb_pix_perline;
-
-            for (int k = 0; k < N / 4 + 1; k++)
-            {
-                double theta = k * Math.PI / N;
-                double alpha = Math.Tan(theta);
-                for (int x = 0; x < D; x++)
-                {
-                    double y = alpha * (x - x_off);
-                    int yd = (int)Math.Floor(y + ROUNDING_FACTOR(y));
-                    if ((yd + y_off >= 0) && (yd + y_off < height) && (x < width))
-                    {
-                        ptr_radon_map[k, x] = img[x, yd + y_off];
-                        nb_per_line[k] += 1;
-                    }
-                    if ((yd + x_off >= 0) && (yd + x_off < width) && (k != N / 4) && (x < height))
-                    {
-                        ptr_radon_map[N / 2 - k, x] = img[yd + x_off, x];
-                        nb_per_line[N / 2 - k] += 1;
-                    }
-                }
-            }
-            int j = 0;
-            for (int k = 3 * N / 4; k < N; k++)
-            {
-                double theta = k * Math.PI / N;
-                double alpha = Math.Tan(theta);
-                for (int x = 0; x < D; x++)
-                {
-                    double y = alpha * (x - x_off);
-                    int yd = (int)Math.Floor(y + ROUNDING_FACTOR(y));
-                    if ((yd + y_off >= 0) && (yd + y_off < height) && (x < width))
-                    {
-                        ptr_radon_map[k, x] = img[x, yd + y_off];
-                        nb_per_line[k] += 1;
-                    }
-                    if ((y_off - yd >= 0) && (y_off - yd < width) && (2 * y_off - x >= 0) && (2 * y_off - x < height) && (k != 3 * N / 4))
-                    {
-                        ptr_radon_map[k - j, x] = img[-yd + y_off, -(x - y_off) + y_off];
-                        nb_per_line[k - j] += 1;
-                    }
-
-                }
-                j += 2;
-            }
-
-            return projs;
-        }
-
-        /// <summary>
-        /// compute the feature vector from a radon projection map.
-        /// </summary>
-        /// <param name="projs">Projections struct</param>
-        /// <returns>Features struct</returns>
-        private static Features ph_feature_vector(Projections projs)
-        {
-            var ptr_map = projs.R;
-            var nb_perline = projs.nb_pix_perline;
-            int N = projs.nb_pix_perline.Length;
-            int D = ptr_map.Height;
-
-            var fv = new Features();
-            fv.features = new double[N];
-
-            var feat_v = fv.features;
-            double sum = 0.0;
-            double sum_sqd = 0.0;
-            for (int k = 0; k < N; k++)
-            {
-                double line_sum = 0.0;
-                double line_sum_sqd = 0.0;
-                int nb_pixels = nb_perline[k];
-                for (int i = 0; i < D; i++)
-                {
-                    line_sum += ptr_map[k, i];
-                    line_sum_sqd += ptr_map[k, i] * ptr_map[k, i];
-                }
-                feat_v[k] = (line_sum_sqd / nb_pixels) - (line_sum * line_sum) / (nb_pixels * nb_pixels);
-                sum += feat_v[k];
-                sum_sqd += feat_v[k] * feat_v[k];
-            }
-            double mean = sum / N;
-            double var = Math.Sqrt((sum_sqd / N) - (sum * sum) / (N * N));
-
-            for (int i = 0; i < N; i++)
-            {
-                feat_v[i] = (feat_v[i] - mean) / var;
-            }
-
-            return fv;
-        }
-
-        /// <summary>
-        /// Compute the dct of a given vector
-        /// </summary>
-        /// <param name="fv">vector of input series</param>
-        /// <returns>the dct of R</returns>
+        [Obsolete]
         public static Digest ph_dct(Features fv)
-        {
-            var N = fv.features.Length;
-            const int nb_coeffs = 40;
+            => ImagePhash.ComputeDct(fv);
 
-            var digest = new Digest();
-            digest.coeffs = new byte[nb_coeffs];
-
-            var R = fv.features;
-            var D = digest.coeffs;
-
-            var D_temp = new double[nb_coeffs];
-            double max = 0.0;
-            double min = 0.0;
-            for (int k = 0; k < nb_coeffs; k++)
-            {
-                double sum = 0.0;
-                for (int n = 0; n < N; n++)
-                {
-                    double temp = R[n] * Math.Cos((Math.PI * (2 * n + 1) * k) / (2 * N));
-                    sum += temp;
-                }
-                if (k == 0)
-                {
-                    D_temp[k] = sum / Math.Sqrt((double)N);
-                }
-                else
-                {
-                    D_temp[k] = sum * SQRT_TWO / Math.Sqrt((double)N);
-                }
-                if (D_temp[k] > max)
-                {
-                    max = D_temp[k];
-                }
-                if (D_temp[k] < min)
-                {
-                    min = D_temp[k];
-                }
-            }
-
-            for (int i = 0; i < nb_coeffs; i++)
-            {
-                D[i] = (byte)(byte.MaxValue * (D_temp[i] - min) / (max - min));
-            }
-
-            return digest;
-        }
-
-        /// <summary>
-        /// cross correlation for 2 series. Compute the cross correlation of two series vectors
-        /// </summary>
-        /// <param name="x">Digest struct</param>
-        /// <param name="y">Digest struct</param>
-        /// <param name="pcc">double value the peak of cross correlation</param>
-        /// <param name="threshold">double value for the threshold value for which 2 images are considered the same or different.</param>
-        /// <returns>int value - 1 (true) for same, 0 (false) for different, < 0 for error</returns>
+        [Obsolete]
         public static bool ph_crosscorr(Digest x, Digest y, out double pcc, double threshold = 0.9)
         {
             pcc = ImagePhash.GetCrossCorrelation(x, y);
             return pcc > threshold;
         }
 
-        //#ifdef max
-        //#undef max
-        //#endif
-
-
-        /// <summary>
-        /// Compute the image digest for an image given the input image
-        /// </summary>
-        /// <param name="img">CImg object representing an input image</param>
-        /// <param name="sigma">double value for the deviation for a gaussian filter function</param>
-        /// <param name="gamma">double value for gamma correction on the input image</param>
-        /// <param name="numberOfAngles">int value for the number of angles to consider.</param>
-        /// <returns></returns>
+        [Obsolete]
         internal static Digest _ph_image_digest(ByteImage img, double sigma, double gamma, int numberOfAngles = 180)
-        {
-            var blurred = img.Blur(sigma);
+            => ImagePhash.ComputeDigest(img, sigma, gamma, numberOfAngles: numberOfAngles);
 
-            blurred.DiviveInplace(blurred.Max());
-            blurred.ApplyGamma(gamma);
-
-            var projs = ph_radon_projections(blurred, numberOfAngles);
-            var features = ph_feature_vector(projs);
-
-            return ph_dct(features);
-        }
-
-        //#define max(a,b) (((a)>(b))?(a):(b))
-
-        // /*! /brief compare 2 images
-        // *  /param imA - CImg object of first image
-        // *  /param imB - CImg object of second image
-        // *  /param pcc   - (out) double value for peak of cross correlation
-        // *  /param sigma - double value for the deviation of gaussian filter
-        // *  /param gamma - double value for gamma correction of images
-        // *  /param N     - int number for the number of angles of radon projections
-        // *  /param theshold - double value for the threshold
-        // *  /return int 0 (false) for different images, 1 (true) for same image, less than 0 for error
-        // */
-
-
+        [Obsolete]
         public static bool _ph_compare_images(BitmapSource imA, BitmapSource imB, out double pcc, double sigma = 3.5, double gamma = 1.0, int N = 180, double threshold = 0.90)
-        {
-            Digest digestA = _ph_image_digest(imA.ToByteImageOfYOrB(), sigma, gamma, N);
+            => ImagePhash.CompareImages(imA, imB, out pcc, sigma: sigma, gamma: gamma, numberOfAngles: N, threshold: threshold);
 
-            Digest digestB = _ph_image_digest(imB.ToByteImageOfYOrB(), sigma, gamma, N);
+        [Obsolete]
+        public static bool ph_compare_images(string file1, string file2, out double pcc, double sigma = 3.5, double gamma = 1.0, int N = 180, double threshold = 0.90)
+            => ImagePhash.CompareImages(file1, file2, out pcc, sigma: sigma, gamma: gamma, numberOfAngles: N, threshold: threshold);
 
-            return ph_crosscorr(digestA, digestB, out pcc, threshold);
-        }
-
-
-        // /*! /brief compare 2 images
-        // *  Compare 2 images given the file names
-        // *  /param file1 - char string of first image file
-        // *  /param file2 - char string of second image file
-        // *  /param pcc   - (out) double value for peak of cross correlation
-        // *  /param sigma - double value for deviation of gaussian filter
-        // *  /param gamma - double value for gamma correction of images
-        // *  /param N     - int number for number of angles
-        // *  /return int 0 (false) for different image, 1 (true) for same images, less than 0 for error
-        // */
-        //int ph_compare_images(const char* file1, const char* file2, double &pcc, double sigma = 3.5, double gamma = 1.0, int N = 180, double threshold = 0.90);
-
-
-        //int ph_compare_images(const char* file1, const char* file2, double &pcc, double sigma, double gamma, int N, double threshold)
-        //{
-        //    CImg<byte>* imA = new CImg<byte>(file1);
-        //    CImg<byte>* imB = new CImg<byte>(file2);
-
-        //    int res = _ph_compare_images(*imA, *imB, pcc, sigma, gamma, N, threshold);
-
-        //    delete imA;
-        //    delete imB;
-        //    return res;
-        //}
-
-        /// <summary>
-        /// return dct matrix, C Return DCT matrix of sqare size, N
-        /// </summary>
-        /// <param name="N">int denoting the size of the square matrix to create.</param>
-        /// <returns>size NxN containing the dct matrix</returns>
+        [Obsolete]
         private static FloatImage ph_dct_matrix(int N)
-        {
-            var ptr_matrix = new FloatImage(N, N, 1 / (float)Math.Sqrt(N));
-            var c1 = (float)Math.Sqrt(2f / N);
-            for (int x = 0; x < N; x++)
-            {
-                for (int y = 1; y < N; y++)
-                {
-                    ptr_matrix[x, y] = c1 * (float)Math.Cos((Math.PI / 2 / N) * y * (2 * x + 1));
-                }
-            }
-            return ptr_matrix;
-        }
+            => ImagePhash.CreateDctMatrix(N);
 
         //BinHash* _ph_bmb_new(uint32_t bytelength)
         //{
@@ -1026,442 +626,9 @@ namespace Shipwreck.Phash
         //    return 0;
         //}
 
-        // /*! /
-        // *  /param
-        // *  /param
-        // *  /return
-        // */
-
-        /// <summary>
-        /// compute dct robust image hash
-        /// </summary>
-        /// <param name="file">file string variable for name of file</param>
-        /// <param name="hash">hash of type ulong (must be 64-bit variable)</param>
-        /// <returns>int value - -1 for failure, 1 for success</returns>
+        [Obsolete]
         public static ulong ph_dct_imagehash(Stream file)
-        {
-            var src = BitmapFrame.Create(file);
-
-            var img = src.ToByteImageOfYOrB().Convolve(new FloatImage(7, 7, 1));
-
-            var resized = img.Resize(32, 32);
-            var C = ph_dct_matrix(32);
-            var Ctransp = C.Transpose();
-            var dctImage = C.Multiply(resized).Multiply(Ctransp);
-
-            var sum = 0f;
-            for (var y = 0; y < 8; y++)
-            {
-                for (var x = 0; x < 8; x++)
-                {
-                    sum += dctImage[x, y];
-                }
-            }
-
-            var median = sum / 64f;
-            var r = 0ul;
-            for (var y = 0; y < 8; y++)
-            {
-                for (var x = 0; x < 8; x++)
-                {
-                    r |= dctImage[x, y] > median ? (1ul << (x + 8 * y)) : 0;
-                }
-            }
-
-            return r;
-        }
-
-        //#ifdef HAVE_PTHREAD
-        //void* ph_image_thread(void* p)
-        //{
-        //    slice* s = (slice*)p;
-        //    for (int i = 0; i < s->n; ++i)
-        //    {
-        //        DP* dp = (DP*)s->hash_p[i];
-        //        ulong hash;
-        //        int ret = ph_dct_imagehash(dp->id, hash);
-        //        dp->hash = (ulong*)malloc(sizeof(hash));
-        //        memcpy(dp->hash, &hash, sizeof(hash));
-        //        dp->hash_length = 1;
-        //    }
-        //}
-
-        //DP** ph_dct_image_hashes(char* files[], int count, int threads)
-        //{
-        //    if (!files || count <= 0)
-        //        return null;
-
-        //    int num_threads;
-        //    if (threads > count)
-        //    {
-        //        num_threads = count;
-        //    }
-        //    else if (threads > 0)
-        //    {
-        //        num_threads = threads;
-        //    }
-        //    else
-        //    {
-        //        num_threads = ph_num_threads();
-        //    }
-
-        //    DP** hashes = (DP**)malloc(count * sizeof(DP*));
-
-        //    for (int i = 0; i < count; ++i)
-        //    {
-        //        hashes[i] = (DP*)malloc(sizeof(DP));
-        //        hashes[i]->id = strdup(files[i]);
-        //    }
-
-        //    pthread_t thds[num_threads];
-
-        //    int rem = count % num_threads;
-        //    int start = 0;
-        //    int off = 0;
-        //    slice* s = new slice[num_threads];
-        //    for (int n = 0; n < num_threads; ++n)
-        //    {
-        //        off = (int)floor((count / (float)num_threads) + (rem > 0 ? num_threads - (count % num_threads) : 0));
-
-        //        s[n].hash_p = &hashes[start];
-        //        s[n].n = off;
-        //        s[n].hash_params = null;
-        //        start += off;
-        //        --rem;
-        //        pthread_create(&thds[n], null, ph_image_thread, &s[n]);
-        //    }
-        //    for (int i = 0; i < num_threads; ++i)
-        //    {
-        //        pthread_join(thds[i], null);
-        //    }
-        //    delete[] s;
-
-        //    return hashes;
-
-        //}
-        //#endif
-
-        //#endif
-
-        //#if defined(HAVE_VIDEO_HASH) && defined(HAVE_IMAGE_HASH)
-
-        //CImgList<byte>* ph_getKeyFramesFromVideo(const char *filename){
-        //    long N =  GetNumberVideoFrames(filename);
-
-        //    if (N < 0){
-        //        return null;
-        //    }
-
-        //    float frames_per_sec = 0.5*fps(filename);
-        //    if (frames_per_sec < 0){
-        //        return null;
-        //    }
-
-        //    int step = (int)(frames_per_sec + ROUNDING_FACTOR(frames_per_sec));
-        //    long nbframes = (long)(N/step);
-
-        //    float *dist = (float*)malloc((nbframes)*sizeof(float));
-        //    if (!dist){
-        //        return null;
-        //    }
-        //    CImg<float> prev(64,1,1,1,0);
-
-        //    VFInfo st_info;
-        //    st_info.filename = filename;
-        //    st_info.nb_retrieval = 100;
-        //    st_info.step = step;
-        //    st_info.pixelformat = 0;
-        //    st_info.pFormatCtx = null;
-        //    st_info.width = -1;
-        //    st_info.height = -1;
-
-        //    CImgList<byte> *pframelist = new CImgList<byte>();
-        //    if (!pframelist){
-        //        return null;
-        //    }
-        //    int nbread = 0;
-        //    int k=0;
-        //    do {
-        //        nbread = NextFrames(&st_info, pframelist);
-        //        if (nbread < 0){
-        //            delete pframelist;
-        //            free(dist);
-        //            return null;
-        //        }
-        //        unsigned int i = 0;
-        //        while ((i < pframelist->size()) && (k < nbframes)){
-        //            CImg<byte> current = pframelist->at(i++);
-        //            CImg<float> hist = current.get_histogram(64,0,255);
-        //            float d = 0.0;
-        //            dist[k] = 0.0;
-        //            cimg_forX(hist,X){
-        //                d =  hist(X) - prev(X);
-        //                d = (d>=0) ? d : -d;
-        //                dist[k] += d;
-        //                prev(X) = hist(X);
-        //            }
-        //            k++;
-        //        }
-        //        pframelist->clear();
-        //    } while ((nbread >= st_info.nb_retrieval)&&(k < nbframes));
-        //    vfinfo_close(&st_info);
-
-        //    int S = 10;
-        //    int L = 50;
-        //    int alpha1 = 3;
-        //    int alpha2 = 2;
-        //    int s_begin, s_end;
-        //    int l_begin, l_end;
-        //    byte *bnds = (byte*)malloc(nbframes*sizeof(byte));
-        //    if (!bnds){
-        //        delete pframelist;
-        //        free(dist);
-        //        return null;
-        //    }
-
-        //    int nbboundaries = 0;
-        //    k = 1;
-        //    bnds[0] = 1;
-        //    do {
-        //        s_begin = (k-S >= 0) ? k-S : 0;
-        //        s_end   = (k+S < nbframes) ? k+S : nbframes-1;
-        //        l_begin = (k-L >= 0) ? k-L : 0;
-        //        l_end   = (k+L < nbframes) ? k+L : nbframes-1;
-
-        //        /* get global average */
-        //        float ave_global, sum_global = 0.0, dev_global = 0.0;
-        //        for (int i=l_begin;i<=l_end;i++){
-        //            sum_global += dist[i];
-        //        }
-        //        ave_global = sum_global/((float)(l_end-l_begin+1));
-
-        //        /*get global deviation */
-        //        for (int i=l_begin;i<=l_end;i++){
-        //            float dev = ave_global - dist[i];
-        //            dev = (dev >= 0) ? dev : -1*dev;
-        //            dev_global += dev;
-        //        }
-        //        dev_global = dev_global/((float)(l_end-l_begin+1));
-
-        //        /* global threshold */
-        //        float T_global = ave_global + alpha1*dev_global;
-
-        //        /* get local maximum */
-        //        int localmaxpos = s_begin;
-        //        for (int i=s_begin;i<=s_end;i++){
-        //            if (dist[i] > dist[localmaxpos])
-        //                localmaxpos = i;
-        //        }
-        //        /* get 2nd local maximum */
-        //        int localmaxpos2 = s_begin;
-        //        float localmax2 = 0;
-        //        for (int i=s_begin;i<=s_end;i++){
-        //            if (i == localmaxpos)
-        //                continue;
-        //            if (dist[i] > localmax2){
-        //                localmaxpos2 = i;
-        //                localmax2 = dist[i];
-        //            }
-        //        }
-        //        float T_local = alpha2*dist[localmaxpos2];
-        //        float Thresh = (T_global >= T_local) ? T_global : T_local;
-
-        //        if ((dist[k] == dist[localmaxpos])&&(dist[k] > Thresh)){
-        //            bnds[k] = 1;
-        //            nbboundaries++;
-        //        }
-        //        else {
-        //            bnds[k] = 0;
-        //        }
-        //        k++;
-        //    } while ( k < nbframes-1);
-        //    bnds[nbframes-1]=1;
-        //    nbboundaries += 2;
-
-        //    int start = 0;
-        //    int end = 0;
-        //    int nbselectedframes = 0;
-        //    do {
-        //        /* find next boundary */
-        //        do {end++;} while ((bnds[end]!=1)&&(end < nbframes));
-
-        //        /* find min disparity within bounds */
-        //        int minpos = start+1;
-        //        for (int i=start+1; i < end;i++){
-        //            if (dist[i] < dist[minpos])
-        //                minpos = i;
-        //        }
-        //        bnds[minpos] = 2;
-        //        nbselectedframes++;
-        //        start = end;
-        //    } while (start < nbframes-1);
-
-        //    st_info.nb_retrieval = 1;
-        //    st_info.width = 32;
-        //    st_info.height = 32;
-        //    k = 0;
-        //    do {
-        //        if (bnds[k]==2){
-        //            if (ReadFrames(&st_info, pframelist, k*st_info.step,k*st_info.step + 1) < 0){
-        //                delete pframelist;
-        //                free(dist);
-        //                return null;
-        //            }
-        //        }
-        //        k++;
-        //    } while (k < nbframes);
-        //    vfinfo_close(&st_info);
-
-        //    free(bnds);
-        //    bnds = null;
-        //    free(dist);
-        //    dist = null;
-
-        //    return pframelist;
-        //}
-
-        //ulong* ph_dct_videohash(const char *filename, int &Length){
-        //    CImgList<byte> *keyframes = ph_getKeyFramesFromVideo(filename);
-        //    if (keyframes == null)
-        //        return null;
-
-        //    Length = keyframes->size();
-
-        //    ulong *hash = (ulong*)malloc(sizeof(ulong)*Length);
-        //    CImg<float> *C = ph_dct_matrix(32);
-        //    CImg<float> Ctransp = C->get_transpose();
-        //    CImg<float> dctImage;
-        //    CImg<float> subsec;
-        //    CImg<byte> currentframe;
-
-        //    for (unsigned int i=0;i < keyframes->size(); i++){
-        //        currentframe = keyframes->at(i);
-        //        currentframe.blur(1.0);
-        //        dctImage = (*C)*(currentframe)*Ctransp;
-        //        subsec = dctImage.crop(1,1,8,8).unroll('x');
-        //        float med = subsec.median();
-        //        hash[i] =     0x0000000000000000;
-        //        ulong one = 0x0000000000000001;
-        //        for (int j=0;j<64;j++){
-        //            if (subsec(j) > med)
-        //                hash[i] |= one;
-        //            one = one << 1;
-        //        }
-        //    }
-
-        //    keyframes->clear();
-        //    delete keyframes;
-        //    keyframes = null;
-        //    delete C;
-        //    C = null;
-        //    return hash;
-        //}
-
-        //#ifdef HAVE_PTHREAD
-        //void *ph_video_thread(void *p)
-        //{
-        //    slice *s = (slice *)p;
-        //    for(int i = 0; i < s->n; ++i)
-        //    {
-        //        DP *dp = (DP *)s->hash_p[i];
-        //        int N;
-        //        ulong *hash = ph_dct_videohash(dp->id, N);
-        //        if(hash)
-        //        {
-        //            dp->hash = hash;
-        //            dp->hash_length = N;
-        //        }
-        //        else
-        //        {
-        //            dp->hash = null;
-        //            dp->hash_length = 0;
-        //        }
-        //    }
-        //}
-
-        //DP** ph_dct_video_hashes(char *files[], int count, int threads)
-        //{
-        //    if(!files || count <= 0)
-        //        return null;
-
-        //    int num_threads;
-        //    if(threads > count)
-        //    {
-        //        num_threads = count;
-        //    }
-        //    else if(threads > 0)
-        //    {
-        //        num_threads = threads;
-        //    }
-        //    else
-        //    {
-        //        num_threads = ph_num_threads();
-        //    }
-
-        //    DP **hashes = (DP**)malloc(count*sizeof(DP*));
-
-        //    for(int i = 0; i < count; ++i)
-        //    {
-        //        hashes[i] = (DP *)malloc(sizeof(DP));
-        //        hashes[i]->id = strdup(files[i]);
-        //    }
-
-        //    pthread_t thds[num_threads];
-
-        //    int rem = count % num_threads;
-        //    int start = 0;
-        //    int off = 0;
-        //    slice *s = new slice[num_threads];
-        //    for(int n = 0; n < num_threads; ++n)
-        //    {
-        //        off = (int)floor((count/(float)num_threads) + (rem>0?num_threads-(count % num_threads):0));
-
-        //        s[n].hash_p = &hashes[start];
-        //        s[n].n = off;
-        //        s[n].hash_params = null;
-        //        start += off;
-        //        --rem;
-        //        pthread_create(&thds[n], null, ph_video_thread, &s[n]);
-        //    }
-        //    for(int i = 0; i < num_threads; ++i)
-        //    {
-        //        pthread_join(thds[i], null);
-        //    }
-        //    delete[] s;
-
-        //    return hashes;
-
-        //}
-        //#endif
-
-        //double ph_dct_videohash_dist(ulong* hashA, int N1, ulong* hashB, int N2, int threshold)
-        //{
-        //    int den = (N1 <= N2) ? N1 : N2;
-        //    int C[N1 + 1][N2+1];
-
-        //    for (int i = 0; i<N1+1;i++){
-        //        C[i][0] = 0;
-        //    }
-        //    for (int j = 0; j<N2+1;j++){
-        //        C[0][j] = 0;
-        //    }
-        //    for (int i = 1; i<N1+1;i++){
-        //        for (int j = 1; j<N2+1;j++){
-        //            int d = ph_hamming_distance(hashA[i - 1], hashB[j - 1]);
-        //            if (d <= threshold){
-        //                C[i][j] = C[i - 1][j - 1] + 1;
-        //            } else {
-        //                C[i][j] = ((C[i - 1][j] >= C[i][j - 1])) ? C[i - 1][j] : C[i][j - 1];
-        //            }
-        //        }
-        //    }
-
-        //    double result = (double)(C[N1][N2]) / (double)(den);
-
-        //    return result;
-        //}
-
-        //#endif
+            => ImagePhash.ComputeDctHash(file);
 
         public static int ph_hamming_distance(ulong hash1, ulong hash2)
         {
@@ -1476,185 +643,74 @@ namespace Shipwreck.Phash
             return (int)((x * h01) >> 56);
         }
 
-        //#ifdef HAVE_IMAGE_HASH
+        [Obsolete]
+        private static FloatImage GetMHKernel(float alpha, float level)
+            => ImagePhash.CreateMHKernel(alpha, level);
 
-        ///*
-        //DP** ph_read_imagehashes(const char *dirname,int pathlength, int &count){
-        //count = 0;
-        //struct dirent *dir_entry;
-        //DIR *dir = opendir(dirname);
-        //if (!dir)
-        //return null;
+        ///** /brief create MH image hash for filename image
+        //*   /param filename - string name of image file
+        //*   /param N - (out) int value for length of image hash returned
+        //*   /param alpha - int scale factor for marr wavelet (default=2)
+        //*   /param lvl   - int level of scale factor (default = 1)
+        //*   /return byte array
+        //**/
+        byte[] ph_mh_imagehash(Stream filename, out int N, float alpha = 2.0f, float lvl = 1.0f)
+        {
+            var hash = new byte[N = 72];
 
-        //while ((dir_entry = readdir(dir)) != 0){
-        //if (strcmp(dir_entry->d_name,".")&& strcmp(dir_entry->d_name,"..")){
-        //count++;
-        //}
-        //}
+            var blurred = BitmapFrame.Create(filename, BitmapCreateOptions.None, BitmapCacheOption.OnLoad).ToByteImageOfYOrB().Convolve(FloatImage.CreateGaussian(2, 1.0));
+            var resized = blurred.Resize(512, 512); // TODO: bicubic
+            var equalized = resized;// TODO: histogram equalization
 
-        //DP **hashlist = (DP**)malloc(count*sizeof(DP**));
-        //if (!hashlist)
-        //{
-        //closedir(dir);
-        //return null;
-        //}
+            throw new NotImplementedException();
+            //    CImg<float>* pkernel = GetMHKernel(alpha, lvl);
+            //    CImg<float> fresp = img.get_correlate(*pkernel);
+            //    img.clear();
+            //    fresp.normalize(0, 1.0);
+            //    CImg<float> blocks(31, 31, 1, 1, 0);
+            //    for (int rindex = 0; rindex < 31; rindex++)
+            //    {
+            //        for (int cindex = 0; cindex < 31; cindex++)
+            //        {
+            //            blocks(rindex, cindex) = (float)fresp.get_crop(rindex * 16, cindex * 16, rindex * 16 + 16 - 1, cindex * 16 + 16 - 1).sum();
+            //        }
+            //    }
+            //    int hash_index;
+            //    int nb_ones = 0, nb_zeros = 0;
+            //    int bit_index = 0;
+            //    unsigned char hashbyte = 0;
+            //    for (int rindex = 0; rindex < 31 - 2; rindex += 4)
+            //    {
+            //        CImg<float> subsec;
+            //        for (int cindex = 0; cindex < 31 - 2; cindex += 4)
+            //        {
+            //            subsec = blocks.get_crop(cindex, rindex, cindex + 2, rindex + 2).unroll('x');
+            //            float ave = (float)subsec.mean();
+            //            cimg_forX(subsec, I){
+            //                hashbyte <<= 1;
+            //                if (subsec(I) > ave)
+            //                {
+            //                    hashbyte |= 0x01;
+            //                    nb_ones++;
+            //                }
+            //                else
+            //                {
+            //                    nb_zeros++;
+            //                }
+            //                bit_index++;
+            //                if ((bit_index % 8) == 0)
+            //                {
+            //                    hash_index = (int)(bit_index / 8) - 1;
+            //                    hash[hash_index] = hashbyte;
+            //                    hashbyte = 0x00;
+            //                }
+            //            }
+            //        }
+            //    }
 
-        //DP *dp = null;
-        //int index = 0;
-        //errno = 0;
-        //ulong tmphash = 0;
-        //char path[100];
-        //path[0] = '\0';
-        //rewinddir(dir);
-        //while ((dir_entry = readdir(dir)) != 0){
-        //if (strcmp(dir_entry->d_name,".") && strcmp(dir_entry->d_name,"..")){
-        //strcat(path, dirname);
-        //strcat(path, "/");
-        //strcat(path, dir_entry->d_name);
-        //if (ph_dct_imagehash(path, tmphash) < 0)  //calculate the hash
-        //continue;
-        //dp = ph_malloc_datapoint(UINT64ARRAY);
-        //dp->id = strdup(path);
-        //dp->hash = (void*)&tmphash;
-        //dp->hash_length = 1;
-        //hashlist[index++] = dp;
-        //}
-        //errno = 0;
-        //path[0]='\0';
-        //}
-
-        //closedir(dir);
-        //return hashlist;
-
-        //}
-        //*/
-        //CImg<float>* GetMHKernel(float alpha, float level)
-        //{
-        //    int sigma = (int)(4 * Math.Pow((float)alpha, (float)level));
-        //    static CImg<float>* pkernel = null;
-        //    float xpos, ypos, A;
-        //    if (!pkernel)
-        //    {
-        //        pkernel = new CImg<float>(2 * sigma + 1, 2 * sigma + 1, 1, 1, 0);
-        //        cimg_forXY(*pkernel, X, Y){
-        //            xpos = Math.Pow(alpha, -level) * (X - sigma);
-        //            ypos = Math.Pow(alpha, -level) * (Y - sigma);
-        //            A = xpos * xpos + ypos * ypos;
-        //            pkernel->atXY(X, Y) = (2 - A) * exp(-A / 2);
-        //        }
-        //    }
-        //    return pkernel;
-        //}
-
-        //byte* ph_mh_imagehash(const char* filename, int &N, float alpha, float lvl)
-        //{
-        //    if (filename == null)
-        //    {
-        //        return null;
-        //    }
-        //    byte* hash = (unsigned char*)malloc(72 * sizeof(byte));
-        //    N = 72;
-
-        //    CImg<byte> src(filename);
-        //    CImg<byte> img;
-
-        //    if (src.spectrum() == 3)
-        //    {
-        //        img = src.get_RGBtoYCbCr().channel(0).blur(1.0).resize(512, 512, 1, 1, 5).get_equalize(256);
-        //    }
-        //    else
-        //    {
-        //        img = src.channel(0).get_blur(1.0).resize(512, 512, 1, 1, 5).get_equalize(256);
-        //    }
-        //    src.clear();
-
-        //    CImg<float>* pkernel = GetMHKernel(alpha, lvl);
-        //    CImg<float> fresp = img.get_correlate(*pkernel);
-        //    img.clear();
-        //    fresp.normalize(0, 1.0);
-        //    CImg<float> blocks(31, 31, 1, 1, 0);
-        //    for (int rindex = 0; rindex < 31; rindex++)
-        //    {
-        //        for (int cindex = 0; cindex < 31; cindex++)
-        //        {
-        //            blocks(rindex, cindex) = (float)fresp.get_crop(rindex * 16, cindex * 16, rindex * 16 + 16 - 1, cindex * 16 + 16 - 1).sum();
-        //        }
-        //    }
-        //    int hash_index;
-        //    int nb_ones = 0, nb_zeros = 0;
-        //    int bit_index = 0;
-        //    unsigned char hashbyte = 0;
-        //    for (int rindex = 0; rindex < 31 - 2; rindex += 4)
-        //    {
-        //        CImg<float> subsec;
-        //        for (int cindex = 0; cindex < 31 - 2; cindex += 4)
-        //        {
-        //            subsec = blocks.get_crop(cindex, rindex, cindex + 2, rindex + 2).unroll('x');
-        //            float ave = (float)subsec.mean();
-        //            cimg_forX(subsec, I){
-        //                hashbyte <<= 1;
-        //                if (subsec(I) > ave)
-        //                {
-        //                    hashbyte |= 0x01;
-        //                    nb_ones++;
-        //                }
-        //                else
-        //                {
-        //                    nb_zeros++;
-        //                }
-        //                bit_index++;
-        //                if ((bit_index % 8) == 0)
-        //                {
-        //                    hash_index = (int)(bit_index / 8) - 1;
-        //                    hash[hash_index] = hashbyte;
-        //                    hashbyte = 0x00;
-        //                }
-        //            }
-        //        }
-        //    }
-
-        //    return hash;
-        //}
+            //    return hash;
+        }
         //#endif
-
-        //char** ph_readfilenames(const char* dirname, int &count)
-        //{
-        //    count = 0;
-        //    struct dirent * dir_entry;
-        //DIR* dir = opendir(dirname);
-        //    if (!dir)
-        //        return null;
-
-        //    /*count files */
-        //    while ((dir_entry = readdir(dir)) != null){
-        //        if (strcmp(dir_entry->d_name, ".") && strcmp(dir_entry->d_name,".."))
-        //            count++;
-        //    }
-
-        //    /* alloc list of files */
-        //    char** files = (char**)malloc(count * sizeof(*files));
-        //    if (!files)
-        //        return null;
-
-        //    errno = 0;
-        //    int index = 0;
-        //char path[1024];
-        //path[0] = '\0';
-        //    rewinddir(dir);
-        //    while ((dir_entry = readdir(dir)) != 0){
-        //        if (strcmp(dir_entry->d_name,".") && strcmp(dir_entry->d_name,"..")){
-        //            strcat(path, dirname);
-        //            strcat(path, "/");
-        //            strcat(path, dir_entry->d_name);
-        //files[index++] = strdup(path);
-        //        }
-        //        path[0]='\0';
-        //    }
-        //    if (errno)
-        //        return null;
-        //    closedir(dir);
-        //    return files;
-        //}
 
         /// <summary>
         /// brief count number bits set in given byte.

@@ -30,7 +30,7 @@ namespace Shipwreck.Phash.TestApp
                     {
                         using (var fs = fi.OpenRead())
                         {
-                            var hash = ImagePhash.GetDigest(fs);
+                            var hash = ImagePhash.ComputeDigest(fs);
 
                             Console.WriteLine(" - {0}: {1:X16}", fi.Name, hash);
 

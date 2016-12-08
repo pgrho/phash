@@ -15,6 +15,13 @@ namespace Shipwreck.Phash
     /// </summary>
     public class Features
     {
-        public double[] features;
+        public Features(int length)
+        {
+            Items = new double[length];
+        }
+
+        public double[] Items { get; }
+
+        public double[] features => Items;
     }
 }
