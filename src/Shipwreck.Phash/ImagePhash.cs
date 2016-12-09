@@ -154,7 +154,7 @@ namespace Shipwreck.Phash
                 }
                 if (k == 0)
                 {
-                    D_temp[k] = sum / Math.Sqrt((double)N);
+                    D_temp[k] = sum / Math.Sqrt(N);
                 }
                 else
                 {
@@ -339,7 +339,7 @@ namespace Shipwreck.Phash
             => GetCrossCorrelation(x.Coefficents, y.Coefficents);
 
         public static double GetCrossCorrelation(byte[] coefficients1, byte[] coefficients2)
-            => CrossCorrelation.GetCrossCorrelation(coefficients1, coefficients2);
+            => CrossCorrelation.GetCrossCorrelationCore(coefficients1, coefficients2, Math.Min(coefficients1.Length, coefficients2.Length));
 
         internal static FloatImage CreateMHKernel(float alpha, float level)
         {
