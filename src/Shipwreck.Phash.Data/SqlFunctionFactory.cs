@@ -63,7 +63,7 @@ namespace Shipwreck.Phash.Data
             => $"DROP FUNCTION {functionName}";
 
         public static string GetDropIfExistsFunctionSql(string functionName = DEFAULT_FUNCTION_NAME)
-            => $"IF OBJECT_ID('{functionName}', 'U') IS NOT NULL\r\n"
+            => $"IF OBJECT_ID('{functionName}') IS NOT NULL\r\n"
             + $"    DROP FUNCTION {functionName}";
     }
 }
