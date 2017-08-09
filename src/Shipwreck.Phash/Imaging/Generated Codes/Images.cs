@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 namespace Shipwreck.Phash.Imaging
 {
 	partial class FloatImage : IArrayImage<System.Single>
