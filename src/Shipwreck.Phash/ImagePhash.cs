@@ -1,11 +1,7 @@
-﻿using Shipwreck.Phash.Imaging;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
+using Shipwreck.Phash.Imaging;
 
 namespace Shipwreck.Phash
 {
@@ -356,7 +352,6 @@ namespace Shipwreck.Phash
                     var A = xpos * xpos + ypos * ypos;
                     kernel[x, y] = (float)((2 - A) * Math.Exp(-A / 2));
                 }
-
             }
             return kernel;
         }

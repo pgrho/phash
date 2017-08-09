@@ -1,6 +1,5 @@
 <#@ template language="C#" debug="True" #>
 <#@ output extension="cs" #>
-<#@ include file="T4Toolbox.tt" #>
 using System;
 
 namespace Shipwreck.Phash
