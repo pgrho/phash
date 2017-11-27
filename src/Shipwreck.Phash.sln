@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.12
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shipwreck.Phash", "Shipwreck.Phash\Shipwreck.Phash.csproj", "{7D98638A-93D4-46AE-9263-8D513A1C9EAA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shipwreck.Phash", "Shipwreck.Phash\Shipwreck.Phash.csproj", "{7D98638A-93D4-46AE-9263-8D513A1C9EAA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shipwreck.Phash.Data", "Shipwreck.Phash.Data\Shipwreck.Phash.Data.csproj", "{32793FFE-10F6-45A9-879F-D9F3447A949C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shipwreck.Phash.Data", "Shipwreck.Phash.Data\Shipwreck.Phash.Data.csproj", "{32793FFE-10F6-45A9-879F-D9F3447A949C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shipwreck.Phash.Data.Tests", "Shipwreck.Phash.Data.Tests\Shipwreck.Phash.Data.Tests.csproj", "{17F7B35C-838C-4D99-ABB7-C2B70FA0CE51}"
 EndProject
@@ -18,7 +18,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		..\README.md = ..\README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shipwreck.Phash.CrossCorrelation", "Shipwreck.Phash.CrossCorrelation\Shipwreck.Phash.CrossCorrelation.csproj", "{95E3E955-CF81-498D-80C5-5FB0B687EBA9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shipwreck.Phash.CrossCorrelation", "Shipwreck.Phash.CrossCorrelation\Shipwreck.Phash.CrossCorrelation.csproj", "{95E3E955-CF81-498D-80C5-5FB0B687EBA9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -71,5 +71,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {648CABBD-734D-4143-9AF3-D87957143EB0}
 	EndGlobalSection
 EndGlobal

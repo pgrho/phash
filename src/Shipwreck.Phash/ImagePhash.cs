@@ -2,6 +2,7 @@
 using System.IO;
 using System.Windows.Media.Imaging;
 using Shipwreck.Phash.Imaging;
+using System.Drawing;
 
 namespace Shipwreck.Phash
 {
@@ -77,7 +78,17 @@ namespace Shipwreck.Phash
         {
             var bf = BitmapFrame.Create(fileStream, BitmapCreateOptions.None, BitmapCacheOption.OnLoad);
 
-            return ComputeDigest(bf.ToByteImageOfYOrB(), sigma, gamma, numberOfAngles: numberOfAngles);
+            return ComputeDigest(bf, sigma, gamma, numberOfAngles: numberOfAngles);
+        }
+
+        public static Digest ComputeDigest(BitmapSource bitmapSource, double sigma = DEFAULT_SIGMA, double gamma = DEFAULT_GAMMA, int numberOfAngles = DEFAULT_NUMBER_OF_ANGLES)
+        {
+            return ComputeDigest(bitmapSource.ToByteImageOfYOrB(), sigma, gamma, numberOfAngles: numberOfAngles);
+        }
+
+        public static Digest ComputeDigest(Bitmap bitmap, double sigma = DEFAULT_SIGMA, double gamma = DEFAULT_GAMMA, int numberOfAngles = DEFAULT_NUMBER_OF_ANGLES)
+        {
+            return ComputeDigest(bitmap.ToByteImageOfY(), sigma, gamma, numberOfAngles: numberOfAngles);
         }
 
         /// <summary>

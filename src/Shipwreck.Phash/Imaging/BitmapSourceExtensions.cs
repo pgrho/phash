@@ -9,6 +9,7 @@ using System.Windows.Media.Imaging;
 
 namespace Shipwreck.Phash.Imaging
 {
+
     public static class BitmapSourceExtensions
     {
         public static BitmapSource ToGray8(this BitmapSource source)
