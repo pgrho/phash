@@ -74,9 +74,9 @@ namespace Shipwreck.Phash
             }
         }
 
-        public static Digest ComputeDigest(Stream fileStream, double sigma = DEFAULT_SIGMA, double gamma = DEFAULT_GAMMA, int numberOfAngles = DEFAULT_NUMBER_OF_ANGLES)
+        public static Digest ComputeDigest(Stream bitmapStream, double sigma = DEFAULT_SIGMA, double gamma = DEFAULT_GAMMA, int numberOfAngles = DEFAULT_NUMBER_OF_ANGLES)
         {
-            var bf = BitmapFrame.Create(fileStream, BitmapCreateOptions.None, BitmapCacheOption.OnLoad);
+            var bf = BitmapFrame.Create(bitmapStream, BitmapCreateOptions.None, BitmapCacheOption.OnLoad);
 
             return ComputeDigest(bf, sigma, gamma, numberOfAngles: numberOfAngles);
         }
