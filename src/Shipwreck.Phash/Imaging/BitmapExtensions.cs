@@ -9,6 +9,7 @@ using System.Windows.Media.Imaging;
 
 namespace Shipwreck.Phash.Imaging
 {
+
     public static class BitmapExtensions
     {
         public static Bitmap ToRgb24(this Bitmap source)
@@ -48,7 +49,8 @@ namespace Shipwreck.Phash.Imaging
 
                 var r = new ByteImage(bmp.Width, bmp.Height);
 
-                int strideDelta = bmp.GetStride() % bmp.Width;
+                int bytesPerPixel = (Image.GetPixelFormatSize(bmp.PixelFormat) + (sizeof(byte) - 1)) / sizeof(byte);
+                int strideDelta = bmp.GetStride() % (bmp.Width * bytesPerPixel);
                 var yc = new Vector3(66, 129, 25);
                 var i = 0;
                 for (var dy = 0; dy < r.Height; dy++)
