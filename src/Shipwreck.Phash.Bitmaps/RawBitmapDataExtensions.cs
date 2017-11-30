@@ -1,11 +1,11 @@
-﻿using System;
+﻿using Shipwreck.Phash.Imaging;
+using System;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.IO;
 using System.Numerics;
 using System.Runtime.InteropServices;
 
-namespace Shipwreck.Phash.Imaging
+namespace Shipwreck.Phash.Bitmaps
 {
     public static class RawBitmapDataExtensions
     {
@@ -46,13 +46,13 @@ namespace Shipwreck.Phash.Imaging
             rawBitmapData1ByteComponent.PerPixelInArea(area, (dx, dy, A, R, G, B) =>
             {
                 Vector3 sv;
-                sv.Z = R; 
-                sv.Y = G; 
-                sv.X = B; 
+                sv.Z = R;
+                sv.Y = G;
+                sv.X = B;
 
                 r[dx, dy] = (byte)(((int)(Vector3.Dot(yc, sv) + 128) >> 8) + 16);
             });
-            
+
             return r;
         }
 

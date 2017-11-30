@@ -4,7 +4,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 
-namespace Shipwreck.Phash.Imaging
+namespace Shipwreck.Phash.Bitmaps
 {
     public class RawBitmapData
     {
@@ -27,7 +27,7 @@ namespace Shipwreck.Phash.Imaging
             RawPixelBytes = rawPixelBytes;
             int bitsPerPixel = Image.GetPixelFormatSize(pixelFormat);
             BytesPerPixel = (bitsPerPixel + ((sizeof(byte) * 8) - 1)) / (sizeof(byte) * 8);
-    }
+        }
 
         int PixelXYToByteIndex(int pixelX, int pixelY)
         {
@@ -86,7 +86,7 @@ namespace Shipwreck.Phash.Imaging
                 int sizeInBytes = lockedBits.Stride * lockedBits.Height;
                 byte[] rawPixelByteData = new byte[sizeInBytes];
                 Marshal.Copy(lockedBits.Scan0, rawPixelByteData, 0, sizeInBytes);
-                
+
                 return new RawBitmapData(lockedBits.Width, lockedBits.Stride, lockedBits.Height, lockedBits.PixelFormat, rawPixelByteData);
             }
             finally
@@ -94,9 +94,9 @@ namespace Shipwreck.Phash.Imaging
                 if (lockedBits != null)
                     bitmap.UnlockBits(lockedBits);
             }
-            
+
         }
-        
+
 
         public abstract class PixelColorExtractor
         {
@@ -134,7 +134,7 @@ namespace Shipwreck.Phash.Imaging
                 RegisteredColorExtractors.Remove(extractor.PixelFormat);
                 RegisteredColorExtractors.Add(extractor.PixelFormat, extractor);
             }
-            
+
             public static PixelColorExtractor Create(PixelFormat pixelFormat)
             {
                 if (!RegisteredColorExtractors.ContainsKey(pixelFormat))
@@ -183,7 +183,7 @@ namespace Shipwreck.Phash.Imaging
                 B = rawBytes[startIndex + 3];
             }
         }
-        
+
         class Rgb32PixelExtractor : PixelColorExtractor
         {
             public Rgb32PixelExtractor() : base(PixelFormat.Format32bppRgb)

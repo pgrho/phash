@@ -1,13 +1,14 @@
-﻿using System.Drawing;
-using System.Numerics;
-using System.Drawing.Imaging;
+﻿using Shipwreck.Phash.Imaging;
 using System;
-using System.Runtime.InteropServices;
+using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 using System.IO;
+using System.Numerics;
+using System.Runtime.InteropServices;
 using System.Windows.Media.Imaging;
 
-namespace Shipwreck.Phash.Imaging
+namespace Shipwreck.Phash.Bitmaps
 {
     public static class BitmapExtensions
     {
@@ -28,7 +29,7 @@ namespace Shipwreck.Phash.Imaging
                 }
                 return drawingBitmap;
             }
-            catch(Exception)
+            catch (Exception)
             {
                 drawingBitmap?.Dispose();
                 throw;
@@ -75,7 +76,7 @@ namespace Shipwreck.Phash.Imaging
                     bitmap24Rgb?.Dispose();
             }
         }
-        
+
         /// <summary>
         /// Copies the bitmap to its raw bytes format with stride bytes.
         /// </summary>
@@ -90,7 +91,7 @@ namespace Shipwreck.Phash.Imaging
                 int sizeInBytes = lockedBits.Stride * lockedBits.Height;
                 byte[] rawPixelByteData = new byte[sizeInBytes];
                 Marshal.Copy(lockedBits.Scan0, rawPixelByteData, 0, sizeInBytes);
-                
+
                 return rawPixelByteData;
             }
             finally
@@ -151,5 +152,7 @@ namespace Shipwreck.Phash.Imaging
                 throw;
             }
         }
+
+
     }
 }

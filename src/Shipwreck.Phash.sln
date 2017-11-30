@@ -20,6 +20,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shipwreck.Phash.CrossCorrelation", "Shipwreck.Phash.CrossCorrelation\Shipwreck.Phash.CrossCorrelation.csproj", "{95E3E955-CF81-498D-80C5-5FB0B687EBA9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shipwreck.Phash.Bitmaps", "Shipwreck.Phash.Bitmaps\Shipwreck.Phash.Bitmaps.csproj", "{322B6F8F-E473-40D8-AF83-76FEDDEA1CC8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -68,6 +70,14 @@ Global
 		{95E3E955-CF81-498D-80C5-5FB0B687EBA9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{95E3E955-CF81-498D-80C5-5FB0B687EBA9}.Release|x86.ActiveCfg = Release|Any CPU
 		{95E3E955-CF81-498D-80C5-5FB0B687EBA9}.Release|x86.Build.0 = Release|Any CPU
+		{322B6F8F-E473-40D8-AF83-76FEDDEA1CC8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{322B6F8F-E473-40D8-AF83-76FEDDEA1CC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{322B6F8F-E473-40D8-AF83-76FEDDEA1CC8}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{322B6F8F-E473-40D8-AF83-76FEDDEA1CC8}.Debug|x86.Build.0 = Debug|Any CPU
+		{322B6F8F-E473-40D8-AF83-76FEDDEA1CC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{322B6F8F-E473-40D8-AF83-76FEDDEA1CC8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{322B6F8F-E473-40D8-AF83-76FEDDEA1CC8}.Release|x86.ActiveCfg = Release|Any CPU
+		{322B6F8F-E473-40D8-AF83-76FEDDEA1CC8}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -6,8 +6,11 @@ using System.Drawing;
 
 namespace Shipwreck.Phash
 {
-    public static class ImagePhash
+    public class ImagePhash
     {
+        protected ImagePhash()
+        { }
+
         private static float ROUNDING_FACTOR(float x)
             => x >= 0 ? 0.5f : -0.5f;
 
@@ -15,10 +18,10 @@ namespace Shipwreck.Phash
             => x >= 0 ? 0.5 : -0.5;
 
         private const double SQRT_TWO = 1.4142135623730950488016887242097;
-        private const double DEFAULT_SIGMA = 3.5;
-        private const double DEFAULT_GAMMA = 1.0;
-        private const int DEFAULT_NUMBER_OF_ANGLES = 180;
-        private const double DEFAULT_THRESHOLD = 0.9;
+        protected const double DEFAULT_SIGMA = 3.5;
+        protected const double DEFAULT_GAMMA = 1.0;
+        protected const int DEFAULT_NUMBER_OF_ANGLES = 180;
+        protected const double DEFAULT_THRESHOLD = 0.9;
 
         #region CompareImages
 
@@ -78,52 +81,7 @@ namespace Shipwreck.Phash
         {
             var bf = BitmapFrame.Create(bitmapStream, BitmapCreateOptions.None, BitmapCacheOption.OnLoad);
 
-            return ComputeDigest(bf, sigma, gamma, numberOfAngles: numberOfAngles);
-        }
-
-        public static Digest ComputeDigest(BitmapSource bitmapSource, double sigma = DEFAULT_SIGMA, double gamma = DEFAULT_GAMMA, int numberOfAngles = DEFAULT_NUMBER_OF_ANGLES)
-        {
-            return ComputeDigest(bitmapSource.ToByteImageOfYOrB(), sigma, gamma, numberOfAngles: numberOfAngles);
-        }
-
-        /// <summary>
-        /// Computes a Digest of a bitmap. 24bit RGB color format is recommended to avoid unneccessary conversions.
-        /// </summary>
-        /// <param name="bitmap">bitmap image to compute digest against</param>
-        /// <param name="sigma">double value for the deviation for a gaussian filter function</param>
-        /// <param name="gamma">double value for gamma correction on the input image</param>
-        /// <param name="numberOfAngles">int value for the number of angles to consider.</param>
-        /// <returns></returns>
-        public static Digest ComputeDigest(Bitmap bitmap, double sigma = DEFAULT_SIGMA, double gamma = DEFAULT_GAMMA, int numberOfAngles = DEFAULT_NUMBER_OF_ANGLES)
-        {
-            return ComputeDigest(bitmap.ToByteImageOfY(), sigma, gamma, numberOfAngles: numberOfAngles);
-        }
-
-        /// <summary>
-        /// Computes a Digest of raw bitmap data. 8bit per color component format is recommended to avoid unneccessary conversions.
-        /// </summary>
-        /// <param name="rawBitmapData">bitmap image to compute digest against</param>
-        /// <param name="sigma">double value for the deviation for a gaussian filter function</param>
-        /// <param name="gamma">double value for gamma correction on the input image</param>
-        /// <param name="numberOfAngles">int value for the number of angles to consider.</param>
-        /// <returns></returns>
-        public static Digest ComputeDigest(RawBitmapData rawBitmapData, double sigma = DEFAULT_SIGMA, double gamma = DEFAULT_GAMMA, int numberOfAngles = DEFAULT_NUMBER_OF_ANGLES)
-        {
-            return ComputeDigest(rawBitmapData.ToByteImageOfY(), sigma, gamma, numberOfAngles: numberOfAngles);
-        }
-
-        /// <summary>
-        /// Computes a Digest of raw bitmap data. 8bit per color component format is recommended to avoid unneccessary conversions.
-        /// </summary>
-        /// <param name="rawBitmapData">bitmap image to compute digest against</param>
-        /// <param name="computeArea">section of the image to consider for digest</param>
-        /// <param name="sigma">double value for the deviation for a gaussian filter function</param>
-        /// <param name="gamma">double value for gamma correction on the input image</param>
-        /// <param name="numberOfAngles">int value for the number of angles to consider.</param>
-        /// <returns></returns>
-        public static Digest ComputeDigest(RawBitmapData rawBitmapData, Rectangle computeArea, double sigma = DEFAULT_SIGMA, double gamma = DEFAULT_GAMMA, int numberOfAngles = DEFAULT_NUMBER_OF_ANGLES)
-        {
-            return ComputeDigest(rawBitmapData.ToByteImageOfY(computeArea), sigma, gamma, numberOfAngles: numberOfAngles);
+            return ComputeDigest(bf.ToByteImageOfYOrB(), sigma, gamma, numberOfAngles: numberOfAngles);
         }
 
         /// <summary>
@@ -134,7 +92,7 @@ namespace Shipwreck.Phash
         /// <param name="gamma">double value for gamma correction on the input image</param>
         /// <param name="numberOfAngles">int value for the number of angles to consider.</param>
         /// <returns></returns>
-        internal static Digest ComputeDigest(ByteImage image, double sigma, double gamma, int numberOfAngles = DEFAULT_NUMBER_OF_ANGLES)
+        protected static Digest ComputeDigest(ByteImage image, double sigma, double gamma, int numberOfAngles = DEFAULT_NUMBER_OF_ANGLES)
         {
             var blurred = image.Blur(sigma);
 

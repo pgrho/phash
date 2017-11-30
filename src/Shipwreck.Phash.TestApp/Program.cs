@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using Shipwreck.Phash.Imaging;
 using System.Drawing;
+using Shipwreck.Phash.Bitmaps;
 
 namespace Shipwreck.Phash.TestApp
 {
@@ -37,8 +37,8 @@ namespace Shipwreck.Phash.TestApp
                             using (var image = Image.FromStream(fs, true))
                             using (var bitmap = image.ToBitmap())
                             {
-                                bitmapHash = ImagePhash.ComputeDigest(bitmap);
-                                bitmapRawHash = ImagePhash.ComputeDigest(bitmap.ToRawBitmapData());
+                                bitmapHash = BitmapPhash.ComputeBitmapDigest(bitmap);
+                                bitmapRawHash = BitmapPhash.ComputeRawBitmapDigest(bitmap.ToRawBitmapData());
                             }
                             fs.Position = 0;
                             bitmapSourceHash = ImagePhash.ComputeDigest(fs);
