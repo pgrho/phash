@@ -16,6 +16,7 @@ namespace Shipwreck.Phash.TestApp
 
             var bitmapSourceHashes = new Dictionary<string, Digest>();
             var bitmapHashes = new Dictionary<string, Digest>();
+            var bitmapRawHashes = new Dictionary<string, Digest>();
             using (var sw = new StreamWriter("result.html"))
             {
                 sw.WriteLine("<!DOCTYPE html>");
@@ -30,12 +31,14 @@ namespace Shipwreck.Phash.TestApp
                     {
                         using (var fs = fi.OpenRead())
                         {
-                            Digest bitmapHash;
                             Digest bitmapSourceHash;
+                            Digest bitmapHash;
+                            Digest bitmapRawHash;
                             using (var image = Image.FromStream(fs, true))
                             using (var bitmap = image.ToBitmap())
                             {
                                 bitmapHash = ImagePhash.ComputeDigest(bitmap);
+                                bitmapRawHash = ImagePhash.ComputeDigest(bitmap.ToRawBitmapData());
                             }
                             fs.Position = 0;
                             bitmapSourceHash = ImagePhash.ComputeDigest(fs);
@@ -45,12 +48,17 @@ namespace Shipwreck.Phash.TestApp
                             {
                                 bitmapSourceHashes[fi.FullName] = bitmapSourceHash;
                                 bitmapHashes[fi.FullName] = bitmapHash;
+                                bitmapRawHashes[fi.FullName] = bitmapRawHash;
                             }
                             else
                             {
-                                var bitmapCCResults = CrossCorrelateDigests(bitmapHashes, bitmapHash);
                                 var bitmapSourceCCResults = CrossCorrelateDigests(bitmapSourceHashes, bitmapSourceHash);
+                                var bitmapCCResults = CrossCorrelateDigests(bitmapHashes, bitmapHash);
+                                var bitmapRawCCResults = CrossCorrelateDigests(bitmapRawHashes, bitmapRawHash);
+
                                 var mismatchedCCResults = MatchCrossCorrelationResults("bitmap", bitmapCCResults, "bitmap_source", bitmapSourceCCResults);
+                                mismatchedCCResults.AddRange(MatchCrossCorrelationResults("bitmap_raw", bitmapRawCCResults, "bitmap_source", bitmapSourceCCResults));
+
                                 WriteOutputHtml(bitmapSourceCCResults, mismatchedCCResults, bitmapSourceHash, sw, di, fi);
                             }
                         }

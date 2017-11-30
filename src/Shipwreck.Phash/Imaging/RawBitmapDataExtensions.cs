@@ -19,7 +19,7 @@ namespace Shipwreck.Phash.Imaging
 
         public static ByteImage ToByteImageOfY(this RawBitmapData rawBitmapData)
         {
-            return rawBitmapData.ToByteImageOfY(new Rectangle(0, 0, rawBitmapData.PixelWidth, rawBitmapData.PixelHeight);
+            return rawBitmapData.ToByteImageOfY(new Rectangle(0, 0, rawBitmapData.PixelWidth, rawBitmapData.PixelHeight));
         }
         public static ByteImage ToByteImageOfY(this RawBitmapData rawBitmapData, Rectangle area)
         {
