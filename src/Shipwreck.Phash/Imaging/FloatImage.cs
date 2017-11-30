@@ -64,7 +64,7 @@ namespace Shipwreck.Phash.Imaging
             }
         }
 
-        public void DiviveInplace(float divider)
+        public void DivideInplace(float divider)
             => MultiplyInplace(1 / divider);
 
 
