@@ -48,7 +48,7 @@ namespace Shipwreck.Phash.Imaging
 
                 var r = new ByteImage(bitmap24Rgb.Width, bitmap24Rgb.Height);
 
-                int bytesPerPixel = (Image.GetPixelFormatSize(bitmap24Rgb.PixelFormat) + (sizeof(byte) - 1)) / sizeof(byte);
+                int bytesPerPixel = (Image.GetPixelFormatSize(bitmap24Rgb.PixelFormat) + ((sizeof(byte) * 8) - 1)) / (sizeof(byte) * 8);
                 int strideDelta = bitmap24Rgb.GetStride() % (bitmap24Rgb.Width * bytesPerPixel);
                 var yc = new Vector3(66, 129, 25);
                 var i = 0;

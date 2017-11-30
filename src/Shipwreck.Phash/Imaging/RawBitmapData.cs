@@ -26,12 +26,12 @@ namespace Shipwreck.Phash.Imaging
             PixelFormat = pixelFormat;
             RawPixelBytes = rawPixelBytes;
             int bitsPerPixel = Image.GetPixelFormatSize(pixelFormat);
-            BytesPerPixel = (bitsPerPixel + (sizeof(byte) - 1)) / sizeof(byte);
+            BytesPerPixel = (bitsPerPixel + ((sizeof(byte) * 8) - 1)) / (sizeof(byte) * 8);
     }
 
         int PixelXYToByteIndex(int pixelX, int pixelY)
         {
-            return (pixelY * BytesPerPixel * ByteStride) + (pixelX * BytesPerPixel);
+            return (pixelY * ByteStride) + (pixelX * BytesPerPixel);
         }
 
         public void PerPixel(PixelHandler pixelHandler)
@@ -53,7 +53,7 @@ namespace Shipwreck.Phash.Imaging
             int pixelFinalWidth = (area.X + area.Width);
 
             int byteIndex = PixelXYToByteIndex(area.X, area.Y);
-            int byteFinalIndex = PixelXYToByteIndex(area.X + area.Width, area.Y + area.Height);
+            int byteFinalIndex = PixelXYToByteIndex(0, area.Y + area.Height);
 
             int A = 255;
             int R = 255;
@@ -108,7 +108,7 @@ namespace Shipwreck.Phash.Imaging
 
             public PixelFormat PixelFormat { get; }
             public int BitsPerPixel { get; }
-            public int BytesPerPixel => (BitsPerPixel + (sizeof(byte) - 1)) / sizeof(byte);
+            public int BytesPerPixel => (BitsPerPixel + ((sizeof(byte) * 8) - 1)) / (sizeof(byte) * 8);
 
             /// <summary>
             /// Extracts ARGB components from the raw bytes of a pixel.
