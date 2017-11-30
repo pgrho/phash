@@ -9,20 +9,20 @@ namespace Shipwreck.Phash.Imaging
     public class RawBitmapData
     {
 
-        public delegate void PixelHandler(int A, int R, int G, int B);
+        public delegate void PixelHandler(int pixelWidth, int pixelHeight, int A, int R, int G, int B);
 
-        public int Width { get; }
-        public int Stride { get; }
-        public int Height { get; }
+        public int PixelWidth { get; }
+        public int ByteStride { get; }
+        public int PixelHeight { get; }
         public PixelFormat PixelFormat { get; }
         public byte[] RawPixelBytes { get; }
         public int BytesPerPixel { get; }
 
         private RawBitmapData(int width, int stride, int height, PixelFormat pixelFormat, byte[] rawPixelBytes)
         {
-            Width = width;
-            Stride = stride;
-            Height = height;
+            PixelWidth = width;
+            ByteStride = stride;
+            PixelHeight = height;
             PixelFormat = pixelFormat;
             RawPixelBytes = rawPixelBytes;
             int bitsPerPixel = Image.GetPixelFormatSize(pixelFormat);
@@ -31,20 +31,20 @@ namespace Shipwreck.Phash.Imaging
 
         int PixelXYToByteIndex(int pixelX, int pixelY)
         {
-            return (pixelY * BytesPerPixel * Stride) + (pixelX * BytesPerPixel);
+            return (pixelY * BytesPerPixel * ByteStride) + (pixelX * BytesPerPixel);
         }
 
         public void PerPixel(PixelHandler pixelHandler)
         {
-            PerPixelInArea(new Rectangle(0, 0, Width, Height), pixelHandler);
+            PerPixelInArea(new Rectangle(0, 0, PixelWidth, PixelHeight), pixelHandler);
         }
 
         public void PerPixelInArea(Rectangle area, PixelHandler pixelHandler)
         {
-            if (area.X + area.Width > Width)
-                throw new ArgumentException($"Requested Rectangle {area} does not fit into the bounds of the bitmap width {Width}");
-            if (area.Y + area.Height > Height)
-                throw new ArgumentException($"Requested Rectangle {area} does not fit into the bounds of the bitmap height {Height}");
+            if (area.X + area.Width > PixelWidth)
+                throw new ArgumentException($"Requested Rectangle {area} does not fit into the bounds of the bitmap width {PixelWidth}");
+            if (area.Y + area.Height > PixelHeight)
+                throw new ArgumentException($"Requested Rectangle {area} does not fit into the bounds of the bitmap height {PixelHeight}");
 
             var pixelExtractor = PixelColorExtractor.Create(PixelFormat);
 
@@ -62,7 +62,7 @@ namespace Shipwreck.Phash.Imaging
             while (byteIndex < byteFinalIndex)
             {
                 pixelExtractor.ExtractPixelBytesToColor(RawPixelBytes, byteIndex, ref A, ref R, ref G, ref B);
-                pixelHandler?.Invoke(A, R, G, B);
+                pixelHandler?.Invoke(pixelWidth, pixelHeight, A, R, G, B);
                 pixelWidth++;
                 if (pixelWidth >= pixelFinalWidth)
                 {
@@ -123,9 +123,10 @@ namespace Shipwreck.Phash.Imaging
 
             static Dictionary<PixelFormat, PixelColorExtractor> RegisteredColorExtractors = new Dictionary<PixelFormat, PixelColorExtractor>()
             {
-                { PixelFormat.Format24bppRgb, new Rgb24PixelScanner() },
-                { PixelFormat.Format32bppArgb, new Argb32PixelScanner() },
-                { PixelFormat.Format32bppPArgb, new PArgb32PixelScanner() },
+                { PixelFormat.Format24bppRgb, new Rgb24PixelExtractor() },
+                { PixelFormat.Format32bppArgb, new Argb32PixelExtractor() },
+                { PixelFormat.Format32bppPArgb, new PArgb32PixelExtractor() },
+                { PixelFormat.Format32bppRgb, new Rgb32PixelExtractor() },
             };
 
             public static void RegisterPixelColorExtractor(PixelColorExtractor extractor)
@@ -137,15 +138,15 @@ namespace Shipwreck.Phash.Imaging
             public static PixelColorExtractor Create(PixelFormat pixelFormat)
             {
                 if (!RegisteredColorExtractors.ContainsKey(pixelFormat))
-                    throw new FormatException($"PixelScanner is not supported for {pixelFormat} pixel format");
+                    throw new FormatException($"PixelColorExtractor has not been registered for {pixelFormat} pixel format. Please create a class which inherits from PixelColorExtractor and register it via PixelColorExtractor.RegisterPixelColorExtractor");
 
                 return RegisteredColorExtractors[pixelFormat];
             }
         }
 
-        class Rgb24PixelScanner : PixelColorExtractor
+        class Rgb24PixelExtractor : PixelColorExtractor
         {
-            public Rgb24PixelScanner() : base(PixelFormat.Format24bppRgb)
+            public Rgb24PixelExtractor() : base(PixelFormat.Format24bppRgb)
             { }
 
             public override void ExtractPixelBytesToColor(byte[] rawBytes, int startIndex, ref int A, ref int R, ref int G, ref int B)
@@ -155,9 +156,9 @@ namespace Shipwreck.Phash.Imaging
                 B = rawBytes[startIndex + 2];
             }
         }
-        class Argb32PixelScanner : PixelColorExtractor
+        class Argb32PixelExtractor : PixelColorExtractor
         {
-            public Argb32PixelScanner() : base(PixelFormat.Format32bppArgb)
+            public Argb32PixelExtractor() : base(PixelFormat.Format32bppArgb)
             { }
 
             public override void ExtractPixelBytesToColor(byte[] rawBytes, int startIndex, ref int A, ref int R, ref int G, ref int B)
@@ -169,6 +170,31 @@ namespace Shipwreck.Phash.Imaging
             }
         }
 
-        class PArgb32PixelScanner : Argb32PixelScanner { }
+        class PArgb32PixelExtractor : PixelColorExtractor
+        {
+            public PArgb32PixelExtractor() : base(PixelFormat.Format32bppPArgb)
+            { }
+
+            public override void ExtractPixelBytesToColor(byte[] rawBytes, int startIndex, ref int A, ref int R, ref int G, ref int B)
+            {
+                A = rawBytes[startIndex];
+                R = rawBytes[startIndex + 1];
+                G = rawBytes[startIndex + 2];
+                B = rawBytes[startIndex + 3];
+            }
+        }
+        
+        class Rgb32PixelExtractor : PixelColorExtractor
+        {
+            public Rgb32PixelExtractor() : base(PixelFormat.Format32bppRgb)
+            { }
+
+            public override void ExtractPixelBytesToColor(byte[] rawBytes, int startIndex, ref int A, ref int R, ref int G, ref int B)
+            {
+                R = rawBytes[startIndex];
+                G = rawBytes[startIndex + 1];
+                B = rawBytes[startIndex + 2];
+            }
+        }
     }
 }

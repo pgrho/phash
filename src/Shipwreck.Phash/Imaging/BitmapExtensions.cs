@@ -9,23 +9,22 @@ using System.Windows.Media.Imaging;
 
 namespace Shipwreck.Phash.Imaging
 {
-
     public static class BitmapExtensions
     {
-        public static Bitmap ToRgb24(this Bitmap source)
+        public static Bitmap ToRgb24(this Bitmap bitmap)
         {
-            if (source.PixelFormat == PixelFormat.Format24bppRgb)
-                return source;
+            if (bitmap.PixelFormat == PixelFormat.Format24bppRgb)
+                return bitmap;
             Bitmap drawingBitmap = null;
             try
             {
-                drawingBitmap = new Bitmap(source.Width, source.Height, PixelFormat.Format24bppRgb);
-                drawingBitmap.SetResolution(source.HorizontalResolution, source.VerticalResolution);
+                drawingBitmap = new Bitmap(bitmap.Width, bitmap.Height, PixelFormat.Format24bppRgb);
+                drawingBitmap.SetResolution(bitmap.HorizontalResolution, bitmap.VerticalResolution);
                 using (var graphics = Graphics.FromImage(drawingBitmap))
                 {
                     graphics.CompositingMode = CompositingMode.SourceCopy;
                     graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
-                    graphics.DrawImage(source, 0, 0);
+                    graphics.DrawImage(bitmap, 0, 0);
                 }
                 return drawingBitmap;
             }
@@ -36,21 +35,21 @@ namespace Shipwreck.Phash.Imaging
             }
         }
 
-        public static ByteImage ToByteImageOfY(this Bitmap source)
+        public static ByteImage ToByteImageOfY(this Bitmap bitmap)
         {
-            Bitmap bmp = null;
+            Bitmap bitmap24Rgb = null;
             bool localOwnedBitmapHandle = false;
             try
             {
-                bmp = source.ToRgb24();
-                localOwnedBitmapHandle = source != bmp;
+                bitmap24Rgb = bitmap.ToRgb24();
+                localOwnedBitmapHandle = bitmap != bitmap24Rgb;
 
-                var data = bmp.ToBytes();
+                var data = bitmap24Rgb.ToBytes();
 
-                var r = new ByteImage(bmp.Width, bmp.Height);
+                var r = new ByteImage(bitmap24Rgb.Width, bitmap24Rgb.Height);
 
-                int bytesPerPixel = (Image.GetPixelFormatSize(bmp.PixelFormat) + (sizeof(byte) - 1)) / sizeof(byte);
-                int strideDelta = bmp.GetStride() % (bmp.Width * bytesPerPixel);
+                int bytesPerPixel = (Image.GetPixelFormatSize(bitmap24Rgb.PixelFormat) + (sizeof(byte) - 1)) / sizeof(byte);
+                int strideDelta = bitmap24Rgb.GetStride() % (bitmap24Rgb.Width * bytesPerPixel);
                 var yc = new Vector3(66, 129, 25);
                 var i = 0;
                 for (var dy = 0; dy < r.Height; dy++)
@@ -73,7 +72,7 @@ namespace Shipwreck.Phash.Imaging
             finally
             {
                 if (localOwnedBitmapHandle)
-                    bmp?.Dispose();
+                    bitmap24Rgb?.Dispose();
             }
         }
         
@@ -101,6 +100,11 @@ namespace Shipwreck.Phash.Imaging
             }
         }
 
+        public static RawBitmapData ToRawBitmapData(this Bitmap bitmap)
+        {
+            return RawBitmapData.FromBitmap(bitmap);
+        }
+
         public static int GetStride(this Bitmap bitmap)
         {
             int bitsPerPixel = ((int)bitmap.PixelFormat & 0xff00) >> 8;
@@ -111,10 +115,10 @@ namespace Shipwreck.Phash.Imaging
         [DllImport("gdi32")]
         static extern int DeleteObject(IntPtr o);
 
-        public static BitmapSource ToBitmapSource(this Bitmap source)
+        public static BitmapSource ToBitmapSource(this Bitmap bitmap)
         {
             BitmapSource bs = null;
-            IntPtr ip = source.GetHbitmap();
+            IntPtr ip = bitmap.GetHbitmap();
             try
             {
                 bs = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(ip,
