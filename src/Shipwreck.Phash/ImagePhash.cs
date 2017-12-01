@@ -2,7 +2,6 @@
 using System.IO;
 using System.Windows.Media.Imaging;
 using Shipwreck.Phash.Imaging;
-using System.Drawing;
 
 namespace Shipwreck.Phash
 {
