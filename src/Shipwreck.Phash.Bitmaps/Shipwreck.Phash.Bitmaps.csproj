@@ -23,6 +23,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="NuGet.Build.Tasks.Pack" Version="4.4.0">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
     <PackageReference Include="System.Numerics.Vectors" Version="4.3.0" />
   </ItemGroup>
 
