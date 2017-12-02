@@ -5,8 +5,11 @@ using Shipwreck.Phash.Imaging;
 
 namespace Shipwreck.Phash
 {
-    public static class ImagePhash
+    public class ImagePhash
     {
+        protected ImagePhash()
+        { }
+
         private static float ROUNDING_FACTOR(float x)
             => x >= 0 ? 0.5f : -0.5f;
 
@@ -14,10 +17,10 @@ namespace Shipwreck.Phash
             => x >= 0 ? 0.5 : -0.5;
 
         private const double SQRT_TWO = 1.4142135623730950488016887242097;
-        private const double DEFAULT_SIGMA = 3.5;
-        private const double DEFAULT_GAMMA = 1.0;
-        private const int DEFAULT_NUMBER_OF_ANGLES = 180;
-        private const double DEFAULT_THRESHOLD = 0.9;
+        protected const double DEFAULT_SIGMA = 3.5;
+        protected const double DEFAULT_GAMMA = 1.0;
+        protected const int DEFAULT_NUMBER_OF_ANGLES = 180;
+        protected const double DEFAULT_THRESHOLD = 0.9;
 
         #region CompareImages
 
@@ -73,9 +76,9 @@ namespace Shipwreck.Phash
             }
         }
 
-        public static Digest ComputeDigest(Stream fileStream, double sigma = DEFAULT_SIGMA, double gamma = DEFAULT_GAMMA, int numberOfAngles = DEFAULT_NUMBER_OF_ANGLES)
+        public static Digest ComputeDigest(Stream bitmapStream, double sigma = DEFAULT_SIGMA, double gamma = DEFAULT_GAMMA, int numberOfAngles = DEFAULT_NUMBER_OF_ANGLES)
         {
-            var bf = BitmapFrame.Create(fileStream, BitmapCreateOptions.None, BitmapCacheOption.OnLoad);
+            var bf = BitmapFrame.Create(bitmapStream, BitmapCreateOptions.None, BitmapCacheOption.OnLoad);
 
             return ComputeDigest(bf.ToByteImageOfYOrB(), sigma, gamma, numberOfAngles: numberOfAngles);
         }
@@ -88,7 +91,7 @@ namespace Shipwreck.Phash
         /// <param name="gamma">double value for gamma correction on the input image</param>
         /// <param name="numberOfAngles">int value for the number of angles to consider.</param>
         /// <returns></returns>
-        internal static Digest ComputeDigest(ByteImage image, double sigma, double gamma, int numberOfAngles = 180)
+        protected static Digest ComputeDigest(ByteImage image, double sigma, double gamma, int numberOfAngles = DEFAULT_NUMBER_OF_ANGLES)
         {
             var blurred = image.Blur(sigma);
 

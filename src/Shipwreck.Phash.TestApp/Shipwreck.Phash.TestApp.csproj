@@ -35,6 +35,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
@@ -322,6 +323,10 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Shipwreck.Phash.Bitmaps\Shipwreck.Phash.Bitmaps.csproj">
+      <Project>{322b6f8f-e473-40d8-af83-76feddea1cc8}</Project>
+      <Name>Shipwreck.Phash.Bitmaps</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Shipwreck.Phash\Shipwreck.Phash.csproj">
       <Project>{7D98638A-93D4-46AE-9263-8D513A1C9EAA}</Project>
       <Name>Shipwreck.Phash</Name>

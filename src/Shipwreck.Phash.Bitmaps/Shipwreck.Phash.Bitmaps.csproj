@@ -1,5 +1,4 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <TargetFramework>net452</TargetFramework>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
@@ -9,25 +8,19 @@
     <Authors>shipwreck.jp</Authors>
     <Company />
     <Product>priHash</Product>
-    <Description>C# Implementation of phash-0.9.4.</Description>
+    <Description>C# Implementation of phash-0.9.4 for bitmaps.</Description>
     <PackageLicenseUrl>http://www.gnu.org/licenses/</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/pgrho/phash</PackageProjectUrl>
     <FileVersion>0.1.0.0</FileVersion>
     <Copyright>Copyright © 2016 shipwreck.jp</Copyright>
   </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>bin\Release\net452\Shipwreck.Phash.xml</DocumentationFile>
-  </PropertyGroup>
-
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>bin\Debug\net452\Shipwreck.Phash.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\net452\Shipwreck.Phash.Bitmaps.xml</DocumentationFile>
     <NoWarn>1591,1701,1702,1705</NoWarn>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Include="..\Shipwreck.Phash.CrossCorrelation\Generated Codes\CrossCorrelation.cs" Link="CrossCorrelation.cs" />
-  </ItemGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>bin\Release\net452\Shipwreck.Phash.Bitmaps.xml</DocumentationFile>
+  </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="NuGet.Build.Tasks.Pack" Version="4.4.0">
@@ -37,27 +30,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Shipwreck.Phash\Shipwreck.Phash.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="PresentationCore" />
     <Reference Include="WindowsBase" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Update="Imaging\Generated Codes\Images.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>Images.cs</LastGenOutput>
-    </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="Imaging\Generated Codes\Images.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Images.tt</DependentUpon>
-    </Compile>
-  </ItemGroup>
-  
 </Project>

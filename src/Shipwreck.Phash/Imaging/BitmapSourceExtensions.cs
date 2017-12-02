@@ -1,14 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Drawing;
+using System.IO;
 using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 namespace Shipwreck.Phash.Imaging
 {
+
     public static class BitmapSourceExtensions
     {
         public static BitmapSource ToGray8(this BitmapSource source)
@@ -34,7 +32,7 @@ namespace Shipwreck.Phash.Imaging
 
             var data = new byte[bmp.PixelWidth * bmp.PixelHeight * 3];
             bmp.CopyPixels(data, bmp.PixelWidth * 3, 0);
-
+            
             var r = new ByteImage(bmp.PixelWidth, bmp.PixelHeight);
 
             var yc = new Vector3(66, 129, 25);
@@ -62,5 +60,19 @@ namespace Shipwreck.Phash.Imaging
                   || src.Format == PixelFormats.Gray8
                   || src.Format == PixelFormats.Gray16
                   || src.Format == PixelFormats.Gray32Float ? src.ToByteImage() : src.ToByteImageOfY();
+
+
+        public static Bitmap ToBitmap(this BitmapSource bitmapsource)
+        {
+            Bitmap bitmap;
+            using (var outStream = new MemoryStream())
+            {
+                BitmapEncoder enc = new BmpBitmapEncoder();
+                enc.Frames.Add(BitmapFrame.Create(bitmapsource));
+                enc.Save(outStream);
+                bitmap = new Bitmap(outStream);
+            }
+            return bitmap;
+        }
     }
 }
