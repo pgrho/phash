@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 
 namespace Shipwreck.Phash.Imaging
 {
@@ -66,7 +59,6 @@ namespace Shipwreck.Phash.Imaging
 
         public void DivideInplace(float divider)
             => MultiplyInplace(1 / divider);
-
 
         public FloatImage Multiply(FloatImage other)
         {

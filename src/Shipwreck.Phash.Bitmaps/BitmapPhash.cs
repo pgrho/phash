@@ -1,6 +1,6 @@
-﻿using Shipwreck.Phash.Imaging;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Windows.Media.Imaging;
+using Shipwreck.Phash.Imaging;
 
 namespace Shipwreck.Phash.Bitmaps
 {
@@ -53,6 +53,5 @@ namespace Shipwreck.Phash.Bitmaps
         {
             return ComputeDigest(rawBitmapData.ToByteImageOfY(computeArea), sigma, gamma, numberOfAngles: numberOfAngles);
         }
-
     }
 }

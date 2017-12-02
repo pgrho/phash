@@ -1,8 +1,6 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Shipwreck.Phash.Data;
 using System.Linq;
-using Shipwreck.Phash;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Shipwreck.Phash.Data
 {

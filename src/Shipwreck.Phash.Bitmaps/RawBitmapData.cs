@@ -8,7 +8,6 @@ namespace Shipwreck.Phash.Bitmaps
 {
     public class RawBitmapData
     {
-
         public delegate void PixelHandler(int pixelWidth, int pixelHeight, int A, int R, int G, int B);
 
         public int PixelWidth { get; }
@@ -29,7 +28,7 @@ namespace Shipwreck.Phash.Bitmaps
             BytesPerPixel = (bitsPerPixel + ((sizeof(byte) * 8) - 1)) / (sizeof(byte) * 8);
         }
 
-        int PixelXYToByteIndex(int pixelX, int pixelY)
+        private int PixelXYToByteIndex(int pixelX, int pixelY)
         {
             return (pixelY * ByteStride) + (pixelX * BytesPerPixel);
         }
@@ -94,9 +93,7 @@ namespace Shipwreck.Phash.Bitmaps
                 if (lockedBits != null)
                     bitmap.UnlockBits(lockedBits);
             }
-
         }
-
 
         public abstract class PixelColorExtractor
         {
@@ -121,7 +118,7 @@ namespace Shipwreck.Phash.Bitmaps
             /// <param name="B">Output blue component, required</param>
             public abstract void ExtractPixelBytesToColor(byte[] rawBytes, int startIndex, ref int A, ref int R, ref int G, ref int B);
 
-            static Dictionary<PixelFormat, PixelColorExtractor> RegisteredColorExtractors = new Dictionary<PixelFormat, PixelColorExtractor>()
+            private static Dictionary<PixelFormat, PixelColorExtractor> RegisteredColorExtractors = new Dictionary<PixelFormat, PixelColorExtractor>()
             {
                 { PixelFormat.Format24bppRgb, new Rgb24PixelExtractor() },
                 { PixelFormat.Format32bppArgb, new Argb32PixelExtractor() },
@@ -144,7 +141,7 @@ namespace Shipwreck.Phash.Bitmaps
             }
         }
 
-        class Rgb24PixelExtractor : PixelColorExtractor
+        private class Rgb24PixelExtractor : PixelColorExtractor
         {
             public Rgb24PixelExtractor() : base(PixelFormat.Format24bppRgb)
             { }
@@ -156,7 +153,8 @@ namespace Shipwreck.Phash.Bitmaps
                 B = rawBytes[startIndex + 2];
             }
         }
-        class Argb32PixelExtractor : PixelColorExtractor
+
+        private class Argb32PixelExtractor : PixelColorExtractor
         {
             public Argb32PixelExtractor() : base(PixelFormat.Format32bppArgb)
             { }
@@ -170,7 +168,7 @@ namespace Shipwreck.Phash.Bitmaps
             }
         }
 
-        class PArgb32PixelExtractor : PixelColorExtractor
+        private class PArgb32PixelExtractor : PixelColorExtractor
         {
             public PArgb32PixelExtractor() : base(PixelFormat.Format32bppPArgb)
             { }
@@ -184,7 +182,7 @@ namespace Shipwreck.Phash.Bitmaps
             }
         }
 
-        class Rgb32PixelExtractor : PixelColorExtractor
+        private class Rgb32PixelExtractor : PixelColorExtractor
         {
             public Rgb32PixelExtractor() : base(PixelFormat.Format32bppRgb)
             { }

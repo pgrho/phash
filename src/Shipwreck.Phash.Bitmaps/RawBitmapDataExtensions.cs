@@ -1,15 +1,15 @@
-﻿using Shipwreck.Phash.Imaging;
-using System;
+﻿using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Numerics;
 using System.Runtime.InteropServices;
+using Shipwreck.Phash.Imaging;
 
 namespace Shipwreck.Phash.Bitmaps
 {
     public static class RawBitmapDataExtensions
     {
-        static bool Is1BytePerComponentFormat(PixelFormat format)
+        private static bool Is1BytePerComponentFormat(PixelFormat format)
         {
             return format == PixelFormat.Format24bppRgb ||
                 format == PixelFormat.Format32bppArgb ||
@@ -21,6 +21,7 @@ namespace Shipwreck.Phash.Bitmaps
         {
             return rawBitmapData.ToByteImageOfY(new Rectangle(0, 0, rawBitmapData.PixelWidth, rawBitmapData.PixelHeight));
         }
+
         public static ByteImage ToByteImageOfY(this RawBitmapData rawBitmapData, Rectangle area)
         {
             RawBitmapData rawBitmapData1ByteComponent = rawBitmapData;

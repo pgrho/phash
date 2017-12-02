@@ -1,12 +1,11 @@
-﻿using Shipwreck.Phash.Imaging;
-using System;
+﻿using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
-using System.IO;
 using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Windows.Media.Imaging;
+using Shipwreck.Phash.Imaging;
 
 namespace Shipwreck.Phash.Bitmaps
 {
@@ -102,9 +101,7 @@ namespace Shipwreck.Phash.Bitmaps
         }
 
         public static RawBitmapData ToRawBitmapData(this Bitmap bitmap)
-        {
-            return RawBitmapData.FromBitmap(bitmap);
-        }
+            => RawBitmapData.FromBitmap(bitmap);
 
         public static int GetStride(this Bitmap bitmap)
         {
@@ -114,7 +111,7 @@ namespace Shipwreck.Phash.Bitmaps
         }
 
         [DllImport("gdi32")]
-        static extern int DeleteObject(IntPtr o);
+        private static extern int DeleteObject(IntPtr o);
 
         public static BitmapSource ToBitmapSource(this Bitmap bitmap)
         {
@@ -135,7 +132,6 @@ namespace Shipwreck.Phash.Bitmaps
             return bs;
         }
 
-
         public static Bitmap ToBitmap(this Image image)
         {
             var bitmap = new Bitmap(image.Width, image.Height, image.PixelFormat);
@@ -152,7 +148,5 @@ namespace Shipwreck.Phash.Bitmaps
                 throw;
             }
         }
-
-
     }
 }

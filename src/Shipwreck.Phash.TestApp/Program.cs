@@ -3,14 +3,12 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Drawing;
-using Shipwreck.Phash.Bitmaps;
 
 namespace Shipwreck.Phash.TestApp
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             var dirs = new string[] { "compr", "blur", "rotd", "misc" };
 
@@ -82,7 +80,7 @@ namespace Shipwreck.Phash.TestApp
                 .ToList();
         }
 
-        private static List<string> MatchCrossCorrelationResults(string hashCollectionNameOne, 
+        private static List<string> MatchCrossCorrelationResults(string hashCollectionNameOne,
             IEnumerable<KeyValuePair<string, double>> hashesOne, string hashCollectionNameTwo,
             IEnumerable<KeyValuePair<string, double>> hashesTwo)
         {
@@ -108,9 +106,9 @@ namespace Shipwreck.Phash.TestApp
                 Mismatches.Add($"Mismatched Match Counter {length}, {overLength}");
 
             return Mismatches;
-        } 
+        }
 
-        private static void WriteOutputHtml(IEnumerable<KeyValuePair<string,double>> crossCorrelationResults, List<string> crossCorrelationMismatches, Digest againstHash, StreamWriter sw, DirectoryInfo di, FileInfo fi)
+        private static void WriteOutputHtml(IEnumerable<KeyValuePair<string, double>> crossCorrelationResults, List<string> crossCorrelationMismatches, Digest againstHash, StreamWriter sw, DirectoryInfo di, FileInfo fi)
         {
             sw.Write("<h2>");
             sw.Write(di.Name);
@@ -146,7 +144,6 @@ namespace Shipwreck.Phash.TestApp
 
                 sw.WriteLine(D);
             }
-            
         }
     }
 }

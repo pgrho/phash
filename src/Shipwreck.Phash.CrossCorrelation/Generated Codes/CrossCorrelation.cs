@@ -40,6 +40,7 @@ namespace Shipwreck.Phash
 
             return Math.Sqrt(max);
         }
+
         internal unsafe static double GetCrossCorrelationCore(byte* coefficients1, byte* coefficients2, int length)
         {
             var sumx = 0.0;
@@ -76,5 +77,5 @@ namespace Shipwreck.Phash
 
             return Math.Sqrt(max);
         }
-	}
+    }
 }
