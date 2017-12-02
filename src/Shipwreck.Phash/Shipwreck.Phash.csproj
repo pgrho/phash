@@ -16,6 +16,15 @@
     <Copyright>Copyright © 2016 shipwreck.jp</Copyright>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>bin\Release\net452\Shipwreck.Phash.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>bin\Debug\net452\Shipwreck.Phash.xml</DocumentationFile>
+    <NoWarn>1591,1701,1702,1705</NoWarn>
+  </PropertyGroup>
+
   <ItemGroup>
     <Compile Include="..\Shipwreck.Phash.CrossCorrelation\Generated Codes\CrossCorrelation.cs" Link="CrossCorrelation.cs" />
   </ItemGroup>
