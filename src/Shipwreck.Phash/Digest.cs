@@ -6,25 +6,40 @@ namespace Shipwreck.Phash
     /// <summary>
     /// Digest info
     /// </summary>
+    [Serializable]
     public class Digest
     {
-        public Digest(int size)
+        internal const int LENGTH = 40;
+
+        public Digest()
         {
-            Coefficents = new byte[size];
+            _Coefficents = new byte[LENGTH];
         }
 
-        /// <summary>
-        /// hash id
-        /// </summary>
-        public char[] id;
-
-        [Obsolete]
-        public byte[] coeffs => Coefficents;
+        private readonly byte[] _Coefficents;
 
         /// <summary>
         /// the digest integer coefficient array
         /// </summary>
-        public byte[] Coefficents { get; }
+        public byte[] Coefficents
+        {
+            get => _Coefficents;
+            set
+            {
+                if (value == null)
+                {
+                    Array.Clear(_Coefficents, 0, _Coefficents.Length);
+                }
+                else if (value.Length == _Coefficents.Length)
+                {
+                    Array.Copy(value, _Coefficents, value.Length);
+                }
+                else
+                {
+                    throw new ArgumentException();
+                }
+            }
+        }
 
         public override string ToString()
         {
