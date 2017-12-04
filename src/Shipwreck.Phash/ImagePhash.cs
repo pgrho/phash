@@ -133,17 +133,16 @@ namespace Shipwreck.Phash
         public static Digest ComputeDct(Features featureVector)
         {
             var N = featureVector.features.Length;
-            const int nb_coeffs = 40;
-
-            var digest = new Digest(nb_coeffs);
+  
+            var digest = new Digest( );
 
             var R = featureVector.features;
             var D = digest.Coefficents;
 
-            var D_temp = new double[nb_coeffs];
+            var D_temp = new double[Digest.LENGTH];
             double max = 0.0;
             double min = 0.0;
-            for (int k = 0; k < nb_coeffs; k++)
+            for (int k = 0; k < Digest.LENGTH; k++)
             {
                 double sum = 0.0;
                 for (int n = 0; n < N; n++)
@@ -169,7 +168,7 @@ namespace Shipwreck.Phash
                 }
             }
 
-            for (int i = 0; i < nb_coeffs; i++)
+            for (int i = 0; i < Digest.LENGTH; i++)
             {
                 D[i] = (byte)(byte.MaxValue * (D_temp[i] - min) / (max - min));
             }
