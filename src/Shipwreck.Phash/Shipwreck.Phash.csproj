@@ -5,14 +5,14 @@
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
-    <Version>0.1.0</Version>
+    <Version>0.1.1</Version>
     <Authors>shipwreck.jp</Authors>
     <Company />
     <Product>priHash</Product>
     <Description>C# Implementation of phash-0.9.4.</Description>
     <PackageLicenseUrl>http://www.gnu.org/licenses/</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/pgrho/phash</PackageProjectUrl>
-    <FileVersion>0.1.0.0</FileVersion>
+    <FileVersion>0.1.1.0</FileVersion>
     <Copyright>Copyright © 2016 shipwreck.jp</Copyright>
   </PropertyGroup>
 
