@@ -148,9 +148,9 @@ namespace Shipwreck.Phash.Bitmaps
 
             public override void ExtractPixelBytesToColor(byte[] rawBytes, int startIndex, ref int A, ref int R, ref int G, ref int B)
             {
-                R = rawBytes[startIndex];
+                B = rawBytes[startIndex];
                 G = rawBytes[startIndex + 1];
-                B = rawBytes[startIndex + 2];
+                R = rawBytes[startIndex + 2];
             }
         }
 
@@ -161,10 +161,10 @@ namespace Shipwreck.Phash.Bitmaps
 
             public override void ExtractPixelBytesToColor(byte[] rawBytes, int startIndex, ref int A, ref int R, ref int G, ref int B)
             {
-                A = rawBytes[startIndex];
-                R = rawBytes[startIndex + 1];
-                G = rawBytes[startIndex + 2];
-                B = rawBytes[startIndex + 3];
+                B = rawBytes[startIndex];
+                G = rawBytes[startIndex + 1];
+                R = rawBytes[startIndex + 2];
+                A = rawBytes[startIndex + 3];
             }
         }
 
@@ -175,10 +175,10 @@ namespace Shipwreck.Phash.Bitmaps
 
             public override void ExtractPixelBytesToColor(byte[] rawBytes, int startIndex, ref int A, ref int R, ref int G, ref int B)
             {
-                A = rawBytes[startIndex];
-                R = rawBytes[startIndex + 1];
-                G = rawBytes[startIndex + 2];
-                B = rawBytes[startIndex + 3];
+                B = rawBytes[startIndex];
+                G = rawBytes[startIndex + 1];
+                R = rawBytes[startIndex + 2];
+                A = rawBytes[startIndex + 3];
             }
         }
 
@@ -189,9 +189,9 @@ namespace Shipwreck.Phash.Bitmaps
 
             public override void ExtractPixelBytesToColor(byte[] rawBytes, int startIndex, ref int A, ref int R, ref int G, ref int B)
             {
-                R = rawBytes[startIndex];
+                B = rawBytes[startIndex];
                 G = rawBytes[startIndex + 1];
-                B = rawBytes[startIndex + 2];
+                R = rawBytes[startIndex + 2];
             }
         }
     }
