@@ -57,9 +57,9 @@ namespace Shipwreck.Phash.Bitmaps
                     for (var dx = 0; dx < r.Width; dx++)
                     {
                         Vector3 sv;
-                        sv.Z = data[i++]; // R
+                        sv.Z = data[i++]; // B
                         sv.Y = data[i++]; // G
-                        sv.X = data[i++]; // B
+                        sv.X = data[i++]; // R
 
                         r[dx, dy] = (byte)(((int)(Vector3.Dot(yc, sv) + 128) >> 8) + 16);
                     }
@@ -132,9 +132,9 @@ namespace Shipwreck.Phash.Bitmaps
             return bs;
         }
 
-        public static Bitmap ToBitmap(this Image image)
+        public static Bitmap ToBitmap(this Image image, PixelFormat format = PixelFormat.DontCare)
         {
-            var bitmap = new Bitmap(image.Width, image.Height, image.PixelFormat);
+            var bitmap = new Bitmap(image.Width, image.Height, format == PixelFormat.DontCare ? image.PixelFormat : format);
             try
             {
                 bitmap.SetResolution(image.HorizontalResolution, image.VerticalResolution);

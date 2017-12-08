@@ -41,15 +41,15 @@ namespace Shipwreck.Phash.Bitmaps
 
             var data = rawBitmapData1ByteComponent;
 
-            var r = new ByteImage(rawBitmapData1ByteComponent.PixelWidth, rawBitmapData1ByteComponent.PixelHeight);
+            var r = new ByteImage(area.Width, area.Height);
             var yc = new Vector3(66, 129, 25);
 
             rawBitmapData1ByteComponent.PerPixelInArea(area, (dx, dy, A, R, G, B) =>
             {
                 Vector3 sv;
-                sv.Z = R;
+                sv.Z = B;
                 sv.Y = G;
-                sv.X = B;
+                sv.X = R;
 
                 r[dx, dy] = (byte)(((int)(Vector3.Dot(yc, sv) + 128) >> 8) + 16);
             });
