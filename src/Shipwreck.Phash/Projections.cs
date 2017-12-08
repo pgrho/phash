@@ -19,15 +19,9 @@ namespace Shipwreck.Phash
         /// </summary>
         public FloatImage Region { get; }
 
-        [Obsolete]
-        public FloatImage R => Region;
-
         /// <summary>
         /// int array denoting the number of pixels of each line
         /// </summary>
         public int[] PixelsPerLine { get; }
-
-        [Obsolete]
-        public int[] nb_pix_perline => PixelsPerLine;
     }
 }

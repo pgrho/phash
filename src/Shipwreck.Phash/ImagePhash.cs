@@ -133,8 +133,8 @@ namespace Shipwreck.Phash
         public static Digest ComputeDct(Features featureVector)
         {
             var N = featureVector.features.Length;
-  
-            var digest = new Digest( );
+
+            var digest = new Digest();
 
             var R = featureVector.features;
             var D = digest.Coefficents;
@@ -312,7 +312,7 @@ namespace Shipwreck.Phash
                     line_sum += map[k, i];
                     line_sum_sqd += map[k, i] * map[k, i];
                 }
-                feat_v[k] = (line_sum_sqd / nb_pixels) - (line_sum * line_sum) / (nb_pixels * nb_pixels);
+                feat_v[k] = nb_pixels > 0 ? (line_sum_sqd / nb_pixels) - (line_sum * line_sum) / (nb_pixels * nb_pixels) : 0;
                 sum += feat_v[k];
                 sum_sqd += feat_v[k] * feat_v[k];
             }
