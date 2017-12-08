@@ -1,0 +1,14 @@
+﻿body {
+    display: flex;
+    flex-flow: row nowrap;
+}
+
+    body > div {
+        flex-grow: 0;
+        flex-shrink: 0;
+    }
+
+table img {
+    max-width: 48px;
+    max-width: 48px;
+}

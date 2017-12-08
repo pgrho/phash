@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Xml;
+using System.Xml.Linq;
+using Newtonsoft.Json;
 using Shipwreck.Phash.Bitmaps;
 
 namespace Shipwreck.Phash.TestApp
@@ -45,13 +49,20 @@ namespace Shipwreck.Phash.TestApp
 
         private static void Main(string[] args)
         {
-            var prg = new Program();
+            var prg = new Program()
+            {
+                _Output = OutputToConsole
+            };
 
             var targets = new List<string>();
 
             foreach (var a in args)
             {
-                // TODO: parse arg and continue
+                if (a == "--html")
+                {
+                    prg._Output = OutputToHtml;
+                    continue;
+                }
 
                 targets.Add(a);
             }
@@ -74,10 +85,12 @@ namespace Shipwreck.Phash.TestApp
 
             var bd = GetCommonPath(files);
 
-            OutputToConsole(bd, digests, results);
+            _Output?.Invoke(bd, digests, results);
         }
 
         #region Output result
+
+        private Action<string, List<FileDigests>, List<CCR>> _Output;
 
         private static void OutputToConsole(string bd, List<FileDigests> digests, List<CCR> results)
         {
@@ -104,6 +117,35 @@ namespace Shipwreck.Phash.TestApp
             }
             Console.WriteLine("Hit any key to exit..");
             Console.ReadKey();
+        }
+
+        private static void OutputToHtml(string bd, List<FileDigests> digests, List<CCR> results)
+        {
+            var xd = XDocument.Load("output.template.html");
+
+            using (var sw = new StreamWriter("output.html", false, System.Text.Encoding.UTF8))
+            using (var xw = XmlWriter.Create(sw, new XmlWriterSettings()
+            {
+                OmitXmlDeclaration = true,
+                CheckCharacters = false
+            }))
+            {
+                var js = new JsonSerializer();
+                using (var aw = new StringWriter())
+                {
+                    aw.Write("output(");
+                    js.Serialize(aw, digests.Select(d => new { path = GetShortPath(bd, d), url = new Uri(d.fi.FullName).ToString() }));
+                    aw.Write(",");
+                    js.Serialize(aw, results.Select(r => new { r.i, r.j, ccr = r.m }));
+                    aw.Write(")");
+
+                    xd.Descendants("{http://www.w3.org/1999/xhtml}body").First().SetAttributeValue("onload", aw);
+                }
+
+                xd.Save(xw);
+            }
+
+            Process.Start("output.html");
         }
 
         #endregion Output result
