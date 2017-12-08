@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -10,142 +9,143 @@ namespace Shipwreck.Phash.TestApp
 {
     internal class Program
     {
-        private static void Main(string[] args)
+        private class FileDigests
         {
-            var dirs = new string[] { "compr", "blur", "rotd", "misc" };
-
-            var bitmapSourceHashes = new Dictionary<string, Digest>();
-            var bitmapHashes = new Dictionary<string, Digest>();
-            var bitmapRawHashes = new Dictionary<string, Digest>();
-            using (var sw = new StreamWriter("result.html"))
+            public FileDigests(string f)
             {
-                sw.WriteLine("<!DOCTYPE html>");
-                sw.WriteLine("<html><body>");
-                var collectHashes = true;
-                foreach (var d in dirs)
+                fi = new FileInfo(f);
+                using (var fs = fi.OpenRead())
                 {
-                    var di = new DirectoryInfo(d);
-                    Console.WriteLine("{0}", di.FullName);
-
-                    foreach (var fi in di.EnumerateFiles())
+                    using (var image = Image.FromStream(fs, true))
+                    using (var bitmap = image.ToBitmap())
                     {
-                        using (var fs = fi.OpenRead())
-                        {
-                            Digest bitmapSourceHash;
-                            Digest bitmapHash;
-                            Digest bitmapRawHash;
-                            using (var image = Image.FromStream(fs, true))
-                            using (var bitmap = image.ToBitmap())
-                            {
-                                bitmapHash = BitmapPhash.ComputeBitmapDigest(bitmap);
-                                bitmapRawHash = BitmapPhash.ComputeRawBitmapDigest(bitmap.ToRawBitmapData());
-                            }
-                            fs.Position = 0;
-                            bitmapSourceHash = ImagePhash.ComputeDigest(fs);
-                            Console.WriteLine(" - {0}: {1:X16}", fi.Name, bitmapSourceHash);
-
-                            if (collectHashes)
-                            {
-                                bitmapSourceHashes[fi.FullName] = bitmapSourceHash;
-                                bitmapHashes[fi.FullName] = bitmapHash;
-                                bitmapRawHashes[fi.FullName] = bitmapRawHash;
-                            }
-                            else
-                            {
-                                var bitmapSourceCCResults = CrossCorrelateDigests(bitmapSourceHashes, bitmapSourceHash);
-                                var bitmapCCResults = CrossCorrelateDigests(bitmapHashes, bitmapHash);
-                                var bitmapRawCCResults = CrossCorrelateDigests(bitmapRawHashes, bitmapRawHash);
-
-                                var mismatchedCCResults = MatchCrossCorrelationResults("bitmap", bitmapCCResults, "bitmap_source", bitmapSourceCCResults);
-                                mismatchedCCResults.AddRange(MatchCrossCorrelationResults("bitmap_raw", bitmapRawCCResults, "bitmap_source", bitmapSourceCCResults));
-
-                                WriteOutputHtml(bitmapSourceCCResults, mismatchedCCResults, bitmapSourceHash, sw, di, fi);
-                            }
-                        }
+                        BitmapHash = BitmapPhash.ComputeBitmapDigest(bitmap);
+                        RawBitmapHash = BitmapPhash.ComputeRawBitmapDigest(bitmap.ToRawBitmapData());
                     }
-                    collectHashes = false;
+                    fs.Position = 0;
+                    BitmapSourceHash = ImagePhash.ComputeDigest(fs);
+
+                    //// TODO: Assert all digests are same
                 }
-                sw.WriteLine("</body></html>");
             }
 
-            Process.Start("result.html");
+            public FileInfo fi;
 
+            public Digest BitmapSourceHash;
+            public Digest BitmapHash;
+            public Digest RawBitmapHash;
+        }
+
+        private struct CCR
+        {
+            public int i;
+            public int j;
+            public double m;
+        }
+
+        private static void Main(string[] args)
+        {
+            var prg = new Program();
+
+            var targets = new List<string>();
+
+            foreach (var a in args)
+            {
+                // TODO: parse arg and continue
+
+                targets.Add(a);
+            }
+
+            prg.ProcessFiles(targets.Any() ? targets
+                            : new string[] { "compr", "blur", "rotd", "misc" }.SelectMany(d => Directory.EnumerateFiles(d)));
+        }
+
+        private void ProcessFiles(IEnumerable<string> fs)
+        {
+            var files = fs.Select(f => Path.GetFullPath(f).Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar)).ToList();
+
+            var digests = files.AsParallel().Select(f => new FileDigests(f)).ToList();
+            var results = digests.SelectMany((d1, i) => digests.Skip(i).Select((d2, j) => new CCR
+            {
+                i = i,
+                j = j + i,
+                m = ImagePhash.GetCrossCorrelation(d1.BitmapSourceHash, d2.BitmapSourceHash)
+            })).OrderBy(v => v.m).ToList();
+
+            var bd = GetCommonPath(files);
+
+            OutputToConsole(bd, digests, results);
+        }
+
+        #region Output result
+
+        private static void OutputToConsole(string bd, List<FileDigests> digests, List<CCR> results)
+        {
+            foreach (var d in digests.OrderBy(d => d.fi.FullName, StringComparer.CurrentCultureIgnoreCase))
+            {
+                Console.WriteLine(GetShortPath(bd, d));
+                Console.WriteLine(d.BitmapSourceHash);
+            }
+            Console.WriteLine();
+
+            Console.WriteLine("Hit any key to continue..");
+            Console.ReadKey();
+
+            if (digests.Count > 1)
+            {
+                foreach (var r in results)
+                {
+                    var d1 = digests[r.i];
+                    var d2 = digests[r.j];
+                    Console.WriteLine(GetShortPath(bd, d1));
+                    Console.WriteLine(GetShortPath(bd, d2));
+                    Console.WriteLine(r.m.ToString("f7"));
+                }
+            }
             Console.WriteLine("Hit any key to exit..");
             Console.ReadKey();
         }
 
-        private static List<KeyValuePair<string, double>> CrossCorrelateDigests(Dictionary<string, Digest> hashes, Digest againstHash)
-        {
-            return hashes
-                .Select(kv => new KeyValuePair<string, double>(kv.Key, ImagePhash.GetCrossCorrelation(againstHash, kv.Value)))
-                .OrderBy(_ => _.Value)
-                .ToList();
-        }
+        #endregion Output result
 
-        private static List<string> MatchCrossCorrelationResults(string hashCollectionNameOne,
-            IEnumerable<KeyValuePair<string, double>> hashesOne, string hashCollectionNameTwo,
-            IEnumerable<KeyValuePair<string, double>> hashesTwo)
+        #region IO Utils
+
+        private static string GetCommonPath(IEnumerable<string> files)
         {
-            List<string> Mismatches = new List<string>();
-            const double EqualityThreshold = 0.000000000000001;
-            var enumeratorOne = hashesOne.GetEnumerator();
-            var enumeratorTwo = hashesTwo.GetEnumerator();
-            int length = 0;
-            while (enumeratorOne.MoveNext() && enumeratorTwo.MoveNext())
+            string common = null;
+            foreach (var f in files)
             {
-                if (!enumeratorOne.Current.Key.Equals(enumeratorTwo.Current.Key) ||
-                    Math.Abs(enumeratorOne.Current.Value - enumeratorTwo.Current.Value) >= EqualityThreshold)
+                if (common == null)
                 {
-                    Mismatches.Add($"Cross Correlation Result Mismatch: {hashCollectionNameOne}({enumeratorOne.Current.Key},{enumeratorOne.Current.Value}), {hashCollectionNameTwo}({enumeratorTwo.Current.Key},{enumeratorTwo.Current.Value})");
+                    common = Path.GetDirectoryName(f);
                 }
-                length++;
+                else
+                {
+                    while (f.Length <= common.Length
+                            || !f.StartsWith(common)
+                            || (f[common.Length] != Path.DirectorySeparatorChar
+                                && f[common.Length - 1] != Path.DirectorySeparatorChar))
+                    {
+                        common = Path.GetDirectoryName(common);
+                        if (common == null)
+                        {
+                            return null;
+                        }
+                    }
+                }
             }
 
-            int overLength = length;
-            while (enumeratorOne.MoveNext() || enumeratorTwo.MoveNext())
-                overLength++;
-            if (length != overLength)
-                Mismatches.Add($"Mismatched Match Counter {length}, {overLength}");
+            if (common?.Length > 0 && common.Last() != Path.DirectorySeparatorChar)
+            {
+                return common + Path.DirectorySeparatorChar;
+            }
 
-            return Mismatches;
+            return common;
         }
 
-        private static void WriteOutputHtml(IEnumerable<KeyValuePair<string, double>> crossCorrelationResults, List<string> crossCorrelationMismatches, Digest againstHash, StreamWriter sw, DirectoryInfo di, FileInfo fi)
-        {
-            sw.Write("<h2>");
-            sw.Write(di.Name);
-            sw.Write("/");
-            sw.Write(fi.Name);
-            sw.WriteLine("</h2>");
+        private static string GetShortPath(string bd, FileDigests d)
+            => bd?.Length > 0 ? d.fi.FullName.Substring(bd.Length) : d.fi.FullName;
 
-            sw.Write("<img src=\"");
-            sw.Write(new Uri(fi.FullName));
-            sw.WriteLine("\" />");
-
-            sw.Write("<p>");
-            sw.Write(againstHash.ToString());
-            sw.WriteLine("</p>");
-
-            foreach (var mismatch in crossCorrelationMismatches)
-            {
-                Console.WriteLine(mismatch);
-                sw.Write("<p>");
-                sw.Write(mismatch);
-                sw.WriteLine("</p>");
-            }
-
-            foreach (var result in crossCorrelationResults)
-            {
-                var key = result.Key;
-                var D = result.Value;
-                Console.WriteLine(" - - {0}: {1}", Path.GetFileName(key), D);
-
-                sw.Write("<img width='64' height='64' src=\"");
-                sw.Write(new Uri(key));
-                sw.WriteLine("\" />");
-
-                sw.WriteLine(D);
-            }
-        }
+        #endregion IO Utils
     }
 }

@@ -252,6 +252,7 @@
     <Content Include="misc\wallacestevens.bmp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="output.js" />
     <Content Include="rotd\architecture1.bmp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
