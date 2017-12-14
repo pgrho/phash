@@ -13,19 +13,25 @@ namespace Shipwreck.Phash.Imaging
 
         public int Width
         {
+#if NET452
             [TargetedPatchingOptOut("")]
+#endif
             get => _Image.Width;
         }
 
         public int Height
         {
+#if NET452
             [TargetedPatchingOptOut("")]
+#endif
             get => _Image.Height;
         }
 
         public byte this[int x, int y]
         {
+#if NET452
             [TargetedPatchingOptOut("")]
+#endif
             get => _Image[x, y];
         }
     }

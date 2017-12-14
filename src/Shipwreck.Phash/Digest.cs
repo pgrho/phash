@@ -6,7 +6,9 @@ namespace Shipwreck.Phash
     /// <summary>
     /// Digest info
     /// </summary>
+#if NET452
     [Serializable]
+#endif
     public class Digest
     {
         internal const int LENGTH = 40;
