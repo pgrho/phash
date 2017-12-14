@@ -24,6 +24,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shipwreck.Phash.Bitmaps", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shipwreck.Phash.Tests", "Shipwreck.Phash.Tests\Shipwreck.Phash.Tests.csproj", "{B6573452-7805-4A81-ABA9-A7E5C8C10F53}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shipwreck.Phash.PresentationCore", "Shipwreck.Phash.PresentationCore\Shipwreck.Phash.PresentationCore.csproj", "{214527EA-A228-4633-A9F4-16B8C2F6AA56}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -88,6 +90,14 @@ Global
 		{B6573452-7805-4A81-ABA9-A7E5C8C10F53}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B6573452-7805-4A81-ABA9-A7E5C8C10F53}.Release|x86.ActiveCfg = Release|Any CPU
 		{B6573452-7805-4A81-ABA9-A7E5C8C10F53}.Release|x86.Build.0 = Release|Any CPU
+		{214527EA-A228-4633-A9F4-16B8C2F6AA56}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{214527EA-A228-4633-A9F4-16B8C2F6AA56}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{214527EA-A228-4633-A9F4-16B8C2F6AA56}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{214527EA-A228-4633-A9F4-16B8C2F6AA56}.Debug|x86.Build.0 = Debug|Any CPU
+		{214527EA-A228-4633-A9F4-16B8C2F6AA56}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{214527EA-A228-4633-A9F4-16B8C2F6AA56}.Release|Any CPU.Build.0 = Release|Any CPU
+		{214527EA-A228-4633-A9F4-16B8C2F6AA56}.Release|x86.ActiveCfg = Release|Any CPU
+		{214527EA-A228-4633-A9F4-16B8C2F6AA56}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

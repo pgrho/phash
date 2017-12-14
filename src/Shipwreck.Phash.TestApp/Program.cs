@@ -4,10 +4,12 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Windows.Media.Imaging;
 using System.Xml;
 using System.Xml.Linq;
 using Newtonsoft.Json;
 using Shipwreck.Phash.Bitmaps;
+using Shipwreck.Phash.PresentationCore;
 
 namespace Shipwreck.Phash.TestApp
 {
@@ -23,11 +25,11 @@ namespace Shipwreck.Phash.TestApp
                     using (var image = Image.FromStream(fs, true))
                     using (var bitmap = image.ToBitmap())
                     {
-                        BitmapHash = BitmapPhash.ComputeBitmapDigest(bitmap);
-                        RawBitmapHash = BitmapPhash.ComputeRawBitmapDigest(bitmap.ToRawBitmapData());
+                        BitmapHash = ImagePhash.ComputeDigest(bitmap.ToLuminanceImage());
+                        RawBitmapHash = ImagePhash.ComputeDigest(bitmap.ToRawBitmapData().ToLuminanceImage());
                     }
                     fs.Position = 0;
-                    BitmapSourceHash = ImagePhash.ComputeDigest(fs);
+                    BitmapSourceHash = ImagePhash.ComputeDigest(BitmapFrame.Create(fs).ToByteImage());
 
                     //// TODO: Assert all digests are same
                 }

@@ -4,14 +4,13 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Numerics;
 using System.Runtime.InteropServices;
-using System.Windows.Media.Imaging;
 using Shipwreck.Phash.Imaging;
 
 namespace Shipwreck.Phash.Bitmaps
 {
     public static class BitmapExtensions
     {
-        public static Bitmap ToRgb24(this Bitmap bitmap)
+        internal static Bitmap ToRgb24(this Bitmap bitmap)
         {
             if (bitmap.PixelFormat == PixelFormat.Format24bppRgb)
                 return bitmap;
@@ -35,7 +34,7 @@ namespace Shipwreck.Phash.Bitmaps
             }
         }
 
-        public static ByteImage ToByteImageOfY(this Bitmap bitmap)
+        public static ByteImage ToLuminanceImage(this Bitmap bitmap)
         {
             Bitmap bitmap24Rgb = null;
             bool localOwnedBitmapHandle = false;
@@ -112,25 +111,6 @@ namespace Shipwreck.Phash.Bitmaps
 
         [DllImport("gdi32")]
         private static extern int DeleteObject(IntPtr o);
-
-        public static BitmapSource ToBitmapSource(this Bitmap bitmap)
-        {
-            BitmapSource bs = null;
-            IntPtr ip = bitmap.GetHbitmap();
-            try
-            {
-                bs = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(ip,
-                   IntPtr.Zero, System.Windows.Int32Rect.Empty,
-                   BitmapSizeOptions.FromEmptyOptions());
-            }
-            finally
-            {
-                if (ip != IntPtr.Zero)
-                    DeleteObject(ip);
-            }
-
-            return bs;
-        }
 
         public static Bitmap ToBitmap(this Image image, PixelFormat format = PixelFormat.DontCare)
         {

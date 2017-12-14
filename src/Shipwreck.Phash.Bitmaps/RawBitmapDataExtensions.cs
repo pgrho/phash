@@ -17,12 +17,10 @@ namespace Shipwreck.Phash.Bitmaps
                 format == PixelFormat.Format32bppRgb;
         }
 
-        public static ByteImage ToByteImageOfY(this RawBitmapData rawBitmapData)
-        {
-            return rawBitmapData.ToByteImageOfY(new Rectangle(0, 0, rawBitmapData.PixelWidth, rawBitmapData.PixelHeight));
-        }
+        public static ByteImage ToLuminanceImage(this RawBitmapData rawBitmapData) 
+            => rawBitmapData.ToLuminanceImage(new Rectangle(0, 0, rawBitmapData.PixelWidth, rawBitmapData.PixelHeight));
 
-        public static ByteImage ToByteImageOfY(this RawBitmapData rawBitmapData, Rectangle area)
+        public static ByteImage ToLuminanceImage(this RawBitmapData rawBitmapData, Rectangle area)
         {
             RawBitmapData rawBitmapData1ByteComponent = rawBitmapData;
             if (!Is1BytePerComponentFormat(rawBitmapData.PixelFormat))

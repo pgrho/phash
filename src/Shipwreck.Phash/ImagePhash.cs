@@ -1,6 +1,4 @@
 ﻿using System;
-using System.IO;
-using System.Windows.Media.Imaging;
 using Shipwreck.Phash.Imaging;
 
 namespace Shipwreck.Phash
@@ -25,25 +23,6 @@ namespace Shipwreck.Phash
         #region CompareImages
 
         /// <summary>
-        /// Compare 2 images given the file names
-        /// </summary>
-        /// <param name="file1">first image file</param>
-        /// <param name="file2">second image file</param>
-        /// <param name="pcc">double value for peak of cross correlation</param>
-        /// <param name="sigma">double value for the deviation of gaussian filter</param>
-        /// <param name="gamma">double value for gamma correction of images</param>
-        /// <param name="numberOfAngles">int number for the number of angles of radon projections</param>
-        /// <param name="threshold">double value for the threshold</param>
-        /// <returns>false for different images, 1 true for same image,</returns>
-        public static bool CompareImages(string file1, string file2, out double pcc, double sigma = DEFAULT_SIGMA, double gamma = DEFAULT_GAMMA, int numberOfAngles = DEFAULT_NUMBER_OF_ANGLES, double threshold = DEFAULT_THRESHOLD)
-        {
-            var imA = BitmapFrame.Create(new Uri(file1), BitmapCreateOptions.None, BitmapCacheOption.OnLoad);
-            var imB = BitmapFrame.Create(new Uri(file2), BitmapCreateOptions.None, BitmapCacheOption.OnLoad);
-
-            return CompareImages(imA, imB, out pcc, sigma, gamma, numberOfAngles, threshold);
-        }
-
-        /// <summary>
         /// compare 2 images
         /// </summary>
         /// <param name="imA">CImg object of first image</param>
@@ -54,11 +33,11 @@ namespace Shipwreck.Phash
         /// <param name="numberOfAngles">int number for the number of angles of radon projections</param>
         /// <param name="threshold">double value for the threshold</param>
         /// <returns>false for different images, 1 true for same image,</returns>
-        public static bool CompareImages(BitmapSource imA, BitmapSource imB, out double pcc, double sigma = DEFAULT_SIGMA, double gamma = DEFAULT_GAMMA, int numberOfAngles = DEFAULT_NUMBER_OF_ANGLES, double threshold = DEFAULT_THRESHOLD)
+        public static bool CompareImages(IByteImage imA, IByteImage imB, out double pcc, double sigma = DEFAULT_SIGMA, double gamma = DEFAULT_GAMMA, int numberOfAngles = DEFAULT_NUMBER_OF_ANGLES, double threshold = DEFAULT_THRESHOLD)
         {
-            var digestA = ComputeDigest(imA.ToByteImageOfYOrB(), sigma, gamma, numberOfAngles);
+            var digestA = ComputeDigest(imA, sigma, gamma, numberOfAngles);
 
-            var digestB = ComputeDigest(imB.ToByteImageOfYOrB(), sigma, gamma, numberOfAngles);
+            var digestB = ComputeDigest(imB, sigma, gamma, numberOfAngles);
 
             pcc = GetCrossCorrelation(digestA, digestB);
             return pcc > threshold;
@@ -68,21 +47,6 @@ namespace Shipwreck.Phash
 
         #region ComputeDigest
 
-        public static Digest ComputeDigest(string fileName, double sigma = DEFAULT_SIGMA, double gamma = DEFAULT_GAMMA, int numberOfAngles = DEFAULT_NUMBER_OF_ANGLES)
-        {
-            using (var fs = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.Read))
-            {
-                return ComputeDigest(fs, sigma: sigma, gamma: gamma, numberOfAngles: numberOfAngles);
-            }
-        }
-
-        public static Digest ComputeDigest(Stream bitmapStream, double sigma = DEFAULT_SIGMA, double gamma = DEFAULT_GAMMA, int numberOfAngles = DEFAULT_NUMBER_OF_ANGLES)
-        {
-            var bf = BitmapFrame.Create(bitmapStream, BitmapCreateOptions.None, BitmapCacheOption.OnLoad);
-
-            return ComputeDigest(bf.ToByteImageOfYOrB(), sigma, gamma, numberOfAngles: numberOfAngles);
-        }
-
         /// <summary>
         /// Compute the image digest for an image given the input image
         /// </summary>
@@ -91,7 +55,7 @@ namespace Shipwreck.Phash
         /// <param name="gamma">double value for gamma correction on the input image</param>
         /// <param name="numberOfAngles">int value for the number of angles to consider.</param>
         /// <returns></returns>
-        protected static Digest ComputeDigest(ByteImage image, double sigma, double gamma, int numberOfAngles = DEFAULT_NUMBER_OF_ANGLES)
+        public static Digest ComputeDigest(IByteImage image, double sigma = DEFAULT_SIGMA, double gamma = DEFAULT_GAMMA, int numberOfAngles = DEFAULT_NUMBER_OF_ANGLES)
         {
             var blurred = image.Blur(sigma);
 
@@ -181,13 +145,11 @@ namespace Shipwreck.Phash
         /// <summary>
         /// compute dct robust image hash
         /// </summary>
-        /// <param name="fileStream">file string variable for name of file</param>
+        /// <param name="image">An image to compute DCT hash.</param>
         /// <returns>hash of type ulong</returns>
-        public static ulong ComputeDctHash(Stream fileStream)
+        public static ulong ComputeDctHash(IByteImage image)
         {
-            var src = BitmapFrame.Create(fileStream, BitmapCreateOptions.None, BitmapCacheOption.OnLoad);
-
-            var img = src.ToByteImageOfYOrB().Convolve(new FloatImage(7, 7, 1));
+            var img = image.Convolve(new FloatImage(7, 7, 1));
 
             var resized = img.Resize(32, 32);
             var C = CreateDctMatrix(32);
