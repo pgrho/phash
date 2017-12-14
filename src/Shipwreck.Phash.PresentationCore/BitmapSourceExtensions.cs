@@ -1,22 +1,27 @@
-using System.Drawing;
-using System.IO;
 using System.Numerics;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using Shipwreck.Phash.Imaging;
 
-namespace Shipwreck.Phash.Imaging
+namespace Shipwreck.Phash.PresentationCore
 {
     public static class BitmapSourceExtensions
     {
-        public static BitmapSource ToGray8(this BitmapSource source)
+        private static BitmapSource AsGray8(this BitmapSource source)
             => source.Format == PixelFormats.Gray8 ? source : new FormatConvertedBitmap(source, PixelFormats.Gray8, null, 0);
 
-        public static BitmapSource ToBgr24(this BitmapSource source)
+        private static BitmapSource AsBgr24(this BitmapSource source)
             => source.Format == PixelFormats.Bgr24 ? source : new FormatConvertedBitmap(source, PixelFormats.Bgr24, null, 0);
 
-        public static ByteImage ToByteImage(this BitmapSource source)
+        /// <summary>
+        /// Returns a gray scale image that contains intensity of the specified image.
+        /// </summary>
+        /// <param name="source">A <see cref="BitmapSource"/> to compute luminance.</param>
+        /// <returns>The new <see cref="ByteImage"/>.</returns>
+        /// <remarks>The coefficient is (1/3. 1/3. 1/3).</remarks>
+        public static ByteImage ToIntensityImage(this BitmapSource source)
         {
-            var bmp = source.ToGray8();
+            var bmp = source.AsGray8();
 
             var data = new byte[bmp.PixelWidth * bmp.PixelHeight];
 
@@ -25,9 +30,14 @@ namespace Shipwreck.Phash.Imaging
             return new ByteImage(bmp.PixelWidth, bmp.PixelHeight, data);
         }
 
-        public static ByteImage ToByteImageOfY(this BitmapSource source)
+        /// <summary>
+        /// Returns a gray scale image that contains the luminance defined in MPEG of the specified image.
+        /// </summary>
+        /// <param name="source">A <see cref="BitmapSource"/> to compute luminance.</param>
+        /// <returns>The new <see cref="ByteImage"/>.</returns>
+        public static ByteImage ToLuminanceImage(this BitmapSource source)
         {
-            var bmp = source.ToBgr24();
+            var bmp = source.AsBgr24();
 
             var data = new byte[bmp.PixelWidth * bmp.PixelHeight * 3];
             bmp.CopyPixels(data, bmp.PixelWidth * 3, 0);
@@ -52,25 +62,12 @@ namespace Shipwreck.Phash.Imaging
             return r;
         }
 
-        public static ByteImage ToByteImageOfYOrB(this BitmapSource src)
+        public static ByteImage ToByteImage(this BitmapSource src)
             => src.Format == PixelFormats.BlackWhite
                   || src.Format == PixelFormats.Gray2
                   || src.Format == PixelFormats.Gray4
                   || src.Format == PixelFormats.Gray8
                   || src.Format == PixelFormats.Gray16
-                  || src.Format == PixelFormats.Gray32Float ? src.ToByteImage() : src.ToByteImageOfY();
-
-        public static Bitmap ToBitmap(this BitmapSource bitmapsource)
-        {
-            Bitmap bitmap;
-            using (var outStream = new MemoryStream())
-            {
-                BitmapEncoder enc = new BmpBitmapEncoder();
-                enc.Frames.Add(BitmapFrame.Create(bitmapsource));
-                enc.Save(outStream);
-                bitmap = new Bitmap(outStream);
-            }
-            return bitmap;
-        }
+                  || src.Format == PixelFormats.Gray32Float ? src.ToIntensityImage() : src.ToLuminanceImage();
     }
 }

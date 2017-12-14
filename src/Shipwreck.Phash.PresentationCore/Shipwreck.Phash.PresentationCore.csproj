@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net452</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="WindowsBase" Version="4.6.1055" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Shipwreck.Phash\Shipwreck.Phash.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="PresentationCore" />
+  </ItemGroup>
+</Project>

@@ -37,11 +37,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="PresentationCore" />
-    <Reference Include="WindowsBase" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Update="Imaging\Generated Codes\Images.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>Images.cs</LastGenOutput>

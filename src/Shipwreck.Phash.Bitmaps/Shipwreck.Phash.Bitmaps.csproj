@@ -33,9 +33,4 @@
     <ProjectReference Include="..\Shipwreck.Phash\Shipwreck.Phash.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Reference Include="PresentationCore" />
-    <Reference Include="WindowsBase" />
-  </ItemGroup>
-
 </Project>
