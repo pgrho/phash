@@ -91,7 +91,7 @@ namespace Shipwreck.Phash
         /// <param name="gamma">double value for gamma correction on the input image</param>
         /// <param name="numberOfAngles">int value for the number of angles to consider.</param>
         /// <returns></returns>
-        protected static Digest ComputeDigest(ByteImage image, double sigma, double gamma, int numberOfAngles = DEFAULT_NUMBER_OF_ANGLES)
+        protected static Digest ComputeDigest(IByteImage image, double sigma, double gamma, int numberOfAngles = DEFAULT_NUMBER_OF_ANGLES)
         {
             var blurred = image.Blur(sigma);
 
