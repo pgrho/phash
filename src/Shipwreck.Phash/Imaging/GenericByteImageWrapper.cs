@@ -6,6 +6,8 @@ namespace Shipwreck.Phash.Imaging
     {
         private readonly IByteImage _Image;
 
+        static IByteImageOperations Wrapper = new ByteImageOperations<GenericByteImageWrapper>();
+
         public GenericByteImageWrapper(IByteImage image)
         {
             _Image = image;
@@ -33,6 +35,11 @@ namespace Shipwreck.Phash.Imaging
             [TargetedPatchingOptOut("")]
 #endif
             get => _Image[x, y];
+        }
+
+        public IByteImageOperations GetOperations()
+        {
+            return Wrapper;
         }
     }
 }
