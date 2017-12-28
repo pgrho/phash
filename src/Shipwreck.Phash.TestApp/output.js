@@ -8,7 +8,7 @@
         document.querySelector("#selectedImage").src = sel.url;
     }
 
-	document.querySelector("#performanceReport").innerText = perf.report;
+    document.querySelector("#performanceReport").innerText = perf.report;
 
     var tbody = document.querySelector("tbody");
     tbody.innerHTML = "";
@@ -18,7 +18,7 @@
 
     for (var m of ms) {
 
-        var h = (function (i) { return function (e) { output(digests, matches, i); e.preventDefault(); }; })(m.i);
+        var h = (function (i) { return function (e) { output(digests, matches, perf, i); e.preventDefault(); }; })(m.i);
 
         var od = digests[m.i];
 
