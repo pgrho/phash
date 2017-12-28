@@ -1,4 +1,4 @@
-﻿function output(digests, matches, id) {
+﻿function output(digests, matches, perf, id) {
     id = id || 0;
 
     var sel = digests[id];
@@ -7,6 +7,9 @@
         document.querySelector("h1").innerText = sel.path;
         document.querySelector("#selectedImage").src = sel.url;
     }
+
+	document.querySelector("#performanceReport").innerText = perf.report;
+
     var tbody = document.querySelector("tbody");
     tbody.innerHTML = "";
 

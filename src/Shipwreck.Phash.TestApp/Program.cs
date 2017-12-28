@@ -297,6 +297,8 @@ namespace Shipwreck.Phash.TestApp
                     js.Serialize(aw, digests.Select(d => new { path = GetShortPath(bd, d), url = new Uri(d.fi.FullName).ToString() }));
                     aw.Write(",");
                     js.Serialize(aw, results.Select(r => new { r.i, r.j, ccr = r.m }));
+                    aw.Write(",");
+                    js.Serialize(aw, new { report = perfReport?.ToString() ?? "" });
                     aw.Write(")");
 
                     xd.Descendants("{http://www.w3.org/1999/xhtml}body").First().SetAttributeValue("onload", aw);
