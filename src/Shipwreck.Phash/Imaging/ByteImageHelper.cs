@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
 
 namespace Shipwreck.Phash.Imaging
 {
@@ -9,8 +11,16 @@ namespace Shipwreck.Phash.Imaging
                 ?? (image as IByteImageWrapperProvider)?.GetWrapper()
                 ?? new GenericByteImageWrapper(image);
 
+        static ConcurrentDictionary<Type, IByteImageOperations> typeOperationsCache = 
+            new ConcurrentDictionary<Type, IByteImageOperations>();
+
         internal static IByteImageOperations GetOperations(IByteImageWrapper image)
-            => (IByteImageOperations)Activator.CreateInstance(typeof(ByteImageOperations<>).MakeGenericType(image.GetType()));
+            => typeOperationsCache.GetOrAdd(image.GetType(), CreateByteImageOperationsForImageType);
+
+        static IByteImageOperations CreateByteImageOperationsForImageType(Type imageType)
+        {
+            return (IByteImageOperations)Activator.CreateInstance(typeof(ByteImageOperations<>).MakeGenericType(imageType));
+        }
 
         public static FloatImage Convolve(this IByteImage image, FloatImage kernel)
             => image.Wrap().Convolve(kernel);
