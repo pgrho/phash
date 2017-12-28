@@ -10,6 +10,11 @@ using System.Xml.Linq;
 using Newtonsoft.Json;
 using Shipwreck.Phash.Bitmaps;
 using Shipwreck.Phash.PresentationCore;
+using System.Collections.Concurrent;
+using System.Threading;
+using System.Collections.ObjectModel;
+using System.Threading.Tasks;
+using System.Text;
 
 namespace Shipwreck.Phash.TestApp
 {
@@ -64,6 +69,13 @@ namespace Shipwreck.Phash.TestApp
                 {
                     prg._Output = OutputToHtml;
                     continue;
+                } else if (a.StartsWith("--perf"))
+                {
+                    prg._PerformanceTracker = new PerformanceTracker();
+                    int iterationsParse;
+                    if (a.IndexOf(':') > 0 && int.TryParse(a.Split(':').Last(), out iterationsParse) && iterationsParse > 0)
+                        prg._Iterations = iterationsParse;
+                    continue;
                 }
 
                 targets.Add(a);
@@ -77,24 +89,166 @@ namespace Shipwreck.Phash.TestApp
         {
             var files = fs.Select(f => Path.GetFullPath(f).Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar)).ToList();
 
-            var digests = files.AsParallel().Select(f => new FileDigests(f)).ToList();
-            var results = digests.SelectMany((d1, i) => digests.Skip(i).Select((d2, j) => new CCR
+            List<FileDigests> digests = new List<FileDigests>();
+            List<CCR> results = new List<CCR>();
+            var totalTimerId = _PerformanceTracker?.StartTimer("Total");
+            for (int iteration = 0; iteration < _Iterations; iteration++)
             {
-                i = i,
-                j = j + i,
-                m = ImagePhash.GetCrossCorrelation(d1.BitmapSourceHash, d2.BitmapSourceHash)
-            })).OrderBy(v => v.m).ToList();
-
+                var digestIterationTimerId = _PerformanceTracker?.StartTimer("Digest Iteration");
+                digests = files.AsParallel().Select(f => {
+                    var digestTimerId = _PerformanceTracker?.StartTimer("Digest");
+                    var digest = new FileDigests(f);
+                    _PerformanceTracker?.EndTimer(digestTimerId.GetValueOrDefault(), "Digest");
+                    return digest;
+                    }).ToList();
+                _PerformanceTracker?.EndTimer(digestIterationTimerId.GetValueOrDefault(), "Digest Iteration");
+                results = digests.SelectMany((d1, i) => digests.Skip(i).Select((d2, j) => new CCR
+                {
+                    i = i,
+                    j = j + i,
+                    m = ImagePhash.GetCrossCorrelation(d1.BitmapSourceHash, d2.BitmapSourceHash)
+                })).OrderBy(v => v.m).ToList();
+            }
+            _PerformanceTracker?.EndTimer(totalTimerId.GetValueOrDefault(), "Total");
             var bd = GetCommonPath(files);
-
-            _Output?.Invoke(bd, digests, results);
+            var perfReport = _PerformanceTracker?.GenerateReport();
+            _Output?.Invoke(bd, digests, results, perfReport);
         }
+
+        #region Performance tracking
+        private PerformanceTracker _PerformanceTracker = null;
+        private int _Iterations = 1;
+        
+       
+        class PerformanceTracker
+        {
+
+            ConcurrentDictionary<string, ConcurrentDictionary<int, Stopwatch>> categoryToIdToTimerMap = new ConcurrentDictionary<string, ConcurrentDictionary<int, Stopwatch>>();
+            static int Id = 0;
+            
+            /// <summary>
+            /// Starts a new timer instance in a category of timers.
+            /// </summary>
+            /// <param name="category">Group name for the timer</param>
+            /// <returns>Id of the timer</returns>
+            public int StartTimer(string category = "default")
+            {
+                var idToTimerMap = categoryToIdToTimerMap.GetOrAdd(category, (key) => new ConcurrentDictionary<int, Stopwatch>());
+                return AddNewTimer(idToTimerMap);
+            }
+
+            int AddNewTimer(ConcurrentDictionary<int, Stopwatch> idToTimerMap)
+            {
+                int currentId = Interlocked.Increment(ref Id);
+                idToTimerMap.AddOrUpdate(currentId, (key) => Stopwatch.StartNew(), 
+                    (key, oldValue) => {
+                        oldValue.Restart();
+                        return oldValue;
+                    });
+                return currentId;
+            }
+
+            /// <summary>
+            /// Ends a timer of the specified id and category.
+            /// </summary>
+            /// <param name="id">Id of the timer</param>
+            /// <param name="category">Group name of the timer</param>
+            /// <returns>Id of the timer</returns>
+            public int EndTimer(int id, string category = "default")
+            {
+                ConcurrentDictionary<int, Stopwatch> idToTimerMap;
+                if (!categoryToIdToTimerMap.TryGetValue(category, out idToTimerMap))
+                    throw new KeyNotFoundException($"{category} key does not exist.");
+                Stopwatch timer;
+                if (!idToTimerMap.TryGetValue(id, out timer))
+                    throw new KeyNotFoundException($"{category}:{id} key does not exist.");
+                timer.Stop();
+                return id;
+            }
+
+            public PerformanceReport GenerateReport()
+            {
+                var categoryToSummaryMap = new ConcurrentDictionary<string, PerformanceReport.SummaryStatistics>();
+                var taskList = categoryToIdToTimerMap.Select(async (keyValue) => {
+                    var summaryStatistics = await GenerateStatistics(keyValue.Value);
+                    categoryToSummaryMap.AddOrUpdate(keyValue.Key, (key) => summaryStatistics, (key, oldValue) => summaryStatistics);
+                    });
+                Task.WhenAll(taskList).GetAwaiter().GetResult();
+                return new PerformanceReport(categoryToSummaryMap);
+            }
+
+            async Task<PerformanceReport.SummaryStatistics> GenerateStatistics(ConcurrentDictionary<int, Stopwatch> idToTimerMap)
+            {
+                await Task.Yield();
+
+                var MinEntry = idToTimerMap.Min(kv => kv.Value.IsRunning ? TimeSpan.MaxValue : kv.Value.Elapsed);
+                var MaxEntry = idToTimerMap.Max(kv => kv.Value.IsRunning ? TimeSpan.MinValue : kv.Value.Elapsed);
+                var AverageTimespan = TimeSpan.FromMilliseconds((MaxEntry.TotalMilliseconds - MinEntry.TotalMilliseconds) / 2);
+                var Average = TimeSpan.FromMilliseconds(idToTimerMap.Average(kv => kv.Value.IsRunning ? AverageTimespan.TotalMilliseconds : kv.Value.ElapsedMilliseconds));
+                var Sum = TimeSpan.FromMilliseconds(idToTimerMap.Sum(kv => kv.Value.IsRunning ? TimeSpan.Zero.TotalMilliseconds : kv.Value.ElapsedMilliseconds));
+                return new PerformanceReport.SummaryStatistics(idToTimerMap.Count, MinEntry, MaxEntry, Average, Sum);
+            }
+
+
+            
+        }
+
+        public class PerformanceReport
+        {
+            public class SummaryStatistics
+            {
+                public SummaryStatistics(int entryCount, TimeSpan minEntry, TimeSpan maxEntry, TimeSpan average, TimeSpan sum)
+                {
+                    EntryCount = entryCount;
+                    MinEntry = minEntry;
+                    MaxEntry = maxEntry;
+                    Average = average;
+                    Sum = sum;
+                }
+                public int EntryCount { get; }
+                public TimeSpan MinEntry { get; }
+                public TimeSpan MaxEntry { get; }
+                public TimeSpan Average { get; }
+                public TimeSpan Sum { get; }
+
+                public override string ToString()
+                {
+                    return $"{{Entries:{EntryCount}, Min:{MinEntry.ToString()}, Max:{MaxEntry.ToString()}, Avg:{Average.ToString()}, Sum:{Sum.ToString()}}}";
+                }
+            }
+
+            ReadOnlyDictionary<string, SummaryStatistics> categoryToSummaryMap;
+
+            public PerformanceReport(IDictionary<string, SummaryStatistics> categoryToSummaryMap)
+            {
+                this.categoryToSummaryMap = new ReadOnlyDictionary<string, SummaryStatistics>(categoryToSummaryMap);
+            }
+
+            public IReadOnlyDictionary<string, SummaryStatistics> CategoryToSummaryMap => categoryToSummaryMap;
+
+            public override string ToString()
+            {
+                StringBuilder builder = new StringBuilder();
+                builder.AppendLine("Performance Report:");
+                foreach (var categorySummaryPair in CategoryToSummaryMap.OrderBy(kv => kv.Key))
+                {
+                    builder.AppendLine("-----");
+                    builder.AppendLine($"    {categorySummaryPair.Key}: {categorySummaryPair.Value.ToString()}");
+                }
+                builder.AppendLine("-----END------");
+                return builder.ToString();
+
+            }
+        }
+
+
+        #endregion
 
         #region Output result
 
-        private Action<string, List<FileDigests>, List<CCR>> _Output;
+        private Action<string, List<FileDigests>, List<CCR>, PerformanceReport> _Output;
 
-        private static void OutputToConsole(string bd, List<FileDigests> digests, List<CCR> results)
+        private static void OutputToConsole(string bd, List<FileDigests> digests, List<CCR> results, PerformanceReport perfReport)
         {
             foreach (var d in digests.OrderBy(d => d.fi.FullName, StringComparer.CurrentCultureIgnoreCase))
             {
@@ -117,11 +271,15 @@ namespace Shipwreck.Phash.TestApp
                     Console.WriteLine(r.m.ToString("f7"));
                 }
             }
+
+            if (perfReport != null)
+                Console.WriteLine(perfReport.ToString());
+
             Console.WriteLine("Hit any key to exit..");
             Console.ReadKey();
         }
 
-        private static void OutputToHtml(string bd, List<FileDigests> digests, List<CCR> results)
+        private static void OutputToHtml(string bd, List<FileDigests> digests, List<CCR> results, PerformanceReport perfReport)
         {
             var xd = XDocument.Load("output.template.html");
 
