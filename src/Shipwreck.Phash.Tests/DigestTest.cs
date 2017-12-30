@@ -1,13 +1,12 @@
 ﻿using System.IO;
 using System.Xml.Serialization;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace Shipwreck.Phash
 {
-    [TestClass]
     public class DigestTest
     {
-        [TestMethod]
+        [Fact]
         public void SerializationTest()
         {
             var d = new Digest();
@@ -28,7 +27,7 @@ namespace Shipwreck.Phash
                 {
                     var d2 = (Digest)xs.Deserialize(sr);
 
-                    CollectionAssert.AreEqual(d.Coefficents, d2.Coefficents);
+                    Assert.Equal(d.Coefficents, d2.Coefficents);
                 }
             }
         }

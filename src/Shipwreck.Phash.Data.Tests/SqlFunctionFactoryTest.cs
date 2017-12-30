@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace Shipwreck.Phash.Data
 {
-    [TestClass]
     public class SqlFunctionFactoryTest
     {
-        [TestMethod]
+        [Fact]
         public void TestMethod1()
         {
             const string FUNC = "dbo.__test";
@@ -101,7 +100,7 @@ namespace Shipwreck.Phash.Data
                             var dbResult = db.Database.SqlQuery<double>("SELECT " + FUNC + "({0}, {1})", hashes[i], hashes[j]).First();
                             Console.WriteLine($"[{i}, {j}]: {clrResult:0.0000} - {dbResult:0.0000}");
 
-                            Assert.AreEqual(clrResult, dbResult, 0.01);
+                            Assert.InRange(dbResult, clrResult - 0.01, clrResult + 0.01);
                         }
                     }
                 }
