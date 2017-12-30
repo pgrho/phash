@@ -15,6 +15,7 @@ using System.Threading;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Text;
+using System.Reflection;
 
 namespace Shipwreck.Phash.TestApp
 {
@@ -69,7 +70,8 @@ namespace Shipwreck.Phash.TestApp
                 {
                     prg._Output = OutputToHtml;
                     continue;
-                } else if (a.StartsWith("--perf"))
+                }
+                else if (a.StartsWith("--perf"))
                 {
                     prg._PerformanceTracker = new PerformanceTracker();
                     int iterationsParse;
@@ -82,7 +84,7 @@ namespace Shipwreck.Phash.TestApp
             }
 
             prg.ProcessFiles(targets.Any() ? targets
-                            : new string[] { "compr", "blur", "rotd", "misc" }.SelectMany(d => Directory.EnumerateFiles(d)));
+                            : new string[] { "compr", "blur", "rotd", "misc" }.SelectMany(d => Directory.EnumerateFiles(new Uri(new Uri(Assembly.GetEntryAssembly().Location), d).LocalPath)));
         }
 
         private void ProcessFiles(IEnumerable<string> fs)
@@ -95,12 +97,13 @@ namespace Shipwreck.Phash.TestApp
             for (int iteration = 0; iteration < _Iterations; iteration++)
             {
                 var digestIterationTimerId = _PerformanceTracker?.StartTimer("Digest Iteration");
-                digests = files.AsParallel().Select(f => {
+                digests = files.AsParallel().Select(f =>
+                {
                     var digestTimerId = _PerformanceTracker?.StartTimer("Digest");
                     var digest = new FileDigests(f);
                     _PerformanceTracker?.EndTimer(digestTimerId.GetValueOrDefault(), "Digest");
                     return digest;
-                    }).ToList();
+                }).ToList();
                 _PerformanceTracker?.EndTimer(digestIterationTimerId.GetValueOrDefault(), "Digest Iteration");
                 results = digests.SelectMany((d1, i) => digests.Skip(i).Select((d2, j) => new CCR
                 {
@@ -118,14 +121,14 @@ namespace Shipwreck.Phash.TestApp
         #region Performance tracking
         private PerformanceTracker _PerformanceTracker = null;
         private int _Iterations = 1;
-        
-       
+
+
         class PerformanceTracker
         {
 
             ConcurrentDictionary<string, ConcurrentDictionary<int, Stopwatch>> categoryToIdToTimerMap = new ConcurrentDictionary<string, ConcurrentDictionary<int, Stopwatch>>();
             static int Id = 0;
-            
+
             /// <summary>
             /// Starts a new timer instance in a category of timers.
             /// </summary>
@@ -140,8 +143,9 @@ namespace Shipwreck.Phash.TestApp
             int AddNewTimer(ConcurrentDictionary<int, Stopwatch> idToTimerMap)
             {
                 int currentId = Interlocked.Increment(ref Id);
-                idToTimerMap.AddOrUpdate(currentId, (key) => Stopwatch.StartNew(), 
-                    (key, oldValue) => {
+                idToTimerMap.AddOrUpdate(currentId, (key) => Stopwatch.StartNew(),
+                    (key, oldValue) =>
+                    {
                         oldValue.Restart();
                         return oldValue;
                     });
@@ -169,10 +173,11 @@ namespace Shipwreck.Phash.TestApp
             public PerformanceReport GenerateReport()
             {
                 var categoryToSummaryMap = new ConcurrentDictionary<string, PerformanceReport.SummaryStatistics>();
-                var taskList = categoryToIdToTimerMap.Select(async (keyValue) => {
+                var taskList = categoryToIdToTimerMap.Select(async (keyValue) =>
+                {
                     var summaryStatistics = await GenerateStatistics(keyValue.Value);
                     categoryToSummaryMap.AddOrUpdate(keyValue.Key, (key) => summaryStatistics, (key, oldValue) => summaryStatistics);
-                    });
+                });
                 Task.WhenAll(taskList).GetAwaiter().GetResult();
                 return new PerformanceReport(categoryToSummaryMap);
             }
@@ -190,7 +195,7 @@ namespace Shipwreck.Phash.TestApp
             }
 
 
-            
+
         }
 
         public class PerformanceReport

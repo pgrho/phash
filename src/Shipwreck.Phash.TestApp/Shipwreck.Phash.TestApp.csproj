@@ -5,27 +5,7 @@
     <OutputType>Exe</OutputType>
     <StartupObject>Shipwreck.Phash.TestApp.Program</StartupObject>
   </PropertyGroup>
-  <ItemGroup>
-    <None Remove="blur\*.jpg" />
-    <None Remove="compr\*.jpg" />
-    <None Remove="misc\*.jpg" />
-    <None Remove="rotd\*.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="blur\*.jpg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="compr\*.jpg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="misc\*.jpg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="rotd\*.jpg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
+   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
   </ItemGroup>
 
@@ -37,5 +17,13 @@
 
   <ItemGroup>
     <Reference Include="PresentationCore" />
+  </ItemGroup>
+
+  <ItemGroup>
+  <Content Include="..\..\data\**\*.*">
+    <Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
+    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+  </Content> 
+  
   </ItemGroup>
 </Project>

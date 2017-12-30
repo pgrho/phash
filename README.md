@@ -91,7 +91,7 @@ Then you can call it like this:
 
 ## TestApp ##
 
-Download Image sets from <http://phash.org/download/> and extract into predefined `compr`, `blur`, `rotd`, `misc` directories.
+Download Image sets from <http://phash.org/download/> and extract into the `/data/compr`, `/data/blur`, `/data/rotd`, `/data/misc` directories.
 Or you can create test Image sets by yourself.
 
 ## License ##
