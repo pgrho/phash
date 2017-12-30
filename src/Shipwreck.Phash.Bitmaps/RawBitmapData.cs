@@ -61,7 +61,7 @@ namespace Shipwreck.Phash.Bitmaps
             while (byteIndex < byteFinalIndex)
             {
                 pixelExtractor.ExtractPixelBytesToColor(RawPixelBytes, byteIndex, ref A, ref R, ref G, ref B);
-                pixelHandler?.Invoke(pixelWidth, pixelHeight, A, R, G, B);
+                pixelHandler?.Invoke(pixelWidth - area.X, pixelHeight - area.Y, A, R, G, B);
                 pixelWidth++;
                 if (pixelWidth >= pixelFinalWidth)
                 {
