@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27004.2005
+VisualStudioVersion = 15.0.27004.2010
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shipwreck.Phash", "Shipwreck.Phash\Shipwreck.Phash.csproj", "{7D98638A-93D4-46AE-9263-8D513A1C9EAA}"
 EndProject
@@ -24,7 +24,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shipwreck.Phash.Bitmaps", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shipwreck.Phash.Tests", "Shipwreck.Phash.Tests\Shipwreck.Phash.Tests.csproj", "{B6573452-7805-4A81-ABA9-A7E5C8C10F53}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shipwreck.Phash.PresentationCore", "Shipwreck.Phash.PresentationCore\Shipwreck.Phash.PresentationCore.csproj", "{214527EA-A228-4633-A9F4-16B8C2F6AA56}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shipwreck.Phash.PresentationCore", "Shipwreck.Phash.PresentationCore\Shipwreck.Phash.PresentationCore.csproj", "{214527EA-A228-4633-A9F4-16B8C2F6AA56}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shipwreck.Phash.Bitmaps.Tests", "Shipwreck.Phash.Bitmaps.Tests\Shipwreck.Phash.Bitmaps.Tests.csproj", "{04B29B49-57EF-46A5-A57C-B9526C1C37F3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -98,6 +100,14 @@ Global
 		{214527EA-A228-4633-A9F4-16B8C2F6AA56}.Release|Any CPU.Build.0 = Release|Any CPU
 		{214527EA-A228-4633-A9F4-16B8C2F6AA56}.Release|x86.ActiveCfg = Release|Any CPU
 		{214527EA-A228-4633-A9F4-16B8C2F6AA56}.Release|x86.Build.0 = Release|Any CPU
+		{04B29B49-57EF-46A5-A57C-B9526C1C37F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{04B29B49-57EF-46A5-A57C-B9526C1C37F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{04B29B49-57EF-46A5-A57C-B9526C1C37F3}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{04B29B49-57EF-46A5-A57C-B9526C1C37F3}.Debug|x86.Build.0 = Debug|Any CPU
+		{04B29B49-57EF-46A5-A57C-B9526C1C37F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{04B29B49-57EF-46A5-A57C-B9526C1C37F3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{04B29B49-57EF-46A5-A57C-B9526C1C37F3}.Release|x86.ActiveCfg = Release|Any CPU
+		{04B29B49-57EF-46A5-A57C-B9526C1C37F3}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
