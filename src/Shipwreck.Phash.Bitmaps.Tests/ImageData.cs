@@ -7,19 +7,24 @@ namespace Shipwreck.Phash.Bitmaps.Tests
 
     public class ImageData : IDisposable
     {
-        static Uri blurredUri = new Uri(Path.GetFullPath("./data/blur/"));
-        static Uri compressedUri = new Uri(Path.GetFullPath("./data/compr/"));
-        static Uri subsectionUri = new Uri(Path.GetFullPath("./data/subsection/"));
+        static string GetDataDirectory(string directoryName)
+        {
+            return Path.GetFullPath($"../../../../data/{directoryName}/");
+        }
+
+        static Uri blurredUri = new Uri(GetDataDirectory("blur"));
+        static Uri compressedUri = new Uri(GetDataDirectory("compr"));
+        static Uri subsectionUri = new Uri(GetDataDirectory("subsection"));
         
-        public LazyBitmap ArchitectureBlurred { get; private set; }
-        public LazyBitmap ArchitectureSmallBlurred { get; private set; }
+        public LazyBitmap StainedGlassBlurred { get; private set; }
+        public LazyBitmap StainedGlassSmallBlurred { get; private set; }
 
-        public LazyBitmap ArchitectureCompressed { get; private set; }
+        public LazyBitmap StainedGlassCompressed { get; private set; }
 
-        public LazyBitmap ArchitectureSubsectionLeftBottom { get; private set; }
-        public LazyBitmap ArchitectureSubsectionLeftTop { get; private set; }
-        public LazyBitmap ArchitectureSubsectionRightBottom { get; private set; }
-        public LazyBitmap ArchitectureSubsectionRightTop { get; private set; }
+        public LazyBitmap StainedGlassLeftBottom { get; private set; }
+        public LazyBitmap StainedGlassLeftTop { get; private set; }
+        public LazyBitmap StainedGlassRightBottom { get; private set; }
+        public LazyBitmap StainedGlassRightTop { get; private set; }
 
         public ImageData()
         {
@@ -30,34 +35,34 @@ namespace Shipwreck.Phash.Bitmaps.Tests
 
         void InitBlurred()
         {
-            ArchitectureBlurred = new LazyBitmap(new Uri(blurredUri, "architecture_2.bmp"));
-            ArchitectureSmallBlurred = new LazyBitmap(new Uri(blurredUri, "architecture_2.small.bmp"));
+            StainedGlassBlurred = new LazyBitmap(new Uri(blurredUri, "stain_glass.bmp"));
+            StainedGlassSmallBlurred = new LazyBitmap(new Uri(blurredUri, "stain_glass.small.bmp"));
         }
 
         void InitCompressed()
         {
-            ArchitectureCompressed = new LazyBitmap(new Uri(compressedUri, "architecture_2.jpg"));
+            StainedGlassCompressed = new LazyBitmap(new Uri(compressedUri, "stain_glass.jpg"));
         }
 
         void InitSubsection()
         {
-            ArchitectureSubsectionLeftBottom = new LazyBitmap(new Uri(subsectionUri, "architecture_2.left60bottom80.bmp"));
-            ArchitectureSubsectionLeftTop = new LazyBitmap(new Uri(subsectionUri, "architecture_2.left60top80.bmp"));
-            ArchitectureSubsectionRightBottom = new LazyBitmap(new Uri(subsectionUri, "architecture_2.right60bottom80.bmp"));
-            ArchitectureSubsectionRightTop = new LazyBitmap(new Uri(subsectionUri, "architecture_2.right60top80.bmp"));
+            StainedGlassLeftBottom = new LazyBitmap(new Uri(subsectionUri, "stain_glass.left60bottom80.bmp"));
+            StainedGlassLeftTop = new LazyBitmap(new Uri(subsectionUri, "stain_glass.left60top80.bmp"));
+            StainedGlassRightBottom = new LazyBitmap(new Uri(subsectionUri, "stain_glass.right60bottom80.bmp"));
+            StainedGlassRightTop = new LazyBitmap(new Uri(subsectionUri, "stain_glass.right60top80.bmp"));
         }
 
         public void Dispose()
         {
-            ArchitectureBlurred.Dispose();
-            ArchitectureSmallBlurred.Dispose();
+            StainedGlassBlurred.Dispose();
+            StainedGlassSmallBlurred.Dispose();
 
-            ArchitectureCompressed.Dispose();
+            StainedGlassCompressed.Dispose();
 
-            ArchitectureSubsectionLeftBottom.Dispose();
-            ArchitectureSubsectionLeftTop.Dispose();
-            ArchitectureSubsectionRightBottom.Dispose();
-            ArchitectureSubsectionRightTop.Dispose();
+            StainedGlassLeftBottom.Dispose();
+            StainedGlassLeftTop.Dispose();
+            StainedGlassRightBottom.Dispose();
+            StainedGlassRightTop.Dispose();
         }
     }
 }

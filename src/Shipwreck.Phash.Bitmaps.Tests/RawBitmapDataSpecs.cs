@@ -29,15 +29,15 @@ namespace Shipwreck.Phash.Bitmaps.Tests
         [TestMethod]
         public void Digest_Should_Have_Non_Zero_Hash_For_Small_Images()
         {
-            var rawBitmapDataDigest = ImagePhash.ComputeDigest(Images.ArchitectureSmallBlurred.Bitmap.ToRawBitmapData().ToLuminanceImage());
+            var rawBitmapDataDigest = ImagePhash.ComputeDigest(Images.StainedGlassSmallBlurred.Bitmap.ToRawBitmapData().ToLuminanceImage());
             Assert.IsTrue(rawBitmapDataDigest.Coefficents.Any(coeff => coeff > 0));
         }
 
         [TestMethod]
         public void Digest_Should_Match_BitmapSource_Exactly()
         {
-            var rawBitmapDataDigest = ImagePhash.ComputeDigest(Images.ArchitectureBlurred.Bitmap.ToRawBitmapData().ToLuminanceImage());
-            var bitmapSourceDigest = ImagePhash.ComputeDigest(Images.ArchitectureBlurred.BitmapSource.ToLuminanceImage());
+            var rawBitmapDataDigest = ImagePhash.ComputeDigest(Images.StainedGlassBlurred.Bitmap.ToRawBitmapData().ToLuminanceImage());
+            var bitmapSourceDigest = ImagePhash.ComputeDigest(Images.StainedGlassBlurred.BitmapSource.ToLuminanceImage());
             Digest_Should_Match_Exactly(rawBitmapDataDigest, bitmapSourceDigest);
         }
 
@@ -50,8 +50,8 @@ namespace Shipwreck.Phash.Bitmaps.Tests
         [TestMethod]
         public void Digest_Should_Match_Bitmap_Exactly()
         {
-            var rawBitmapDataDigest = ImagePhash.ComputeDigest(Images.ArchitectureBlurred.Bitmap.ToRawBitmapData().ToLuminanceImage());
-            var bitmapDigest = ImagePhash.ComputeDigest(Images.ArchitectureBlurred.Bitmap.ToLuminanceImage());
+            var rawBitmapDataDigest = ImagePhash.ComputeDigest(Images.StainedGlassBlurred.Bitmap.ToRawBitmapData().ToLuminanceImage());
+            var bitmapDigest = ImagePhash.ComputeDigest(Images.StainedGlassBlurred.Bitmap.ToLuminanceImage());
             Digest_Should_Match_Exactly(rawBitmapDataDigest, bitmapDigest);
         }
 
@@ -59,10 +59,10 @@ namespace Shipwreck.Phash.Bitmaps.Tests
         [TestMethod]
         public void CCR_Should_Match_BitmapSource_Exactly()
         {
-            var rawBitmapDataDigestBlurred = ImagePhash.ComputeDigest(Images.ArchitectureBlurred.Bitmap.ToRawBitmapData().ToLuminanceImage());
-            var rawBitmapDataDigestCompressed = ImagePhash.ComputeDigest(Images.ArchitectureCompressed.Bitmap.ToRawBitmapData().ToLuminanceImage());
-            var bitmapSourceDigestBlurred = ImagePhash.ComputeDigest(Images.ArchitectureBlurred.BitmapSource.ToLuminanceImage());
-            var bitmapSourceDigestCompressed = ImagePhash.ComputeDigest(Images.ArchitectureCompressed.BitmapSource.ToLuminanceImage());
+            var rawBitmapDataDigestBlurred = ImagePhash.ComputeDigest(Images.StainedGlassBlurred.Bitmap.ToRawBitmapData().ToLuminanceImage());
+            var rawBitmapDataDigestCompressed = ImagePhash.ComputeDigest(Images.StainedGlassCompressed.Bitmap.ToRawBitmapData().ToLuminanceImage());
+            var bitmapSourceDigestBlurred = ImagePhash.ComputeDigest(Images.StainedGlassBlurred.BitmapSource.ToLuminanceImage());
+            var bitmapSourceDigestCompressed = ImagePhash.ComputeDigest(Images.StainedGlassCompressed.BitmapSource.ToLuminanceImage());
 
             CCR_Should_Match_Exactly(
                 new Tuple<Digest, Digest>(rawBitmapDataDigestBlurred, rawBitmapDataDigestCompressed),
@@ -81,10 +81,10 @@ namespace Shipwreck.Phash.Bitmaps.Tests
         [TestMethod]
         public void CCR_Should_Match_Bitmap_Exactly()
         {
-            var rawBitmapDataDigestBlurred = ImagePhash.ComputeDigest(Images.ArchitectureBlurred.Bitmap.ToRawBitmapData().ToLuminanceImage());
-            var rawBitmapDataDigestCompressed = ImagePhash.ComputeDigest(Images.ArchitectureCompressed.Bitmap.ToRawBitmapData().ToLuminanceImage());
-            var bitmapDigestBlurred = ImagePhash.ComputeDigest(Images.ArchitectureBlurred.Bitmap.ToLuminanceImage());
-            var bitmapDigestCompressed = ImagePhash.ComputeDigest(Images.ArchitectureCompressed.Bitmap.ToLuminanceImage());
+            var rawBitmapDataDigestBlurred = ImagePhash.ComputeDigest(Images.StainedGlassBlurred.Bitmap.ToRawBitmapData().ToLuminanceImage());
+            var rawBitmapDataDigestCompressed = ImagePhash.ComputeDigest(Images.StainedGlassCompressed.Bitmap.ToRawBitmapData().ToLuminanceImage());
+            var bitmapDigestBlurred = ImagePhash.ComputeDigest(Images.StainedGlassBlurred.Bitmap.ToLuminanceImage());
+            var bitmapDigestCompressed = ImagePhash.ComputeDigest(Images.StainedGlassCompressed.Bitmap.ToLuminanceImage());
 
             CCR_Should_Match_Exactly(
                 new Tuple<Digest, Digest>(rawBitmapDataDigestBlurred, rawBitmapDataDigestCompressed),
@@ -95,10 +95,11 @@ namespace Shipwreck.Phash.Bitmaps.Tests
         [TestMethod]
         public void Left_Bottom_Area_Should_Match_Original_Digest_Exactly()
         {
-            var rawBitmapDataDigestBlurred = ImagePhash.ComputeDigest(Images.ArchitectureBlurred.Bitmap.ToRawBitmapData().ToLuminanceImage());
+            var originalImage = Images.StainedGlassBlurred.Bitmap.ToRawBitmapData();
+            var rawBitmapDataDigestBlurred = ImagePhash.ComputeDigest(originalImage.ToLuminanceImage());
 
-            var trimArea = new Rectangle(60, 0, 300, 400);
-            var rawBitmapDataDigestLeftBottom = ImagePhash.ComputeDigest(Images.ArchitectureSubsectionLeftBottom.Bitmap.ToRawBitmapData().ToLuminanceImage(trimArea));
+            var trimArea = new Rectangle(60, 0, originalImage.PixelWidth, originalImage.PixelHeight);
+            var rawBitmapDataDigestLeftBottom = ImagePhash.ComputeDigest(Images.StainedGlassLeftBottom.Bitmap.ToRawBitmapData().ToLuminanceImage(trimArea));
 
             Area_Should_Match_Original_Digest_Exactly(rawBitmapDataDigestBlurred, rawBitmapDataDigestLeftBottom);
         }
@@ -111,10 +112,11 @@ namespace Shipwreck.Phash.Bitmaps.Tests
         [TestMethod]
         public void Left_Top_Area_Should_Match_Original_Digest_Exactly()
         {
-            var rawBitmapDataDigestBlurred = ImagePhash.ComputeDigest(Images.ArchitectureBlurred.Bitmap.ToRawBitmapData().ToLuminanceImage());
+            var originalImage = Images.StainedGlassBlurred.Bitmap.ToRawBitmapData();
+            var rawBitmapDataDigestBlurred = ImagePhash.ComputeDigest(originalImage.ToLuminanceImage());
 
-            var trimArea = new Rectangle(60, 80, 300, 400);
-            var rawBitmapDataDigestLeftTop = ImagePhash.ComputeDigest(Images.ArchitectureSubsectionLeftTop.Bitmap.ToRawBitmapData().ToLuminanceImage(trimArea));
+            var trimArea = new Rectangle(60, 80, originalImage.PixelWidth, originalImage.PixelHeight);
+            var rawBitmapDataDigestLeftTop = ImagePhash.ComputeDigest(Images.StainedGlassLeftTop.Bitmap.ToRawBitmapData().ToLuminanceImage(trimArea));
 
             Area_Should_Match_Original_Digest_Exactly(rawBitmapDataDigestBlurred, rawBitmapDataDigestLeftTop);
         }
@@ -122,10 +124,11 @@ namespace Shipwreck.Phash.Bitmaps.Tests
         [TestMethod]
         public void Right_Bottom_Area_Should_Match_Original_Digest_Exactly()
         {
-            var rawBitmapDataDigestBlurred = ImagePhash.ComputeDigest(Images.ArchitectureBlurred.Bitmap.ToRawBitmapData().ToLuminanceImage());
+            var originalImage = Images.StainedGlassBlurred.Bitmap.ToRawBitmapData();
+            var rawBitmapDataDigestBlurred = ImagePhash.ComputeDigest(originalImage.ToLuminanceImage());
 
-            var trimArea = new Rectangle(0, 0, 300, 400);
-            var rawBitmapDataDigestRightBottom = ImagePhash.ComputeDigest(Images.ArchitectureSubsectionRightBottom.Bitmap.ToRawBitmapData().ToLuminanceImage(trimArea));
+            var trimArea = new Rectangle(0, 0, originalImage.PixelWidth, originalImage.PixelHeight);
+            var rawBitmapDataDigestRightBottom = ImagePhash.ComputeDigest(Images.StainedGlassRightBottom.Bitmap.ToRawBitmapData().ToLuminanceImage(trimArea));
 
             Area_Should_Match_Original_Digest_Exactly(rawBitmapDataDigestBlurred, rawBitmapDataDigestRightBottom);
         }
@@ -133,10 +136,11 @@ namespace Shipwreck.Phash.Bitmaps.Tests
         [TestMethod]
         public void Right_Top_Area_Should_Match_Original_Digest_Exactly()
         {
-            var rawBitmapDataDigestBlurred = ImagePhash.ComputeDigest(Images.ArchitectureBlurred.Bitmap.ToRawBitmapData().ToLuminanceImage());
+            var originalImage = Images.StainedGlassBlurred.Bitmap.ToRawBitmapData();
+            var rawBitmapDataDigestBlurred = ImagePhash.ComputeDigest(originalImage.ToLuminanceImage());
 
-            var trimArea = new Rectangle(0, 80, 300, 400);
-            var rawBitmapDataDigestRightTop = ImagePhash.ComputeDigest(Images.ArchitectureSubsectionRightTop.Bitmap.ToRawBitmapData().ToLuminanceImage(trimArea));
+            var trimArea = new Rectangle(0, 80, originalImage.PixelWidth, originalImage.PixelHeight);
+            var rawBitmapDataDigestRightTop = ImagePhash.ComputeDigest(Images.StainedGlassRightTop.Bitmap.ToRawBitmapData().ToLuminanceImage(trimArea));
 
             Area_Should_Match_Original_Digest_Exactly(rawBitmapDataDigestBlurred, rawBitmapDataDigestRightTop);
         }
