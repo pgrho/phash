@@ -5,7 +5,7 @@
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
-    <Version>0.2.1</Version>
+    <Version>0.2.2</Version>
     <Authors>shipwreck.jp</Authors>
     <Company />
     <Product>priHash</Product>
@@ -14,7 +14,7 @@
     <PackageProjectUrl>https://github.com/pgrho/phash</PackageProjectUrl>
     <FileVersion>0.2.1.0</FileVersion>
     <Copyright>Copyright © 2016-2017 shipwreck.jp</Copyright>
-    <AssemblyVersion>0.2.1.0</AssemblyVersion>
+    <AssemblyVersion>0.2.2.0</AssemblyVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
