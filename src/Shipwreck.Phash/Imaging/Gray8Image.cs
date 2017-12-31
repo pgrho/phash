@@ -26,6 +26,9 @@
             get => _Data[_Offset + y * _Stride + x];
         }
 
+        public Gray8Image Crop(int x, int y, int width, int height)
+            => new Gray8Image(width, height, _Data, _Offset + y * _Stride + x, _Stride);
+
         IByteImageWrapper IByteImageWrapperProvider.GetWrapper()
             => new Gray8ImageWrapper(this);
     }

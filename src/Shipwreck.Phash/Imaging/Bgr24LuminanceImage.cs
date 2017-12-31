@@ -10,6 +10,9 @@ namespace Shipwreck.Phash.Imaging
         byte IByteImage.this[int x, int y]
             => this[x, y].GetLuminance();
 
+        public Bgr24LuminanceImage Crop(int x, int y, int width, int height)
+            => new Bgr24LuminanceImage(width, height, _Data, _Offset + y * _Stride + x * _PixelSize, _Stride, _PixelSize);
+
         IByteImageWrapper IByteImageWrapperProvider.GetWrapper()
             => new Bgr24LuminanceImageWrapper(this);
     }

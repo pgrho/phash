@@ -37,6 +37,9 @@ namespace Shipwreck.Phash.Imaging
             set => Array[x + y * Width] = value;
         }
 
+        public Gray8Image Crop(int x, int y, int width, int height)
+            => new Gray8Image(width, height, Array, y * Width + x, Width);
+
         IByteImageWrapper IByteImageWrapperProvider.GetWrapper()
             => new ByteImageWrapper(this);
     }

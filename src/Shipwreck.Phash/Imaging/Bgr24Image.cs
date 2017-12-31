@@ -5,11 +5,11 @@ namespace Shipwreck.Phash.Imaging
     public class Bgr24Image : IVector3Image
     {
         // TODO: use Span<byte> if the System.Memory.dll released
-        private readonly byte[] _Data;
+        internal readonly byte[] _Data;
 
-        private readonly int _Offset;
-        private readonly int _Stride;
-        private readonly int _PixelSize;
+        internal readonly int _Offset;
+        internal readonly int _Stride;
+        internal readonly int _PixelSize;
 
         public Bgr24Image(int width, int height, byte[] data, int offset, int stride, int pixelSize)
         {
