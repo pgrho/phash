@@ -2,19 +2,54 @@
 
 namespace Shipwreck.Phash.Imaging
 {
-    public sealed partial class FloatImage
+    public sealed partial class FloatImage : IArrayImage<float>
     {
+        public FloatImage(int width, int height)
+        {
+            Width = width;
+            Height = height;
+            Array = new float[width * height];
+        }
+
+        public FloatImage(int width, int height, float value)
+        {
+            Width = width;
+            Height = height;
+            Array = new float[width * height];
+            for (var i = 0; i < Array.Length; i++)
+            {
+                Array[i] = value;
+            }
+        }
+
+        public FloatImage(int width, int height, float[] data)
+        {
+            Width = width;
+            Height = height;
+            Array = data;
+        }
+
+        public int Width { get; }
+        public int Height { get; }
+        public float[] Array { get; }
+
+        public float this[int x, int y]
+        {
+            get => Array[x + y * Width];
+            set => Array[x + y * Width] = value;
+        }
+
         public FloatImage Resize(int w, int h)
         {
             // TODO:bilinearにする
 
             var r = new FloatImage(w, h);
-            var xr = w / (float)_Width;
-            var yr = h / (float)_Height;
-            for (var sy = 0; sy < _Height; sy++)
+            var xr = w / (float)Width;
+            var yr = h / (float)Height;
+            for (var sy = 0; sy < Height; sy++)
             {
                 var dy = (int)Math.Max(0, Math.Min(sy * yr, h - 1));
-                for (var sx = 0; sx < _Width; sx++)
+                for (var sx = 0; sx < Width; sx++)
                 {
                     var dx = (int)Math.Max(0, Math.Min(sx * xr, w - 1));
 
@@ -27,20 +62,20 @@ namespace Shipwreck.Phash.Imaging
 
         public void ApplyGamma(double gamma)
         {
-            for (var i = 0; i < _Data.Length; i++)
+            for (var i = 0; i < Array.Length; i++)
             {
-                _Data[i] = (float)Math.Pow(_Data[i], gamma);
+                Array[i] = (float)Math.Pow(Array[i], gamma);
             }
         }
 
         public static FloatImage operator *(FloatImage image, float coefficient)
         {
-            var d = new float[image._Data.Length];
+            var d = new float[image.Array.Length];
             for (var i = 0; i < d.Length; i++)
             {
-                d[i] = image._Data[i] * coefficient;
+                d[i] = image.Array[i] * coefficient;
             }
-            return new Imaging.FloatImage(image._Width, image._Height, d);
+            return new Imaging.FloatImage(image.Width, image.Height, d);
         }
 
         public static FloatImage operator *(float coefficient, FloatImage image)
@@ -51,9 +86,9 @@ namespace Shipwreck.Phash.Imaging
 
         public void MultiplyInplace(float coefficient)
         {
-            for (var i = 0; i < _Data.Length; i++)
+            for (var i = 0; i < Array.Length; i++)
             {
-                _Data[i] *= coefficient;
+                Array[i] *= coefficient;
             }
         }
 
@@ -62,10 +97,10 @@ namespace Shipwreck.Phash.Imaging
 
         public FloatImage Multiply(FloatImage other)
         {
-            var r = new FloatImage(_Width, _Height);
-            for (var sy = 0; sy < _Height; sy++)
+            var r = new FloatImage(Width, Height);
+            for (var sy = 0; sy < Height; sy++)
             {
-                for (var sx = 0; sx < _Width; sx++)
+                for (var sx = 0; sx < Width; sx++)
                 {
                     r[sx, sy] = this[sx, sy] * other[sx, sy];
                 }
@@ -103,6 +138,43 @@ namespace Shipwreck.Phash.Imaging
             }
 
             return vs;
+        }
+
+        public float Max()
+        {
+            float r = 0;
+            for (var i = 0; i < Array.Length; i++)
+            {
+                r = Math.Max(Array[i], r);
+            }
+            return r;
+        }
+
+        public float Min()
+        {
+            float r = 0;
+            for (var i = 0; i < Array.Length; i++)
+            {
+                r = Math.Min(Array[i], r);
+            }
+            return r;
+        }
+
+        public float Sum()
+        {
+            float r = 0;
+            for (var i = 0; i < Array.Length; i++)
+            {
+                r += Array[i];
+            }
+            return r;
+        }
+
+        public FloatImage Transpose()
+        {
+            var r = new FloatImage(Height, Width);
+            this.TransposeTo(r);
+            return r;
         }
     }
 }

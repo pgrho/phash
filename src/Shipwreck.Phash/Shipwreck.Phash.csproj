@@ -38,22 +38,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Imaging\Generated Codes\Images.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>Images.cs</LastGenOutput>
-    </None>
-  </ItemGroup>
-
-  <ItemGroup>
     <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="Imaging\Generated Codes\Images.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Images.tt</DependentUpon>
-    </Compile>
   </ItemGroup>
   
 </Project>
