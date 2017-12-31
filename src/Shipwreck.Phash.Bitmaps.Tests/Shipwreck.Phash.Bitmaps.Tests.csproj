@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net452</TargetFramework>
     <ApplicationIcon />
-    <OutputType>Exe</OutputType>
+    <OutputType>Library</OutputType>
     <StartupObject />
     <RootNamespace>Shipwreck.Phash.Bitmaps.Tests</RootNamespace>
   </PropertyGroup>

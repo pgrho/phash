@@ -9,7 +9,7 @@ namespace Shipwreck.Phash.Bitmaps.Tests
     {
         static string GetDataDirectory(string directoryName)
         {
-            return Path.GetFullPath($"../../../../data/{directoryName}/");
+            return Path.GetFullPath($"./{directoryName}/");
         }
 
         static Uri blurredUri = new Uri(GetDataDirectory("blur"));

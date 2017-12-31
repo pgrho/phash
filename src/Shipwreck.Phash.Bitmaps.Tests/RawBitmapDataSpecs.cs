@@ -1,39 +1,32 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Shipwreck.Phash.PresentationCore;
+﻿using Shipwreck.Phash.PresentationCore;
 using System;
 using System.Drawing;
 using System.Linq;
+using Xunit;
 
 namespace Shipwreck.Phash.Bitmaps.Tests
 {
-
-    [TestClass]
-    public class RawBitmapDataSpecs : ImageTestFixture
+    
+    public class RawBitmapDataSpecs : IClassFixture<ImageData>
     {
-        // Really Microsoft? No inheritance of attributes?
-        [ClassInitialize]
-        public static void Init(TestContext context)
+        public RawBitmapDataSpecs(ImageData images)
         {
-            InitImages(context);
+            Images = images;
         }
 
-        [ClassCleanup]
-        public static void Cleanup()
-        {
-            DisposeImages();
-        }
+        public ImageData Images { get; private set; }
 
         const double ExactThreshhold = 0.000000000000000000000000001;
 
         // TODO: Categories
-        [TestMethod]
+        [Fact]
         public void Digest_Should_Have_Non_Zero_Hash_For_Small_Images()
         {
             var rawBitmapDataDigest = ImagePhash.ComputeDigest(Images.StainedGlassSmallBlurred.Bitmap.ToRawBitmapData().ToLuminanceImage());
-            Assert.IsTrue(rawBitmapDataDigest.Coefficents.Any(coeff => coeff > 0));
+            Assert.Contains(rawBitmapDataDigest.Coefficents, coeff => coeff > 0);
         }
 
-        [TestMethod]
+        [Fact]
         public void Digest_Should_Match_BitmapSource_Exactly()
         {
             var rawBitmapDataDigest = ImagePhash.ComputeDigest(Images.StainedGlassBlurred.Bitmap.ToRawBitmapData().ToLuminanceImage());
@@ -43,11 +36,11 @@ namespace Shipwreck.Phash.Bitmaps.Tests
 
         void Digest_Should_Match_Exactly(Digest one, Digest two)
         {
-            Assert.AreEqual(one.ToString(), two.ToString());
+            Assert.Equal(one.ToString(), two.ToString());
         }
 
 
-        [TestMethod]
+        [Fact]
         public void Digest_Should_Match_Bitmap_Exactly()
         {
             var rawBitmapDataDigest = ImagePhash.ComputeDigest(Images.StainedGlassBlurred.Bitmap.ToRawBitmapData().ToLuminanceImage());
@@ -56,7 +49,7 @@ namespace Shipwreck.Phash.Bitmaps.Tests
         }
 
 
-        [TestMethod]
+        [Fact]
         public void CCR_Should_Match_BitmapSource_Exactly()
         {
             var rawBitmapDataDigestBlurred = ImagePhash.ComputeDigest(Images.StainedGlassBlurred.Bitmap.ToRawBitmapData().ToLuminanceImage());
@@ -74,11 +67,11 @@ namespace Shipwreck.Phash.Bitmaps.Tests
             var ccrOne = ImagePhash.GetCrossCorrelation(ccrComparisonOne.Item1, ccrComparisonOne.Item2);
             var ccrTwo = ImagePhash.GetCrossCorrelation(ccrComparisonTwo.Item1, ccrComparisonTwo.Item2);
 
-            Assert.IsTrue(Math.Abs(ccrOne - ccrTwo) < ExactThreshhold);
+            Assert.True(Math.Abs(ccrOne - ccrTwo) < ExactThreshhold);
         }
 
 
-        [TestMethod]
+        [Fact]
         public void CCR_Should_Match_Bitmap_Exactly()
         {
             var rawBitmapDataDigestBlurred = ImagePhash.ComputeDigest(Images.StainedGlassBlurred.Bitmap.ToRawBitmapData().ToLuminanceImage());
@@ -92,7 +85,7 @@ namespace Shipwreck.Phash.Bitmaps.Tests
         }
 
 
-        [TestMethod]
+        [Fact]
         public void Left_Bottom_Area_Should_Match_Original_Digest_Exactly()
         {
             var originalImage = Images.StainedGlassBlurred.Bitmap.ToRawBitmapData();
@@ -106,10 +99,10 @@ namespace Shipwreck.Phash.Bitmaps.Tests
 
         void Area_Should_Match_Original_Digest_Exactly(Digest original, Digest subsection)
         {
-            Assert.AreEqual(original.ToString(), subsection.ToString());
+            Assert.Equal(original.ToString(), subsection.ToString());
         }
 
-        [TestMethod]
+        [Fact]
         public void Left_Top_Area_Should_Match_Original_Digest_Exactly()
         {
             var originalImage = Images.StainedGlassBlurred.Bitmap.ToRawBitmapData();
@@ -121,7 +114,7 @@ namespace Shipwreck.Phash.Bitmaps.Tests
             Area_Should_Match_Original_Digest_Exactly(rawBitmapDataDigestBlurred, rawBitmapDataDigestLeftTop);
         }
 
-        [TestMethod]
+        [Fact]
         public void Right_Bottom_Area_Should_Match_Original_Digest_Exactly()
         {
             var originalImage = Images.StainedGlassBlurred.Bitmap.ToRawBitmapData();
@@ -133,7 +126,7 @@ namespace Shipwreck.Phash.Bitmaps.Tests
             Area_Should_Match_Original_Digest_Exactly(rawBitmapDataDigestBlurred, rawBitmapDataDigestRightBottom);
         }
 
-        [TestMethod]
+        [Fact]
         public void Right_Top_Area_Should_Match_Original_Digest_Exactly()
         {
             var originalImage = Images.StainedGlassBlurred.Bitmap.ToRawBitmapData();
