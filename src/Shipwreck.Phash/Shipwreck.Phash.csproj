@@ -40,5 +40,21 @@
   <ItemGroup>
     <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Imaging\Generated Codes\Wrappers.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Wrappers.tt</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Imaging\Generated Codes\Wrappers.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Wrappers.cs</LastGenOutput>
+      <LastOutputs>.\Wrappers.cs</LastOutputs>
+    </None>
+  </ItemGroup>
   
 </Project>

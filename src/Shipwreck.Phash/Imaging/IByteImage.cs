@@ -1,6 +1,4 @@
-﻿using System.Runtime;
-
-namespace Shipwreck.Phash.Imaging
+﻿namespace Shipwreck.Phash.Imaging
 {
     public interface IByteImage
     {
@@ -8,6 +6,4 @@ namespace Shipwreck.Phash.Imaging
         int Height { get; }
         byte this[int x, int y] { get; }
     }
-
-
 }

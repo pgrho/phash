@@ -1,14 +1,20 @@
+<#@ template language="C#" debug="True" #>
+<#@ output extension="cs" #>
 using System.Runtime;
 
 namespace Shipwreck.Phash.Imaging
 {
-    internal struct ByteImageWrapper : IByteImageWrapper
+<#
+foreach (var T in new [] { "ByteImage", "Bgr24LuminanceImage" })
+{
+#>
+    internal struct <#= T #>Wrapper : IByteImageWrapper
     {
-        private readonly ByteImage _Image;
+        private static readonly IByteImageOperations _Operations = new ByteImageOperations<<#= T #>Wrapper>();
 
-        static IByteImageOperations Wrapper = new ByteImageOperations<ByteImageWrapper>();
+        private readonly <#= T #> _Image;
 
-        public ByteImageWrapper(ByteImage image)
+        public <#= T #>Wrapper(<#= T #> image)
         {
             _Image = image;
         }
@@ -34,12 +40,14 @@ namespace Shipwreck.Phash.Imaging
 #if NET452
             [TargetedPatchingOptOut("")]
 #endif
-            get => _Image[x, y];
+            get => ((IByteImage)_Image)[x, y];
         }
 
         public IByteImageOperations GetOperations()
-        {
-            return Wrapper;
-        }
+            => _Operations;
     }
+
+<#
+}
+#>
 }
