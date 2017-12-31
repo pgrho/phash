@@ -5,7 +5,7 @@ using System.Runtime;
 namespace Shipwreck.Phash.Imaging
 {
 <#
-foreach (var T in new [] { "ByteImage", "Bgr24LuminanceImage" })
+foreach (var T in new [] { "ByteImage", "Gray8Image", "Bgr24LuminanceImage" })
 {
 #>
     internal struct <#= T #>Wrapper : IByteImageWrapper

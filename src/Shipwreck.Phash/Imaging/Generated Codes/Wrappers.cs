@@ -41,6 +41,45 @@ namespace Shipwreck.Phash.Imaging
             => _Operations;
     }
 
+    internal struct Gray8ImageWrapper : IByteImageWrapper
+    {
+        private static readonly IByteImageOperations _Operations = new ByteImageOperations<Gray8ImageWrapper>();
+
+        private readonly Gray8Image _Image;
+
+        public Gray8ImageWrapper(Gray8Image image)
+        {
+            _Image = image;
+        }
+
+        public int Width
+        {
+#if NET452
+            [TargetedPatchingOptOut("")]
+#endif
+            get => _Image.Width;
+        }
+
+        public int Height
+        {
+#if NET452
+            [TargetedPatchingOptOut("")]
+#endif
+            get => _Image.Height;
+        }
+
+        public byte this[int x, int y]
+        {
+#if NET452
+            [TargetedPatchingOptOut("")]
+#endif
+            get => ((IByteImage)_Image)[x, y];
+        }
+
+        public IByteImageOperations GetOperations()
+            => _Operations;
+    }
+
     internal struct Bgr24LuminanceImageWrapper : IByteImageWrapper
     {
         private static readonly IByteImageOperations _Operations = new ByteImageOperations<Bgr24LuminanceImageWrapper>();
