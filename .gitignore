@@ -240,7 +240,15 @@ ModelManifest.xml
 
 # FAKE - F# Make
 .fake/
-# /data/*/*.bmp
-# /data/*/*.jpg
+/data/*/*.bmp
+/data/*/*.jpg
+!/data/blur/bear.bmp
+!/data/blur/canyon.bmp
+!/data/blur/stain_glass.bmp
+!/data/blur/stain_glass.small.bmp
+!/data/compr/bear.bmp
+!/data/compr/canyon.bmp
+!/data/compr/stain_glass.bmp
+!/data/subsection/*
 /src/Shipwreck.Phash.TestApp/Properties/launchSettings.json
 /src/Shipwreck.Phash.TestApp/output.html
