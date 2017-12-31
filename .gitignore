@@ -242,3 +242,5 @@ ModelManifest.xml
 .fake/
 /data/*/*.bmp
 /data/*/*.jpg
+/src/Shipwreck.Phash.TestApp/Properties/launchSettings.json
+/src/Shipwreck.Phash.TestApp/output.html
