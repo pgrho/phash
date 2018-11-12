@@ -11,23 +11,17 @@
     <Description>C# Implementation of phash-0.9.4 for bitmaps.</Description>
     <PackageLicenseUrl>http://www.gnu.org/licenses/</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/pgrho/phash</PackageProjectUrl>
-    <FileVersion>0.2.1.0</FileVersion>
-    <Copyright>Copyright © 2016-2017 shipwreck.jp</Copyright>
-    <AssemblyVersion>0.2.1.0</AssemblyVersion>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>bin\Debug\net452\Shipwreck.Phash.Bitmaps.xml</DocumentationFile>
-    <NoWarn>1591,1701,1702,1705</NoWarn>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>bin\Release\net452\Shipwreck.Phash.Bitmaps.xml</DocumentationFile>
+    <Copyright>Copyright © 2016-2018 shipwreck.jp</Copyright>
+    <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\Shipwreck.Phash.Bitmaps.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NuGet.Build.Tasks.Pack" Version="4.4.0">
+    <PackageReference Include="NuGet.Build.Tasks.Pack"
+                      Version="4.4.0">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="System.Numerics.Vectors" Version="4.3.0" />
+    <PackageReference Include="System.Numerics.Vectors"
+                      Version="4.3.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -35,9 +29,8 @@
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
-    <PackageReference Include="CoreCompat.System.Drawing.v2">
-      <Version>5.2.0-preview1-r131</Version>
-    </PackageReference>
+    <PackageReference Include="System.Drawing.Common"
+                      Version="4.5.1"/>
   </ItemGroup>
 
 </Project>
