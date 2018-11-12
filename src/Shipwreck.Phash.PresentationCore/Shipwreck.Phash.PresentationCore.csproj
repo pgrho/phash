@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net452</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -7,12 +7,10 @@
     <Company>shipwreck.jp</Company>
     <Product>priHash</Product>
     <Description>C# Implementation of phash-0.9.4 for PresentationCore.dll</Description>
-    <Copyright>Copyright © 2016-2017 shipwreck.jp</Copyright>
+    <Copyright>Copyright © 2016-2018 shipwreck.jp</Copyright>
     <PackageLicenseUrl>http://www.gnu.org/licenses/</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/pgrho/phash</PackageProjectUrl>
-    <Version>0.2.0</Version>
-    <AssemblyVersion>0.2.0.0</AssemblyVersion>
-    <FileVersion>0.2.0.0</FileVersion>
+    <Version>0.3.0</Version>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="WindowsBase" Version="4.6.1055" />
