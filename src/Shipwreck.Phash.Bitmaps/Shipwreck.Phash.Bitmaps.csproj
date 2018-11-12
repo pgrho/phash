@@ -4,7 +4,7 @@
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
-    <Version>0.2.1</Version>
+    <Version>0.3.0</Version>
     <Authors>shipwreck.jp</Authors>
     <Company />
     <Product>priHash</Product>
