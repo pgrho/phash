@@ -1,18 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net452</TargetFramework>
+    <TargetFramework>netstandard1.0</TargetFramework>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
-    <Version>0.1.0</Version>
+    <Version>0.3.0</Version>
     <Authors>shipwreck.jp</Authors>
     <Company />
     <Product>priHash DB Integrations</Product>
     <Description>Provides Stored Function Implementations for pHash Digests</Description>
     <PackageLicenseUrl>http://www.gnu.org/licenses/</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/pgrho/phash</PackageProjectUrl>
-    <FileVersion>0.1.0.0</FileVersion>
-    <Copyright>Copyright © 2016 shipwreck.jp</Copyright>
+    <Copyright>Copyright © 2016-2018 shipwreck.jp</Copyright>
   </PropertyGroup>
 </Project>
