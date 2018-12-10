@@ -4,18 +4,20 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Windows.Media.Imaging;
 using System.Xml;
 using System.Xml.Linq;
 using Newtonsoft.Json;
 using Shipwreck.Phash.Bitmaps;
-using Shipwreck.Phash.PresentationCore;
 using System.Collections.Concurrent;
 using System.Threading;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Text;
 using System.Reflection;
+#if NET452
+using System.Windows.Media.Imaging;
+using Shipwreck.Phash.PresentationCore;
+#endif
 
 namespace Shipwreck.Phash.TestApp
 {
@@ -35,7 +37,14 @@ namespace Shipwreck.Phash.TestApp
                         RawBitmapHash = ImagePhash.ComputeDigest(bitmap.ToRawBitmapData().ToLuminanceImage());
                     }
                     fs.Position = 0;
+#if NET452
                     BitmapSourceHash = ImagePhash.ComputeDigest(BitmapFrame.Create(fs).ToByteImage());
+#else
+                    using (var bmp = (Bitmap)Image.FromStream(fs))
+                    {
+                        BitmapSourceHash = ImagePhash.ComputeDigest(bmp.ToLuminanceImage());
+                    }
+#endif
 
                     //// TODO: Assert all digests are same
                 }
@@ -84,7 +93,10 @@ namespace Shipwreck.Phash.TestApp
             }
 
             prg.ProcessFiles(targets.Any() ? targets
-                            : new string[] { "compr", "blur", "rotd", "misc" }.SelectMany(d => Directory.EnumerateFiles(new Uri(new Uri(Assembly.GetEntryAssembly().Location), d).LocalPath)));
+                            : new string[] { "compr", "blur", "rotd", "misc" }
+                    .Select(d => new Uri(new Uri(Assembly.GetEntryAssembly().Location), d).LocalPath)
+                    .Where(Directory.Exists)
+                    .SelectMany(d => Directory.EnumerateFiles(d)));
         }
 
         private void ProcessFiles(IEnumerable<string> fs)

@@ -1,29 +1,30 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net452</TargetFramework>
+    <TargetFrameworks>net452;netcoreapp2.0;netcoreapp2.1</TargetFrameworks>
     <ApplicationIcon />
     <OutputType>Exe</OutputType>
     <StartupObject>Shipwreck.Phash.TestApp.Program</StartupObject>
   </PropertyGroup>
-   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json"
+                      Version="10.0.3" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Shipwreck.Phash\Shipwreck.Phash.csproj" />
     <ProjectReference Include="..\Shipwreck.Phash.Bitmaps\Shipwreck.Phash.Bitmaps.csproj" />
-    <ProjectReference Include="..\Shipwreck.Phash.PresentationCore\Shipwreck.Phash.PresentationCore.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net452'">
+    <ProjectReference Include="..\Shipwreck.Phash.PresentationCore\Shipwreck.Phash.PresentationCore.csproj" />
     <Reference Include="PresentationCore" />
   </ItemGroup>
 
   <ItemGroup>
-  <Content Include="..\..\data\**\*.*">
-    <Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
-    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-  </Content> 
-  
+    <Content Include="..\..\data\**\*.*">
+      <Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+
   </ItemGroup>
 </Project>
