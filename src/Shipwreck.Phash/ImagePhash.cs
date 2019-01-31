@@ -1,5 +1,5 @@
-﻿using System;
-using Shipwreck.Phash.Imaging;
+﻿using Shipwreck.Phash.Imaging;
+using System;
 
 namespace Shipwreck.Phash
 {
@@ -319,5 +319,30 @@ namespace Shipwreck.Phash
             }
             return kernel;
         }
+
+        #region GetHammingDistance
+
+        public static int GetHammingDistance(long x, long y)
+            => GetHammingDistance(x ^ y);
+
+        public static int GetHammingDistance(ulong x, ulong y)
+            => GetHammingDistance(x ^ y);
+
+        public static int GetHammingDistance(long v)
+            => GetHammingDistance(unchecked((ulong)v));
+
+        public static int GetHammingDistance(ulong v)
+        {
+            // TODO: (netcoreapp3.0) if (Popcnt.IsSupported) return Popcnt.PopCount(v);
+
+            unchecked
+            {
+                v = v - ((v >> 1) & 0x5555555555555555UL);
+                v = (v & 0x3333333333333333UL) + ((v >> 2) & 0x3333333333333333UL);
+                return (int)((((v + (v >> 4)) & 0xF0F0F0F0F0F0F0FUL) * 0x101010101010101UL) >> 56);
+            }
+        }
+
+        #endregion GetHammingDistance
     }
 }
