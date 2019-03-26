@@ -1,0 +1,12 @@
+﻿<Project>
+  <PropertyGroup>
+    <Version>0.3.1</Version>
+    <Product>priHash</Product>
+    <Authors>shipwreck.jp</Authors>
+    <Company />
+    <PackageLicenseUrl>http://www.gnu.org/licenses/</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/pgrho/phash</PackageProjectUrl>
+    <Copyright>Copyright © 2016-2018 shipwreck.jp</Copyright>
+    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+  </PropertyGroup>
+</Project>

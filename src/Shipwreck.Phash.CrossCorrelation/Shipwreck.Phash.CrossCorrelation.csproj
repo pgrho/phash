@@ -4,16 +4,10 @@
     <TargetFramework>net452</TargetFramework>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
-    <Version>0.1.0</Version>
-    <Authors>shipwreck.jp</Authors>
-    <Company />
     <Product>priHash CrossCorrelation</Product>
     <Description>C# Implementation of phash-0.9.4 that provides Only GetCrossCorrelation functionality. Intended to be referenced from SQL CLR.</Description>
-    <PackageLicenseUrl>http://www.gnu.org/licenses/</PackageLicenseUrl>
-    <PackageProjectUrl>https://github.com/pgrho/phash</PackageProjectUrl>
+    <Version>0.1.0</Version>
     <FileVersion>0.1.0.0</FileVersion>
-    <Copyright>Copyright © 2016 shipwreck.jp</Copyright>
   </PropertyGroup>
 
   <ItemGroup>
