@@ -7,8 +7,14 @@ namespace Shipwreck.Phash
     partial class CrossCorrelation
     {
 <#
-foreach (var T in new [] { "byte[]", "byte*" })
+foreach (var T in new [] { "byte[]", "byte*", "Span<byte>" })
 {
+	if (T == "Span<byte>")
+	{
+#>
+#if !NO_SPAN
+<#
+	}
 #>
         internal unsafe static double GetCrossCorrelationCore(<#= T #> coefficients1, <#= T #> coefficients2, int length)
         {
@@ -47,6 +53,12 @@ foreach (var T in new [] { "byte[]", "byte*" })
             return Math.Sqrt(max);
         }
 <#
+	if (T == "Span<byte>")
+	{
+#>
+#endif
+<#
+	}
 }
 #>
 	}

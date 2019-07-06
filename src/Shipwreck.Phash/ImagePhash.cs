@@ -301,6 +301,12 @@ namespace Shipwreck.Phash
         public static double GetCrossCorrelation(byte[] coefficients1, byte[] coefficients2)
             => CrossCorrelation.GetCrossCorrelationCore(coefficients1, coefficients2, Math.Min(coefficients1.Length, coefficients2.Length));
 
+        public unsafe static double GetCrossCorrelation(byte* coefficients1, byte* coefficients2)
+            => CrossCorrelation.GetCrossCorrelationCore(coefficients1, coefficients2, 40);
+
+        public static double GetCrossCorrelation(Span<byte> coefficients1, Span<byte> coefficients2)
+            => CrossCorrelation.GetCrossCorrelationCore(coefficients1, coefficients2, Math.Min(coefficients1.Length, coefficients2.Length));
+
         internal static FloatImage CreateMHKernel(float alpha, float level)
         {
             var sigma = (int)(4 * Math.Pow((float)alpha, (float)level));

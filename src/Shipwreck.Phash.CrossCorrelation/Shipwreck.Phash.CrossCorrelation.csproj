@@ -6,8 +6,10 @@
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Product>priHash CrossCorrelation</Product>
     <Description>C# Implementation of phash-0.9.4 that provides Only GetCrossCorrelation functionality. Intended to be referenced from SQL CLR.</Description>
-    <Version>0.1.0</Version>
-    <FileVersion>0.1.0.0</FileVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DefineConstants>TRACE;NO_SPAN</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
