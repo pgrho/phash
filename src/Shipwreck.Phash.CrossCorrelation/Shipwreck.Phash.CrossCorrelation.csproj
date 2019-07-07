@@ -2,36 +2,21 @@
 
   <PropertyGroup>
     <TargetFrameworks>net4;netstandard1.0</TargetFrameworks>
-    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Product>priHash CrossCorrelation</Product>
     <Description>C# Implementation of phash-0.9.4 that provides Only GetCrossCorrelation functionality. Intended to be referenced from SQL CLR.</Description>
+    <RootNamespace>Shipwreck.Phash</RootNamespace>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)'=='Debug'">
-    <DefineConstants>DEBUG;TRACE;NO_SPAN</DefineConstants>
+    <DefineConstants>DEBUG;TRACE;NO_SPAN;NO_UNSAFE</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)'=='Release'">
-    <DefineConstants>TRACE;NO_SPAN</DefineConstants>
+    <DefineConstants>TRACE;NO_SPAN;NO_UNSAFE</DefineConstants>
   </PropertyGroup>
-
-  <ItemGroup>
-    <None Update="Generated Codes\CrossCorrelation.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>CrossCorrelation.cs</LastGenOutput>
-    </None>
-  </ItemGroup>
 
   <ItemGroup>
     <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="Generated Codes\CrossCorrelation.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>CrossCorrelation.tt</DependentUpon>
-    </Compile>
   </ItemGroup>
 
 </Project>

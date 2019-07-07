@@ -9,7 +9,7 @@
   </PropertyGroup>
  
   <ItemGroup>
-    <Compile Include="..\Shipwreck.Phash.CrossCorrelation\Generated Codes\CrossCorrelation.cs" Link="CrossCorrelation.cs" />
+    <Compile Include="..\Shipwreck.Phash.CrossCorrelation\CrossCorrelation.Core.cs" Link="CrossCorrelation.Core.cs" />
   </ItemGroup>
 
   <ItemGroup>

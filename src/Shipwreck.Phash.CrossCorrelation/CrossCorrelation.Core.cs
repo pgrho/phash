@@ -1,10 +1,13 @@
-using System;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
 namespace Shipwreck.Phash
 {
     partial class CrossCorrelation
     {
-        internal unsafe static double GetCrossCorrelationCore(byte[] coefficients1, byte[] coefficients2, int length)
+        internal static double GetCrossCorrelationCore(byte[] coefficients1, byte[] coefficients2, int length)
         {
             var sumx = 0.0;
             var sumy = 0.0;
@@ -40,6 +43,8 @@ namespace Shipwreck.Phash
 
             return Math.Sqrt(max);
         }
+
+#if !NO_UNSAFE
         internal unsafe static double GetCrossCorrelationCore(byte* coefficients1, byte* coefficients2, int length)
         {
             var sumx = 0.0;
@@ -76,8 +81,10 @@ namespace Shipwreck.Phash
 
             return Math.Sqrt(max);
         }
+#endif
+
 #if !NO_SPAN
-        internal unsafe static double GetCrossCorrelationCore(Span<byte> coefficients1, Span<byte> coefficients2, int length)
+        internal static double GetCrossCorrelationCore(Span<byte> coefficients1, Span<byte> coefficients2, int length)
         {
             var sumx = 0.0;
             var sumy = 0.0;
@@ -114,7 +121,7 @@ namespace Shipwreck.Phash
             return Math.Sqrt(max);
         }
 #endif
-        internal  static int GetHammingDistanceCore(ulong v)
+        internal static int GetHammingDistanceCore(ulong v)
         {
             unchecked
             {
@@ -123,5 +130,5 @@ namespace Shipwreck.Phash
                 return (int)((((v + (v >> 4)) & 0xF0F0F0F0F0F0F0FUL) * 0x101010101010101UL) >> 56);
             }
         }
-	}
+    }
 }
