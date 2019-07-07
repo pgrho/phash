@@ -4,7 +4,7 @@
     <Product>priHash</Product>
     <Authors>shipwreck.jp</Authors>
     <Company />
-    <PackageLicenseUrl>http://www.gnu.org/licenses/</PackageLicenseUrl>
+    <PackageLicenseExpression>GPL-3.0-only</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/pgrho/phash</PackageProjectUrl>
     <Copyright>Copyright © 2016-2019 shipwreck.jp</Copyright>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
