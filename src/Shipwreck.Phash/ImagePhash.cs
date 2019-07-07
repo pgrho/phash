@@ -338,16 +338,7 @@ namespace Shipwreck.Phash
             => GetHammingDistance(unchecked((ulong)v));
 
         public static int GetHammingDistance(ulong v)
-        {
-            // TODO: (netcoreapp3.0) if (Popcnt.IsSupported) return Popcnt.PopCount(v);
-
-            unchecked
-            {
-                v = v - ((v >> 1) & 0x5555555555555555UL);
-                v = (v & 0x3333333333333333UL) + ((v >> 2) & 0x3333333333333333UL);
-                return (int)((((v + (v >> 4)) & 0xF0F0F0F0F0F0F0FUL) * 0x101010101010101UL) >> 56);
-            }
-        }
+            => CrossCorrelation.GetHammingDistanceCore(v);
 
         #endregion GetHammingDistance
     }

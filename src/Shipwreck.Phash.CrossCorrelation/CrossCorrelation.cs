@@ -9,5 +9,17 @@ namespace Shipwreck.Phash
 
         public unsafe static double GetCrossCorrelation(byte* coefficients1, byte* coefficients2, int length)
             => GetCrossCorrelationCore(coefficients1, coefficients2, length);
+
+        public static int GetHammingDistance(long x, long y)
+            => GetHammingDistance(x ^ y);
+
+        public static int GetHammingDistance(ulong x, ulong y)
+            => GetHammingDistance(x ^ y);
+
+        public static int GetHammingDistance(long v)
+            => GetHammingDistanceCore(unchecked((ulong)v));
+
+        public static int GetHammingDistance(ulong v)
+            => GetHammingDistanceCore(v);
     }
 }
