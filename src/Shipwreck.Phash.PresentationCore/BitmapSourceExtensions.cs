@@ -1,7 +1,7 @@
+using Shipwreck.Phash.Imaging;
 using System.Numerics;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using Shipwreck.Phash.Imaging;
 
 namespace Shipwreck.Phash.PresentationCore
 {
@@ -69,5 +69,44 @@ namespace Shipwreck.Phash.PresentationCore
                   || src.Format == PixelFormats.Gray8
                   || src.Format == PixelFormats.Gray16
                   || src.Format == PixelFormats.Gray32Float ? src.ToIntensityImage() : src.ToLuminanceImage();
+
+        public static ByteImage ToRedImage(this BitmapSource src)
+            => src.ToChannelImage(2);
+
+        public static ByteImage ToGreenImage(this BitmapSource src)
+            => src.ToChannelImage(1);
+
+        public static ByteImage ToBlueImage(this BitmapSource src)
+            => src.ToChannelImage(0);
+
+        private static ByteImage ToChannelImage(this BitmapSource src, int offset)
+        {
+            if (src.Format == PixelFormats.BlackWhite
+                  || src.Format == PixelFormats.Gray2
+                  || src.Format == PixelFormats.Gray4
+                  || src.Format == PixelFormats.Gray8
+                  || src.Format == PixelFormats.Gray16
+                  || src.Format == PixelFormats.Gray32Float)
+            {
+                return src.ToIntensityImage();
+            }
+
+            var bmp = src.AsBgr24();
+
+            var data = new byte[bmp.PixelWidth * bmp.PixelHeight * 3];
+            bmp.CopyPixels(data, bmp.PixelWidth * 3, 0);
+
+            var r = new ByteImage(bmp.PixelWidth, bmp.PixelHeight);
+
+            for (var dy = 0; dy < r.Height; dy++)
+            {
+                for (var dx = 0; dx < r.Width; dx++)
+                {
+                    r[dx, dy] = data[(dx + dy * r.Width) * 3 + offset];
+                }
+            }
+
+            return r;
+        }
     }
 }

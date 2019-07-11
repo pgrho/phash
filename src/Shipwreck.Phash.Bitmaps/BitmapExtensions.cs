@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Shipwreck.Phash.Imaging;
+using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Numerics;
 using System.Runtime.InteropServices;
-using Shipwreck.Phash.Imaging;
 
 namespace Shipwreck.Phash.Bitmaps
 {
@@ -37,11 +37,9 @@ namespace Shipwreck.Phash.Bitmaps
         public static ByteImage ToLuminanceImage(this Bitmap bitmap)
         {
             Bitmap bitmap24Rgb = null;
-            bool localOwnedBitmapHandle = false;
             try
             {
                 bitmap24Rgb = bitmap.ToRgb24();
-                localOwnedBitmapHandle = bitmap != bitmap24Rgb;
 
                 var data = bitmap24Rgb.ToBytes();
 
@@ -70,8 +68,50 @@ namespace Shipwreck.Phash.Bitmaps
             }
             finally
             {
-                if (localOwnedBitmapHandle)
+                if (bitmap != bitmap24Rgb)
+                {
                     bitmap24Rgb?.Dispose();
+                }
+            }
+        }
+
+        public static ByteImage ToRedImage(this Bitmap src)
+            => src.ToChannelImage(2);
+
+        public static ByteImage ToGreenImage(this Bitmap src)
+            => src.ToChannelImage(1);
+
+        public static ByteImage ToBlueImage(this Bitmap src)
+            => src.ToChannelImage(0);
+
+        private static ByteImage ToChannelImage(this Bitmap bitmap, int offset)
+        {
+            Bitmap bitmap24Rgb = null;
+            try
+            {
+                bitmap24Rgb = bitmap.ToRgb24();
+
+                var data = bitmap24Rgb.ToBytes();
+
+                var r = new ByteImage(bitmap24Rgb.Width, bitmap24Rgb.Height);
+
+                var stride = bitmap24Rgb.GetStride();
+                for (var dy = 0; dy < r.Height; dy++)
+                {
+                    for (var dx = 0; dx < r.Width; dx++)
+                    {
+                        r[dx, dy] = data[dx * 3 + stride * dy + offset];
+                    }
+                }
+
+                return r;
+            }
+            finally
+            {
+                if (bitmap != bitmap24Rgb)
+                {
+                    bitmap24Rgb?.Dispose();
+                }
             }
         }
 
