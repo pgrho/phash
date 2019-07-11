@@ -1,3 +1,5 @@
+using System.Runtime;
+
 namespace Shipwreck.Phash.Imaging
 {
     public sealed partial class ByteImage : IArrayImage<byte>, IByteImageWrapperProvider
@@ -27,13 +29,29 @@ namespace Shipwreck.Phash.Imaging
             Array = data;
         }
 
-        public int Width { get; }
-        public int Height { get; }
-        public byte[] Array { get; }
+        public int Width
+        {
+            [TargetedPatchingOptOut("")]
+            get;
+        }
+
+        public int Height
+        {
+            [TargetedPatchingOptOut("")]
+            get;
+        }
+
+        public byte[] Array
+        {
+            [TargetedPatchingOptOut("")]
+            get;
+        }
 
         public byte this[int x, int y]
         {
+            [TargetedPatchingOptOut("")]
             get => Array[x + y * Width];
+            [TargetedPatchingOptOut("")]
             set => Array[x + y * Width] = value;
         }
 

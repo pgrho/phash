@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime;
 
 namespace Shipwreck.Phash.Imaging
 {
@@ -29,13 +30,29 @@ namespace Shipwreck.Phash.Imaging
             Array = data;
         }
 
-        public int Width { get; }
-        public int Height { get; }
-        public float[] Array { get; }
+        public int Width
+        {
+            [TargetedPatchingOptOut("")]
+            get;
+        }
+
+        public int Height
+        {
+            [TargetedPatchingOptOut("")]
+            get;
+        }
+
+        public float[] Array
+        {
+            [TargetedPatchingOptOut("")]
+            get;
+        }
 
         public float this[int x, int y]
         {
+            [TargetedPatchingOptOut("")]
             get => Array[x + y * Width];
+            [TargetedPatchingOptOut("")]
             set => Array[x + y * Width] = value;
         }
 
