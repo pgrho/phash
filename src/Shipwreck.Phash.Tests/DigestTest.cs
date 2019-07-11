@@ -11,9 +11,9 @@ namespace Shipwreck.Phash
         {
             var d = new Digest();
 
-            for (var i = 0; i < d.Coefficents.Length; i++)
+            for (var i = 0; i < d.Coefficients.Length; i++)
             {
-                d.Coefficents[i] = (byte)(11 * i);
+                d.Coefficients[i] = (byte)(11 * i);
             }
 
             var xs = new XmlSerializer(d.GetType());
@@ -27,7 +27,7 @@ namespace Shipwreck.Phash
                 {
                     var d2 = (Digest)xs.Deserialize(sr);
 
-                    Assert.Equal(d.Coefficents, d2.Coefficents);
+                    Assert.Equal(d.Coefficients, d2.Coefficients);
                 }
             }
         }

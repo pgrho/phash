@@ -94,14 +94,14 @@ namespace Shipwreck.Phash
         /// </summary>
         /// <param name="featureVector">vector of input series</param>
         /// <returns>the dct of R</returns>
-        public static Digest ComputeDct(Features featureVector)
+        internal static Digest ComputeDct(Features featureVector)
         {
             var N = featureVector.features.Length;
 
             var digest = new Digest();
 
             var R = featureVector.features;
-            var D = digest.Coefficents;
+            var D = digest.Coefficients;
 
             var D_temp = new double[Digest.LENGTH];
             double max = 0.0;
@@ -296,7 +296,7 @@ namespace Shipwreck.Phash
         /// <param name="y">Digest struct</param>
         /// <returns>double value the peak of cross correlation</returns>
         public static double GetCrossCorrelation(Digest x, Digest y)
-            => GetCrossCorrelation(x.Coefficents, y.Coefficents);
+            => GetCrossCorrelation(x.Coefficients, y.Coefficients);
 
         public static double GetCrossCorrelation(byte[] coefficients1, byte[] coefficients2)
             => CrossCorrelation.GetCrossCorrelationCore(coefficients1, coefficients2, Math.Min(coefficients1.Length, coefficients2.Length));

@@ -1,6 +1,6 @@
 ﻿<Project>
   <PropertyGroup>
-    <Version>0.3.4</Version>
+    <Version>0.3.5</Version>
     <Product>priHash</Product>
     <Authors>shipwreck.jp</Authors>
     <Company />

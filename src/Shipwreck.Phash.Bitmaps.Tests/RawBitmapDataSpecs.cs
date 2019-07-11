@@ -23,7 +23,7 @@ namespace Shipwreck.Phash.Bitmaps.Tests
         public void Digest_Should_Have_Non_Zero_Hash_For_Small_Images()
         {
             var rawBitmapDataDigest = ImagePhash.ComputeDigest(Images.StainedGlassSmallBlurred.Bitmap.ToRawBitmapData().ToLuminanceImage());
-            Assert.Contains(rawBitmapDataDigest.Coefficents, coeff => coeff > 0);
+            Assert.Contains(rawBitmapDataDigest.Coefficients, coeff => coeff > 0);
         }
 
         [Fact]

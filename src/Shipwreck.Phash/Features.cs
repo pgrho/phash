@@ -3,7 +3,7 @@ namespace Shipwreck.Phash
     /// <summary>
     /// feature vector info
     /// </summary>
-    public class Features
+    internal class Features
     {
         public Features(int length)
         {

@@ -15,26 +15,33 @@ namespace Shipwreck.Phash
 
         public Digest()
         {
-            _Coefficents = new byte[LENGTH];
+            _Coefficients = new byte[LENGTH];
         }
 
-        private readonly byte[] _Coefficents;
+        [Obsolete("Use Coefficients instead")]
+        public byte[] Coefficents
+        {
+            get => Coefficients;
+            set => Coefficients = value;
+        }
+
+        private readonly byte[] _Coefficients;
 
         /// <summary>
         /// the digest integer coefficient array
         /// </summary>
-        public byte[] Coefficents
+        public byte[] Coefficients
         {
-            get => _Coefficents;
+            get => _Coefficients;
             set
             {
                 if (value == null)
                 {
-                    Array.Clear(_Coefficents, 0, _Coefficents.Length);
+                    Array.Clear(_Coefficients, 0, _Coefficients.Length);
                 }
-                else if (value.Length == _Coefficents.Length)
+                else if (value.Length == _Coefficients.Length)
                 {
-                    Array.Copy(value, _Coefficents, value.Length);
+                    Array.Copy(value, _Coefficients, value.Length);
                 }
                 else
                 {
@@ -45,9 +52,9 @@ namespace Shipwreck.Phash
 
         public override string ToString()
         {
-            var sb = new StringBuilder(Coefficents.Length * 2 + 2);
+            var sb = new StringBuilder(Coefficients.Length * 2 + 2);
             sb.Append("0x");
-            foreach (var b in Coefficents)
+            foreach (var b in Coefficients)
             {
                 sb.Append(b.ToString("X2"));
             }
