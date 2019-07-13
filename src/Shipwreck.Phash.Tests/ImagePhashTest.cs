@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Numerics;
 using Xunit;
 using Xunit.Abstractions;
@@ -11,6 +12,31 @@ namespace Shipwreck.Phash
         public ImagePhashTest(ITestOutputHelper output)
         {
             _Output = output;
+        }
+
+        [Theory]
+        [InlineData(1)]
+        [InlineData(3)]
+        [InlineData(5)]
+        public void NormalizeDigestTest(int seed)
+        {
+            _Output.WriteLine("Vector<float>.Count: {0}", Vector<float>.Count);
+            _Output.WriteLine("Vector.IsHardwareAccelerated: {0}", Vector.IsHardwareAccelerated);
+
+            var r = new Random(seed);
+            var a = new float[40];
+
+            for (var i = 0; i < a.Length; i++)
+            {
+                a[i] = (float)r.NextDouble();
+            }
+
+            var max = Enumerable.Max(a);
+            var min = Enumerable.Min(a);
+
+            var digest = ImagePhash.NormalizeDigest(a, max, min);
+
+            Assert.Equal(a.Select(e => (byte)(byte.MaxValue * (e - min) / (max - min))), digest.Coefficients);
         }
 
         [Theory]

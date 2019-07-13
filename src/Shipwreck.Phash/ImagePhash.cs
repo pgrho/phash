@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Numerics;
 using Shipwreck.Phash.Imaging;
 
 namespace Shipwreck.Phash
@@ -103,9 +104,9 @@ namespace Shipwreck.Phash
 
             var R = featureVector;
 
-            var coefficients = new double[Digest.LENGTH];
-            var max = 0.0;
-            var min = 0.0;
+            var coefficients = new float[Digest.LENGTH];
+            var max = 0f;
+            var min = 0f;
             var div2n = Math.PI / (2 * N);
             var divSq = 1 / Math.Sqrt(N);
             for (var k = 0; k < Digest.LENGTH; k++)
@@ -116,23 +117,44 @@ namespace Shipwreck.Phash
                     sum += R[n] * Math.Cos((2 * n + 1) * k * div2n);
                 }
 
-                var v = coefficients[k] = sum * divSq * (k == 0 ? 1 : SQRT_TWO);
+                var v = coefficients[k] = (float)(sum * divSq * (k == 0 ? 1 : SQRT_TWO));
                 max = Math.Max(max, v);
                 min = Math.Min(min, v);
             }
 
-            return NormalizeDct(coefficients, max, min);
+            return NormalizeDigest(coefficients, max, min);
         }
 
-        private static Digest NormalizeDct(double[] coefficients, double max, double min)
+        internal static Digest NormalizeDigest(float[] coefficients, float max, float min)
         {
             var digest = new Digest();
-            var divRange = 1 / (max - min);
+            var coeff = byte.MaxValue / (max - min);
             var dest = digest.Coefficients;
 
-            for (var i = 0; i < Digest.LENGTH; i++)
+            var i = 0;
+            var vc = Vector<float>.Count;
+            if (Vector.IsHardwareAccelerated
+                && vc > 1)
             {
-                dest[i] = (byte)(byte.MaxValue * (coefficients[i] - min) * divRange);
+                var minV = new Vector<float>(min);
+                for (; i < Digest.LENGTH;)
+                {
+                    var ni = i + vc;
+                    if (ni <= Digest.LENGTH)
+                    {
+                        var d = (new Vector<float>(coefficients, i) - minV) * coeff;
+                        for (var j = 0; j < vc; j++)
+                        {
+                            dest[i + j] = (byte)d[j];
+                        }
+                        i = ni;
+                    }
+                }
+            }
+
+            for (; i < Digest.LENGTH; i++)
+            {
+                dest[i] = (byte)((coefficients[i] - min) * coeff);
             }
 
             return digest;
