@@ -8,11 +8,39 @@ using System.Runtime.Intrinsics.X86;
 
 namespace Shipwreck.Phash
 {
+#if !NETCOREAPP2_1 && !NETCOREAPP3_0
+    internal static class MathF
+    {
+        public const float PI = 3.1415926535897932384626433832795f;
+
+        public static float Sqrt(float v)
+            => (float)Math.Sqrt(v);
+
+        public static float Cos(float v)
+            => (float)Math.Cos(v);
+
+        public static float Tan(float v)
+            => (float)Math.Tan(v);
+
+        public static float Floor(float v)
+            => (float)Math.Floor(v);
+
+        public static float Round(float v)
+            => (float)Math.Round(v);
+
+        public static float Pow(float x, float y)
+            => (float)Math.Pow(x, y);
+
+        public static float Exp(float v)
+            => (float)Math.Exp(v);
+    }
+#endif
+
     partial class CrossCorrelation
     {
         #region Internal Overloads
 
-        internal static double GetCrossCorrelationCore(byte[] x, byte[] y, int length)
+        internal static float GetCrossCorrelationCore(byte[] x, byte[] y, int length)
         {
             var sumX = 0;
             var sumY = 0;
@@ -38,7 +66,7 @@ namespace Shipwreck.Phash
         }
 
 #if !NO_UNSAFE
-        internal unsafe static double GetCrossCorrelationCore(byte* x, byte* y, int length)
+        internal unsafe static float GetCrossCorrelationCore(byte* x, byte* y, int length)
         {
             var sumX = 0;
             var sumY = 0;
@@ -65,7 +93,7 @@ namespace Shipwreck.Phash
 #endif
 
 #if !NO_SPAN
-        internal static double GetCrossCorrelationCore(Span<byte> x, Span<byte> y, int length)
+        internal static float GetCrossCorrelationCore(Span<byte> x, Span<byte> y, int length)
         {
             var sumX = 0;
             var sumY = 0;
@@ -93,7 +121,7 @@ namespace Shipwreck.Phash
 
         #endregion
 
-        private static double GetCrossCorrelationCore(float[] x, float[] y)
+        private static float GetCrossCorrelationCore(float[] x, float[] y)
         {
             var max = 0f;
             for (var d = 0; d < x.Length; d++)
@@ -103,7 +131,7 @@ namespace Shipwreck.Phash
                 max = Math.Max(max, v);
             }
 
-            return Math.Sqrt(max);
+            return MathF.Sqrt(max);
         }
 
         private static float GetCrossCorrelationForOffset(float[] x, float[] y, int offset)

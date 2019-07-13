@@ -78,11 +78,11 @@ namespace Shipwreck.Phash.Imaging
             return r;
         }
 
-        public void ApplyGamma(double gamma)
+        public void ApplyGamma(float gamma)
         {
             for (var i = 0; i < Array.Length; i++)
             {
-                Array[i] = (float)Math.Pow(Array[i], gamma);
+                Array[i] = MathF.Pow(Array[i], gamma);
             }
         }
 
@@ -206,21 +206,21 @@ namespace Shipwreck.Phash.Imaging
             return r;
         }
 
-        public static FloatImage CreateGaussian(int radius, double sigma)
+        public static FloatImage CreateGaussian(int radius, float sigma)
         {
-            var r = radius > 0 ? radius : (int)Math.Round(3 * sigma);
+            var r = radius > 0 ? radius : (int)MathF.Round(3 * sigma);
             var w = 2 * r + 1;
 
             var vs = new FloatImage(w, w);
             var s2 = sigma * sigma;
-            var i2s2 = 0.5 / s2;
-            var i2pis2 = 1 / (2 * Math.PI * s2);
+            var i2s2 = 0.5f / s2;
+            var i2pis2 = 1 / (2 * MathF.PI * s2);
             for (var y = 0; y <= r; y++)
             {
                 for (var x = y; x <= r; x++)
                 {
                     var d2 = x * x + y * y;
-                    var v = (float)(Math.Exp(-d2 * i2s2) * i2pis2);
+                    var v = MathF.Exp(-d2 * i2s2) * i2pis2;
                     vs[r - y, r - x] = v;
                     vs[r - y, r + x] = v;
                     vs[r + y, r - x] = v;

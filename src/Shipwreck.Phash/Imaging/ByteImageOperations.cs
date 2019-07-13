@@ -117,7 +117,7 @@ namespace Shipwreck.Phash.Imaging
                         var isEdge = isYEdge || dx - kernelXRadius < 0 || image.Width <= dx + kernelWidth - kernelXRadius - 1;
 
                         var result = isEdge ? ConvolveVectorPixel(image, lines, lineSize, fp, kernelWidth, kernelHeight, kernelXRadius, kernelYRadius, total, xBatch, dx, dy)
-                                    : ConvolveVectorPixel(image, lines, lineSize, fp, kernelHeight, kernelYRadius, xBatch, dx, dy);
+                                    : ConvolveVectorPixel(lines, lineSize, fp, kernelHeight, kernelYRadius, xBatch, dx, dy);
                         r[dx, dy] = result;
                     }
                 }
@@ -126,7 +126,7 @@ namespace Shipwreck.Phash.Imaging
             return r;
         }
 
-        private static unsafe float ConvolveVectorPixel(T image, float[] lines, int lineSize, float* kernel, int kernelHeight, int kernelYRadius, int xBatch, int x, int y)
+        private static unsafe float ConvolveVectorPixel(float[] lines, int lineSize, float* kernel, int kernelHeight, int kernelYRadius, int xBatch, int x, int y)
         {
             var vc = Vector<float>.Count;
             var v = 0f;

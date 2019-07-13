@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Numerics;
 
 namespace Shipwreck.Phash.Imaging
@@ -9,7 +9,7 @@ namespace Shipwreck.Phash.Imaging
             => (byte)Math.Max(byte.MinValue, Math.Min(i, byte.MaxValue));
 
         private static byte ToByte(this float f)
-            => (byte)Math.Max(byte.MinValue, Math.Min(Math.Round(f), byte.MaxValue));
+            => (byte)Math.Max(byte.MinValue, Math.Min(MathF.Round(f), byte.MaxValue));
 
         public static byte GetIntensity(this Vector3 rgb)
             => Vector3.Dot(rgb, new Vector3(1 / 3f)).ToByte();

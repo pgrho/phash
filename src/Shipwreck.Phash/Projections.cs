@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Shipwreck.Phash.Imaging;
 
 namespace Shipwreck.Phash
