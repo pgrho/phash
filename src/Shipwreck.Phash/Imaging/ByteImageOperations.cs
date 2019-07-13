@@ -97,12 +97,7 @@ namespace Shipwreck.Phash.Imaging
 
             var r = new FloatImage(image.Width, image.Height);
 
-            var total = 0f;
-            var one = new Vector<float>(1);
-            for (var i = 0; i < kernel.Length; i += vc)
-            {
-                total += Vector.Dot(one, new Vector<float>(kernel, i));
-            }
+            var total = kernel.Sum();
 
             var xBatch = (kernelWidth + vc - 1) / vc;
             fixed (float* fp = kernel)

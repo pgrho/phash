@@ -1,8 +1,5 @@
-﻿using Shipwreck.Phash.Imaging;
-using System;
-#if NETCOREAPP3_0
-using System.Runtime.Intrinsics.X86;
-#endif
+﻿using System;
+using Shipwreck.Phash.Imaging;
 
 namespace Shipwreck.Phash
 {
@@ -343,7 +340,7 @@ namespace Shipwreck.Phash
         public static int GetHammingDistance(long v)
             => GetHammingDistance(unchecked((ulong)v));
 
-        public static int GetHammingDistance(ulong v) 
+        public static int GetHammingDistance(ulong v)
             => CrossCorrelation.GetHammingDistanceCore(v);
 
         #endregion GetHammingDistance

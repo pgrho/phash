@@ -239,14 +239,7 @@ namespace Shipwreck.Phash.Imaging
         }
 
         public float Max()
-        {
-            float r = 0;
-            for (var i = 0; i < Array.Length; i++)
-            {
-                r = Math.Max(Array[i], r);
-            }
-            return r;
-        }
+            => Array.Max();
 
         public float Min()
         {
@@ -259,14 +252,7 @@ namespace Shipwreck.Phash.Imaging
         }
 
         public float Sum()
-        {
-            float r = 0;
-            for (var i = 0; i < Array.Length; i++)
-            {
-                r += Array[i];
-            }
-            return r;
-        }
+            => Array.Sum();
 
         public FloatImage Transpose()
         {
