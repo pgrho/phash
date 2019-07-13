@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27004.2010
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29102.190
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shipwreck.Phash", "Shipwreck.Phash\Shipwreck.Phash.csproj", "{7D98638A-93D4-46AE-9263-8D513A1C9EAA}"
 EndProject
@@ -13,6 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shipwreck.Phash.TestApp", "
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C36A4D52-112A-437E-994F-B5989E023CC1}"
 	ProjectSection(SolutionItems) = preProject
+		..\.editorconfig = ..\.editorconfig
 		Directory.build.props = Directory.build.props
 		..\build\nuget.exe = ..\build\nuget.exe
 		..\build\pack.bat = ..\build\pack.bat
