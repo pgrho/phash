@@ -97,47 +97,42 @@ namespace Shipwreck.Phash
         /// </summary>
         /// <param name="featureVector">vector of input series</param>
         /// <returns>the dct of R</returns>
-        internal static Digest ComputeDct(Features featureVector)
+        internal static Digest ComputeDct(float[] featureVector)
         {
-            var N = featureVector.features.Length;
+            var N = featureVector.Length;
 
-            var digest = new Digest();
+            var R = featureVector;
 
-            var R = featureVector.features;
-            var D = digest.Coefficients;
-
-            var D_temp = new double[Digest.LENGTH];
-            double max = 0.0;
-            double min = 0.0;
-            for (int k = 0; k < Digest.LENGTH; k++)
+            var coefficients = new double[Digest.LENGTH];
+            var max = 0.0;
+            var min = 0.0;
+            var div2n = Math.PI / (2 * N);
+            var divSq = 1 / Math.Sqrt(N);
+            for (var k = 0; k < Digest.LENGTH; k++)
             {
-                double sum = 0.0;
-                for (int n = 0; n < N; n++)
+                var sum = 0.0;
+                for (var n = 0; n < N; n++)
                 {
-                    double temp = R[n] * Math.Cos((Math.PI * (2 * n + 1) * k) / (2 * N));
-                    sum += temp;
+                    sum += R[n] * Math.Cos((2 * n + 1) * k * div2n);
                 }
-                if (k == 0)
-                {
-                    D_temp[k] = sum / Math.Sqrt(N);
-                }
-                else
-                {
-                    D_temp[k] = sum * SQRT_TWO / Math.Sqrt((double)N);
-                }
-                if (D_temp[k] > max)
-                {
-                    max = D_temp[k];
-                }
-                if (D_temp[k] < min)
-                {
-                    min = D_temp[k];
-                }
+
+                var v = coefficients[k] = sum * divSq * (k == 0 ? 1 : SQRT_TWO);
+                max = Math.Max(max, v);
+                min = Math.Min(min, v);
             }
 
-            for (int i = 0; i < Digest.LENGTH; i++)
+            return NormalizeDct(coefficients, max, min);
+        }
+
+        private static Digest NormalizeDct(double[] coefficients, double max, double min)
+        {
+            var digest = new Digest();
+            var divRange = 1 / (max - min);
+            var dest = digest.Coefficients;
+
+            for (var i = 0; i < Digest.LENGTH; i++)
             {
-                D[i] = (byte)(byte.MaxValue * (D_temp[i] - min) / (max - min));
+                dest[i] = (byte)(byte.MaxValue * (coefficients[i] - min) * divRange);
             }
 
             return digest;
@@ -255,18 +250,17 @@ namespace Shipwreck.Phash
         /// </summary>
         /// <param name="projections">Projections struct</param>
         /// <returns>Features struct</returns>
-        internal static Features ComputeFeatureVector(Projections projections)
+        internal static float[] ComputeFeatureVector(Projections projections)
         {
             var map = projections.Region;
             var ppl = projections.PixelsPerLine;
             var N = ppl.Length;
             var D = map.Height;
 
-            var fv = new Features(N);
+            var fv = new float[N];
 
-            var feat_v = fv.Items;
-            var sum = 0.0;
-            var sum_sqd = 0.0;
+            var sum = 0f;
+            var sum_sqd = 0f;
             for (int k = 0; k < N; k++)
             {
                 var line_sum = 0.0;
@@ -277,16 +271,16 @@ namespace Shipwreck.Phash
                     line_sum += map[k, i];
                     line_sum_sqd += map[k, i] * map[k, i];
                 }
-                feat_v[k] = nb_pixels > 0 ? (line_sum_sqd / nb_pixels) - (line_sum * line_sum) / (nb_pixels * nb_pixels) : 0;
-                sum += feat_v[k];
-                sum_sqd += feat_v[k] * feat_v[k];
+                fv[k] = (float)(nb_pixels > 0 ? (line_sum_sqd / nb_pixels) - (line_sum * line_sum) / (nb_pixels * nb_pixels) : 0);
+                sum += fv[k];
+                sum_sqd += fv[k] * fv[k];
             }
             var mean = sum / N;
-            var var = Math.Sqrt((sum_sqd / N) - (sum * sum) / (N * N));
+            var var = (float)(1 / Math.Sqrt((sum_sqd / N) - (sum * sum) / (N * N)));
 
             for (var i = 0; i < N; i++)
             {
-                feat_v[i] = (feat_v[i] - mean) / var;
+                fv[i] = (fv[i] - mean) * var;
             }
 
             return fv;
