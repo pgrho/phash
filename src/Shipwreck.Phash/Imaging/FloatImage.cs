@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Numerics;
 using System.Runtime;
 
 namespace Shipwreck.Phash.Imaging
@@ -88,11 +89,8 @@ namespace Shipwreck.Phash.Imaging
         public static FloatImage operator *(FloatImage image, float coefficient)
         {
             var d = new float[image.Array.Length];
-            for (var i = 0; i < d.Length; i++)
-            {
-                d[i] = image.Array[i] * coefficient;
-            }
-            return new Imaging.FloatImage(image.Width, image.Height, d);
+            Multiply(image.Array, d, coefficient);
+            return new FloatImage(image.Width, image.Height, d);
         }
 
         public static FloatImage operator *(float coefficient, FloatImage image)
@@ -103,9 +101,35 @@ namespace Shipwreck.Phash.Imaging
 
         public void MultiplyInplace(float coefficient)
         {
-            for (var i = 0; i < Array.Length; i++)
+            Multiply(Array, Array, coefficient);
+        }
+
+        private static void Multiply(float[] source, float[] dest, float coefficient)
+        {
+            var vc = Vector<float>.Count;
+            if (vc > 1 && Vector.IsHardwareAccelerated)
             {
-                Array[i] *= coefficient;
+                for (var i = 0; i < source.Length;)
+                {
+                    var ni = i + vc;
+                    if (ni <= source.Length)
+                    {
+                        (new Vector<float>(source, i) * coefficient).CopyTo(dest, i);
+                        i = ni;
+                    }
+                    else
+                    {
+                        dest[i] = source[i] * coefficient;
+                        i++;
+                    }
+                }
+            }
+            else
+            {
+                for (var i = 0; i < source.Length; i++)
+                {
+                    dest[i] = source[i] * coefficient;
+                }
             }
         }
 
@@ -114,7 +138,64 @@ namespace Shipwreck.Phash.Imaging
 
         public FloatImage Multiply(FloatImage other)
         {
+            if (other.Width < Width || other.Height < Height)
+            {
+                throw new InvalidOperationException();
+            }
+
+            var vc = Vector<float>.Count;
+            if (vc > 1 && Vector.IsHardwareAccelerated)
+            {
+                var oa = other.Array;
+                var d = new float[Width * Height];
+                if (oa.Length == d.Length)
+                {
+                    for (var i = 0; i < d.Length;)
+                    {
+                        var ni = i + vc;
+                        if (ni <= Array.Length)
+                        {
+                            (new Vector<float>(Array, i) * new Vector<float>(oa, i)).CopyTo(d, i);
+                            i = ni;
+                        }
+                        else
+                        {
+                            d[i] = Array[i] * oa[i];
+                            i++;
+                        }
+                    }
+                }
+                else
+                {
+                    var i = 0;
+                    for (var y = 0; y < Height; y++)
+                    {
+                        var j = y * other.Width;
+                        for (var x = 0; x < Width;)
+                        {
+                            var ni = x + vc;
+                            if (ni <= Width)
+                            {
+                                (new Vector<float>(Array, i) * new Vector<float>(oa, j)).CopyTo(d, i);
+                                i += vc;
+                                j += vc;
+                                x = ni;
+                            }
+                            else
+                            {
+                                d[i] = Array[i] * oa[j];
+                                i++;
+                                j++;
+                                x++;
+                            }
+                        }
+                    }
+                }
+                return new FloatImage(Width, Height, d);
+            }
+
             var r = new FloatImage(Width, Height);
+
             for (var sy = 0; sy < Height; sy++)
             {
                 for (var sx = 0; sx < Width; sx++)

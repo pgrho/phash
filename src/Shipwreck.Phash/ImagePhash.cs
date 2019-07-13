@@ -81,14 +81,17 @@ namespace Shipwreck.Phash
         internal static FloatImage CreateDctMatrix(int size)
         {
             var ret = new FloatImage(size, size, 1 / (float)Math.Sqrt(size));
-            var c1 = (float)Math.Sqrt(2f / size);
+            var rad = Math.PI / 2 / size;
             for (var x = 0; x < size; x++)
             {
                 for (var y = 1; y < size; y++)
                 {
-                    ret[x, y] = c1 * (float)Math.Cos((Math.PI / 2 / size) * y * (2 * x + 1));
+                    ret[x, y] = (float)Math.Cos(rad * y * (2 * x + 1));
                 }
             }
+
+            ret.MultiplyInplace((float)Math.Sqrt(2f / size));
+
             return ret;
         }
 
