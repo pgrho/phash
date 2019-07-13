@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net452;netstandard2.0;netcoreapp2.1</TargetFrameworks>
+    <TargetFrameworks>net452;netstandard2.0;netcoreapp2.1;netcoreapp3.0</TargetFrameworks>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Description>C# Implementation of phash-0.9.4.</Description>
