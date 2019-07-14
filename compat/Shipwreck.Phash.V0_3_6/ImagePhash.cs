@@ -1,22 +1,24 @@
-﻿using System;
-using System.Numerics;
-using Shipwreck.Phash.Imaging;
+﻿using Shipwreck.Phash.V0_3_6.Imaging;
+using System;
 
-namespace Shipwreck.Phash
+namespace Shipwreck.Phash.V0_3_6
 {
     public class ImagePhash
     {
         protected ImagePhash()
         { }
 
-        private static float GetRoundingFactor(float x)
+        private static float ROUNDING_FACTOR(float x)
             => x >= 0 ? 0.5f : -0.5f;
 
-        private const float SQRT_TWO = 1.4142135623730950488016887242097f;
-        protected const float DEFAULT_SIGMA = 3.5f;
-        protected const float DEFAULT_GAMMA = 1.0f;
+        private static double ROUNDING_FACTOR(double x)
+            => x >= 0 ? 0.5 : -0.5;
+
+        private const double SQRT_TWO = 1.4142135623730950488016887242097;
+        protected const double DEFAULT_SIGMA = 3.5;
+        protected const double DEFAULT_GAMMA = 1.0;
         protected const int DEFAULT_NUMBER_OF_ANGLES = 180;
-        protected const float DEFAULT_THRESHOLD = 0.9f;
+        protected const double DEFAULT_THRESHOLD = 0.9;
 
         #region CompareImages
 
@@ -31,7 +33,7 @@ namespace Shipwreck.Phash
         /// <param name="numberOfAngles">int number for the number of angles of radon projections</param>
         /// <param name="threshold">double value for the threshold</param>
         /// <returns>false for different images, 1 true for same image,</returns>
-        public static bool CompareImages(IByteImage imA, IByteImage imB, out float pcc, float sigma = DEFAULT_SIGMA, float gamma = DEFAULT_GAMMA, int numberOfAngles = DEFAULT_NUMBER_OF_ANGLES, float threshold = DEFAULT_THRESHOLD)
+        public static bool CompareImages(IByteImage imA, IByteImage imB, out double pcc, double sigma = DEFAULT_SIGMA, double gamma = DEFAULT_GAMMA, int numberOfAngles = DEFAULT_NUMBER_OF_ANGLES, double threshold = DEFAULT_THRESHOLD)
         {
             var digestA = ComputeDigest(imA, sigma, gamma, numberOfAngles);
 
@@ -53,7 +55,7 @@ namespace Shipwreck.Phash
         /// <param name="gamma">double value for gamma correction on the input image</param>
         /// <param name="numberOfAngles">int value for the number of angles to consider.</param>
         /// <returns></returns>
-        public static Digest ComputeDigest(IByteImage image, float sigma = DEFAULT_SIGMA, float gamma = DEFAULT_GAMMA, int numberOfAngles = DEFAULT_NUMBER_OF_ANGLES)
+        public static Digest ComputeDigest(IByteImage image, double sigma = DEFAULT_SIGMA, double gamma = DEFAULT_GAMMA, int numberOfAngles = DEFAULT_NUMBER_OF_ANGLES)
         {
             var blurred = image.Blur(sigma);
 
@@ -76,17 +78,14 @@ namespace Shipwreck.Phash
         internal static FloatImage CreateDctMatrix(int size)
         {
             var ret = new FloatImage(size, size, 1 / (float)Math.Sqrt(size));
-
-            var c1 = MathF.Sqrt(2f / size);
-            var rad = MathF.PI / 2 / size;
+            var c1 = (float)Math.Sqrt(2f / size);
             for (var x = 0; x < size; x++)
             {
                 for (var y = 1; y < size; y++)
                 {
-                    ret[x, y] = c1 * MathF.Cos(rad * y * (2 * x + 1));
+                    ret[x, y] = c1 * (float)Math.Cos((Math.PI / 2 / size) * y * (2 * x + 1));
                 }
             }
-
             return ret;
         }
 
@@ -95,63 +94,47 @@ namespace Shipwreck.Phash
         /// </summary>
         /// <param name="featureVector">vector of input series</param>
         /// <returns>the dct of R</returns>
-        internal static Digest ComputeDct(float[] featureVector)
+        internal static Digest ComputeDct(Features featureVector)
         {
-            var N = featureVector.Length;
+            var N = featureVector.features.Length;
 
-            var R = featureVector;
-
-            var coefficients = new float[Digest.LENGTH];
-            var max = 0f;
-            var min = 0f;
-            var div2n = MathF.PI / (2 * N);
-            var divSq = 1 / MathF.Sqrt(N);
-            for (var k = 0; k < Digest.LENGTH; k++)
-            {
-                var sum = 0f;
-                for (var n = 0; n < N; n++)
-                {
-                    sum += R[n] * MathF.Cos((2 * n + 1) * k * div2n);
-                }
-
-                var v = coefficients[k] = sum * divSq * (k == 0 ? 1 : SQRT_TWO);
-                max = Math.Max(max, v);
-                min = Math.Min(min, v);
-            }
-
-            return NormalizeDigest(coefficients, max, min);
-        }
-
-        internal static Digest NormalizeDigest(float[] coefficients, float max, float min)
-        {
             var digest = new Digest();
-            var coeff = byte.MaxValue / (max - min);
-            var dest = digest.Coefficients;
 
-            var i = 0;
-            var vc = Vector<float>.Count;
-            if (Vector.IsHardwareAccelerated
-                && vc > 1)
+            var R = featureVector.features;
+            var D = digest.Coefficients;
+
+            var D_temp = new double[Digest.LENGTH];
+            double max = 0.0;
+            double min = 0.0;
+            for (int k = 0; k < Digest.LENGTH; k++)
             {
-                var minV = new Vector<float>(min);
-                for (; i < Digest.LENGTH;)
+                double sum = 0.0;
+                for (int n = 0; n < N; n++)
                 {
-                    var ni = i + vc;
-                    if (ni <= Digest.LENGTH)
-                    {
-                        var d = (new Vector<float>(coefficients, i) - minV) * coeff;
-                        for (var j = 0; j < vc; j++)
-                        {
-                            dest[i + j] = (byte)d[j];
-                        }
-                        i = ni;
-                    }
+                    double temp = R[n] * Math.Cos((Math.PI * (2 * n + 1) * k) / (2 * N));
+                    sum += temp;
+                }
+                if (k == 0)
+                {
+                    D_temp[k] = sum / Math.Sqrt(N);
+                }
+                else
+                {
+                    D_temp[k] = sum * SQRT_TWO / Math.Sqrt((double)N);
+                }
+                if (D_temp[k] > max)
+                {
+                    max = D_temp[k];
+                }
+                if (D_temp[k] < min)
+                {
+                    min = D_temp[k];
                 }
             }
 
-            for (; i < Digest.LENGTH; i++)
+            for (int i = 0; i < Digest.LENGTH; i++)
             {
-                dest[i] = (byte)((coefficients[i] - min) * coeff);
+                D[i] = (byte)(byte.MaxValue * (D_temp[i] - min) / (max - min));
             }
 
             return digest;
@@ -210,8 +193,8 @@ namespace Shipwreck.Phash
             int D = (width > height) ? width : height;
             var x_center = width / 2f;
             var y_center = height / 2f;
-            var x_off = (int)MathF.Floor(x_center + GetRoundingFactor(x_center));
-            var y_off = (int)MathF.Floor(y_center + GetRoundingFactor(y_center));
+            var x_off = (int)Math.Floor(x_center + ROUNDING_FACTOR(x_center));
+            var y_off = (int)Math.Floor(y_center + ROUNDING_FACTOR(y_center));
 
             var projs = new Projections(numberOfLines, D, numberOfLines);
 
@@ -220,12 +203,12 @@ namespace Shipwreck.Phash
 
             for (var k = 0; k < numberOfLines / 4 + 1; k++)
             {
-                var theta = k * MathF.PI / numberOfLines;
-                var alpha = MathF.Tan(theta);
+                var theta = k * Math.PI / numberOfLines;
+                var alpha = Math.Tan(theta);
                 for (var x = 0; x < D; x++)
                 {
                     var y = alpha * (x - x_off);
-                    var yd = (int)MathF.Floor(y + GetRoundingFactor(y));
+                    var yd = (int)Math.Floor(y + ROUNDING_FACTOR(y));
                     if ((yd + y_off >= 0) && (yd + y_off < height) && (x < width))
                     {
                         radonMap[k, x] = img[x, yd + y_off];
@@ -241,12 +224,12 @@ namespace Shipwreck.Phash
             var j = 0;
             for (var k = 3 * numberOfLines / 4; k < numberOfLines; k++)
             {
-                var theta = k * MathF.PI / numberOfLines;
-                var alpha = MathF.Tan(theta);
+                var theta = k * Math.PI / numberOfLines;
+                var alpha = Math.Tan(theta);
                 for (var x = 0; x < D; x++)
                 {
                     var y = alpha * (x - x_off);
-                    var yd = (int)MathF.Floor(y + GetRoundingFactor(y));
+                    var yd = (int)Math.Floor(y + ROUNDING_FACTOR(y));
                     if ((yd + y_off >= 0) && (yd + y_off < height) && (x < width))
                     {
                         radonMap[k, x] = img[x, yd + y_off];
@@ -269,37 +252,38 @@ namespace Shipwreck.Phash
         /// </summary>
         /// <param name="projections">Projections struct</param>
         /// <returns>Features struct</returns>
-        internal static float[] ComputeFeatureVector(Projections projections)
+        internal static Features ComputeFeatureVector(Projections projections)
         {
             var map = projections.Region;
             var ppl = projections.PixelsPerLine;
             var N = ppl.Length;
             var D = map.Height;
 
-            var fv = new float[N];
+            var fv = new Features(N);
 
-            var sum = 0f;
-            var sum_sqd = 0f;
+            var feat_v = fv.Items;
+            var sum = 0.0;
+            var sum_sqd = 0.0;
             for (int k = 0; k < N; k++)
             {
-                var line_sum = 0f;
-                var line_sum_sqd = 0f;
+                var line_sum = 0.0;
+                var line_sum_sqd = 0.0;
                 var nb_pixels = ppl[k];
                 for (var i = 0; i < D; i++)
                 {
                     line_sum += map[k, i];
                     line_sum_sqd += map[k, i] * map[k, i];
                 }
-                fv[k] = (float)(nb_pixels > 0 ? (line_sum_sqd / nb_pixels) - (line_sum * line_sum) / (nb_pixels * nb_pixels) : 0);
-                sum += fv[k];
-                sum_sqd += fv[k] * fv[k];
+                feat_v[k] = nb_pixels > 0 ? (line_sum_sqd / nb_pixels) - (line_sum * line_sum) / (nb_pixels * nb_pixels) : 0;
+                sum += feat_v[k];
+                sum_sqd += feat_v[k] * feat_v[k];
             }
             var mean = sum / N;
-            var var = 1 / MathF.Sqrt((sum_sqd / N) - (sum * sum) / (N * N));
+            var var = Math.Sqrt((sum_sqd / N) - (sum * sum) / (N * N));
 
             for (var i = 0; i < N; i++)
             {
-                fv[i] = (fv[i] - mean) * var;
+                feat_v[i] = (feat_v[i] - mean) / var;
             }
 
             return fv;
@@ -311,23 +295,21 @@ namespace Shipwreck.Phash
         /// <param name="x">Digest struct</param>
         /// <param name="y">Digest struct</param>
         /// <returns>double value the peak of cross correlation</returns>
-        public static float GetCrossCorrelation(Digest x, Digest y)
+        public static double GetCrossCorrelation(Digest x, Digest y)
             => GetCrossCorrelation(x.Coefficients, y.Coefficients);
 
-        public static float GetCrossCorrelation(byte[] coefficients1, byte[] coefficients2)
+        public static double GetCrossCorrelation(byte[] coefficients1, byte[] coefficients2)
             => CrossCorrelation.GetCrossCorrelationCore(coefficients1, coefficients2, Math.Min(coefficients1.Length, coefficients2.Length));
 
-        public unsafe static float GetCrossCorrelation(byte* coefficients1, byte* coefficients2)
+        public unsafe static double GetCrossCorrelation(byte* coefficients1, byte* coefficients2)
             => CrossCorrelation.GetCrossCorrelationCore(coefficients1, coefficients2, 40);
 
-#if !NO_SPAN
-        public static float GetCrossCorrelation(Span<byte> coefficients1, Span<byte> coefficients2)
+        public static double GetCrossCorrelation(Span<byte> coefficients1, Span<byte> coefficients2)
             => CrossCorrelation.GetCrossCorrelationCore(coefficients1, coefficients2, Math.Min(coefficients1.Length, coefficients2.Length));
-#endif
 
         internal static FloatImage CreateMHKernel(float alpha, float level)
         {
-            var sigma = (int)(4 * MathF.Pow(alpha, level));
+            var sigma = (int)(4 * Math.Pow((float)alpha, (float)level));
 
             var kernel = new FloatImage(2 * sigma + 1, 2 * sigma + 1);
 
@@ -335,10 +317,10 @@ namespace Shipwreck.Phash
             {
                 for (var x = 0; x < kernel.Height; x++)
                 {
-                    var xpos = MathF.Pow(alpha, -level) * (x - sigma);
-                    var ypos = MathF.Pow(alpha, -level) * (y - sigma);
+                    var xpos = Math.Pow(alpha, -level) * (x - sigma);
+                    var ypos = Math.Pow(alpha, -level) * (y - sigma);
                     var A = xpos * xpos + ypos * ypos;
-                    kernel[x, y] = (float)((2 - A) * MathF.Exp(-A / 2));
+                    kernel[x, y] = (float)((2 - A) * Math.Exp(-A / 2));
                 }
             }
             return kernel;

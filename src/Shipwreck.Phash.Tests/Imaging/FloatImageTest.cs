@@ -48,6 +48,12 @@ namespace Shipwreck.Phash.Imaging
         [InlineData(7)]
         [InlineData(8)]
         [InlineData(9)]
+        [InlineData(16)]
+        [InlineData(24)]
+        [InlineData(32)]
+        [InlineData(80)]
+        [InlineData(128)]
+        [InlineData(256)]
         public void MultiplyInplaceTest(int width)
         {
             _Output.WriteLine("Vector<float>.Count: {0}", Vector<float>.Count);

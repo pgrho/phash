@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
+    <ApplicationIcon />
+    <OutputType>Exe</OutputType>
+    <StartupObject />
+    <RootNamespace>Shipwreck.Phash</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.0.1" />
+    <PackageReference Include="xunit" Version="2.4.0" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Shipwreck.Phash\Shipwreck.Phash.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Shipwreck.Phash.V0_3_6">
+      <HintPath>..\..\compat\Shipwreck.Phash.V0_3_6.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+</Project>

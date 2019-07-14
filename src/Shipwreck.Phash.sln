@@ -29,6 +29,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shipwreck.Phash.Presentatio
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shipwreck.Phash.Bitmaps.Tests", "Shipwreck.Phash.Bitmaps.Tests\Shipwreck.Phash.Bitmaps.Tests.csproj", "{04B29B49-57EF-46A5-A57C-B9526C1C37F3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shipwreck.Phash.Tests.Compatibility", "Shipwreck.Phash.Tests.Compatibility\Shipwreck.Phash.Tests.Compatibility.csproj", "{D416F7D9-C94C-44FA-8B34-B6A66EA35374}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -109,6 +111,14 @@ Global
 		{04B29B49-57EF-46A5-A57C-B9526C1C37F3}.Release|Any CPU.Build.0 = Release|Any CPU
 		{04B29B49-57EF-46A5-A57C-B9526C1C37F3}.Release|x86.ActiveCfg = Release|Any CPU
 		{04B29B49-57EF-46A5-A57C-B9526C1C37F3}.Release|x86.Build.0 = Release|Any CPU
+		{D416F7D9-C94C-44FA-8B34-B6A66EA35374}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D416F7D9-C94C-44FA-8B34-B6A66EA35374}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D416F7D9-C94C-44FA-8B34-B6A66EA35374}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D416F7D9-C94C-44FA-8B34-B6A66EA35374}.Debug|x86.Build.0 = Debug|Any CPU
+		{D416F7D9-C94C-44FA-8B34-B6A66EA35374}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D416F7D9-C94C-44FA-8B34-B6A66EA35374}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D416F7D9-C94C-44FA-8B34-B6A66EA35374}.Release|x86.ActiveCfg = Release|Any CPU
+		{D416F7D9-C94C-44FA-8B34-B6A66EA35374}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
