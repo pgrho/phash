@@ -21,7 +21,7 @@ foreach (var T in new [] { "ByteImage", "Gray8Image", "Bgr24LuminanceImage" })
 
         public int Width
         {
-#if NET452
+#if !NO_SERIALIZABLE
             [TargetedPatchingOptOut("")]
 #endif
             get => _Image.Width;
@@ -29,7 +29,7 @@ foreach (var T in new [] { "ByteImage", "Gray8Image", "Bgr24LuminanceImage" })
 
         public int Height
         {
-#if NET452
+#if !NO_SERIALIZABLE
             [TargetedPatchingOptOut("")]
 #endif
             get => _Image.Height;
@@ -37,7 +37,7 @@ foreach (var T in new [] { "ByteImage", "Gray8Image", "Bgr24LuminanceImage" })
 
         public byte this[int x, int y]
         {
-#if NET452
+#if !NO_SERIALIZABLE
             [TargetedPatchingOptOut("")]
 #endif
             get => ((IByteImage)_Image)[x, y];

@@ -17,6 +17,7 @@
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net452'">
     <ProjectReference Include="..\Shipwreck.Phash.PresentationCore\Shipwreck.Phash.PresentationCore.csproj" />
+    <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
   </ItemGroup>
 

@@ -320,8 +320,10 @@ namespace Shipwreck.Phash
         public unsafe static float GetCrossCorrelation(byte* coefficients1, byte* coefficients2)
             => CrossCorrelation.GetCrossCorrelationCore(coefficients1, coefficients2, 40);
 
+#if !NO_SPAN
         public static float GetCrossCorrelation(Span<byte> coefficients1, Span<byte> coefficients2)
             => CrossCorrelation.GetCrossCorrelationCore(coefficients1, coefficients2, Math.Min(coefficients1.Length, coefficients2.Length));
+#endif
 
         internal static FloatImage CreateMHKernel(float alpha, float level)
         {

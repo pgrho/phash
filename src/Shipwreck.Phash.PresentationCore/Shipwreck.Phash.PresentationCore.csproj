@@ -1,17 +1,17 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
   <PropertyGroup>
-    <TargetFramework>net452</TargetFramework>
+    <TargetFrameworks>net45;net461;netcoreapp3.0</TargetFrameworks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Description>C# Implementation of phash-0.9.4 for PresentationCore.dll</Description>
   </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="WindowsBase"
-                      Version="4.6.1055" />
-  </ItemGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net45|AnyCPU'">
+    <NoWarn>1591;1701;1702</NoWarn>
+  </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\Shipwreck.Phash\Shipwreck.Phash.csproj" />
   </ItemGroup>
-  <ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)'=='net45' Or '$(TargetFramework)'=='net461'">
+    <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
   </ItemGroup>
 </Project>

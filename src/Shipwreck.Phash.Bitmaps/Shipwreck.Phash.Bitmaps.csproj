@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net452;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>net45;net461;netcoreapp2.1;netcoreapp3.0;netstandard2.0;netstandard2.1</TargetFrameworks>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Description>C# Implementation of phash-0.9.4 for bitmaps.</Description>
@@ -8,15 +8,19 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.Numerics.Vectors"
-                      Version="4.5.0" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Shipwreck.Phash\Shipwreck.Phash.csproj" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+  <ItemGroup Condition="'$(TargetFramework)'=='net45'
+                     Or '$(TargetFramework)'=='net461'
+                     Or '$(TargetFramework)'=='netstandard2.0'">
+    <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
+  </ItemGroup>
+  
+  <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp2.1'
+                     Or '$(TargetFramework)' == 'netcoreapp3.0'
+                     Or '$(TargetFramework)' == 'netstandard2.0'
+                     Or '$(TargetFramework)' == 'netstandard2.1'">
     <PackageReference Include="System.Drawing.Common"
                       Version="4.5.1"/>
   </ItemGroup>

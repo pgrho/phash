@@ -9,10 +9,10 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)'=='Debug'">
-    <DefineConstants>DEBUG;TRACE;NO_SPAN;NO_UNSAFE;NO_VECTOR</DefineConstants>
+    <DefineConstants>DEBUG;TRACE;NO_UNSAFE;NO_MATHF;NO_VECTOR;NO_SPAN;NO_X86_INSTRINSICS</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)'=='Release'">
-    <DefineConstants>TRACE;NO_SPAN;NO_UNSAFE;NO_VECTOR</DefineConstants>
+    <DefineConstants>TRACE;NO_UNSAFE;NO_MATHF;NO_VECTOR;NO_SPAN;NO_X86_INSTRINSICS</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>

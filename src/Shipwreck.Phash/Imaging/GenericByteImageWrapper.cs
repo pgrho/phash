@@ -1,4 +1,4 @@
-using System.Runtime;
+﻿using System.Runtime;
 
 namespace Shipwreck.Phash.Imaging
 {
@@ -15,7 +15,7 @@ namespace Shipwreck.Phash.Imaging
 
         public int Width
         {
-#if NET452
+#if !NO_SERIALIZABLE
             [TargetedPatchingOptOut("")]
 #endif
             get => _Image.Width;
@@ -23,7 +23,7 @@ namespace Shipwreck.Phash.Imaging
 
         public int Height
         {
-#if NET452
+#if !NO_SERIALIZABLE
             [TargetedPatchingOptOut("")]
 #endif
             get => _Image.Height;
@@ -31,7 +31,7 @@ namespace Shipwreck.Phash.Imaging
 
         public byte this[int x, int y]
         {
-#if NET452
+#if !NO_SERIALIZABLE
             [TargetedPatchingOptOut("")]
 #endif
             get => _Image[x, y];

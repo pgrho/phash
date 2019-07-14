@@ -2,13 +2,13 @@
 #if !NO_VECTOR
 using System.Numerics;
 #endif
-#if NETCOREAPP3_0
+#if !NO_X86_INSTRINSICS
 using System.Runtime.Intrinsics.X86;
 #endif
 
 namespace Shipwreck.Phash
 {
-#if !NETCOREAPP2_1 && !NETCOREAPP3_0
+#if NO_MATHF
     internal static class MathF
     {
         public const float PI = 3.1415926535897932384626433832795f;
@@ -178,7 +178,7 @@ namespace Shipwreck.Phash
 
         internal static int GetHammingDistanceCore(ulong v)
         {
-#if NETCOREAPP3_0
+#if !NO_X86_INSTRINSICS
             unchecked
             {
                 if (Popcnt.X64.IsSupported)

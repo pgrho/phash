@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-
-namespace Shipwreck.Phash.Imaging
+﻿namespace Shipwreck.Phash.Imaging
 {
     public static class ByteImageHelper
     {

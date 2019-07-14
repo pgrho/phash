@@ -1,4 +1,4 @@
-using System.Runtime;
+﻿using System.Runtime;
 
 namespace Shipwreck.Phash.Imaging
 {
@@ -31,27 +31,37 @@ namespace Shipwreck.Phash.Imaging
 
         public int Width
         {
+#if !NO_SERIALIZABLE
             [TargetedPatchingOptOut("")]
+#endif
             get;
         }
 
         public int Height
         {
+#if !NO_SERIALIZABLE
             [TargetedPatchingOptOut("")]
+#endif
             get;
         }
 
         public byte[] Array
         {
+#if !NO_SERIALIZABLE
             [TargetedPatchingOptOut("")]
+#endif
             get;
         }
 
         public byte this[int x, int y]
         {
+#if !NO_SERIALIZABLE
             [TargetedPatchingOptOut("")]
+#endif
             get => Array[x + y * Width];
+#if !NO_SERIALIZABLE
             [TargetedPatchingOptOut("")]
+#endif
             set => Array[x + y * Width] = value;
         }
 

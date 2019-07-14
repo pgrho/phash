@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Text;
 
 namespace Shipwreck.Phash
@@ -6,7 +6,7 @@ namespace Shipwreck.Phash
     /// <summary>
     /// Digest info
     /// </summary>
-#if NET452
+#if !NO_SERIALIZABLE
     [Serializable]
 #endif
     public class Digest

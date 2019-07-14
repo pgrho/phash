@@ -1,6 +1,6 @@
 ﻿<Project>
   <PropertyGroup>
-    <Version>0.3.6</Version>
+    <Version>0.4.0</Version>
     <Product>priHash</Product>
     <Authors>shipwreck.jp</Authors>
     <Company />
@@ -10,5 +10,6 @@
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
     <IsDeterministic>true</IsDeterministic>
     <LangVersion>preview</LangVersion>
+    <NoWarn>1591;1701;1702</NoWarn>
   </PropertyGroup>
 </Project>

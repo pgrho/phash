@@ -33,27 +33,37 @@ namespace Shipwreck.Phash.Imaging
 
         public int Width
         {
+#if !NO_SERIALIZABLE
             [TargetedPatchingOptOut("")]
+#endif
             get;
         }
 
         public int Height
         {
+#if !NO_SERIALIZABLE
             [TargetedPatchingOptOut("")]
+#endif
             get;
         }
 
         public float[] Array
         {
+#if !NO_SERIALIZABLE
             [TargetedPatchingOptOut("")]
+#endif
             get;
         }
 
         public float this[int x, int y]
         {
+#if !NO_SERIALIZABLE
             [TargetedPatchingOptOut("")]
+#endif
             get => Array[x + y * Width];
+#if !NO_SERIALIZABLE
             [TargetedPatchingOptOut("")]
+#endif
             set => Array[x + y * Width] = value;
         }
 

@@ -1,22 +1,60 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net452;netstandard2.0;netcoreapp2.1;netcoreapp3.0</TargetFrameworks>
+    <TargetFrameworks>net45;net461;netcoreapp1.0;netcoreapp2.0;netcoreapp2.1;netcoreapp3.0;netstandard1.0;netstandard1.1;netstandard2.1</TargetFrameworks>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Description>C# Implementation of phash-0.9.4.</Description>
-    <DocumentationFile></DocumentationFile>
+    <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\Shipwreck.Phash.xml</DocumentationFile>
   </PropertyGroup>
- 
+
+  <PropertyGroup Condition="'$(TargetFramework)'=='netstandard1.0'
+                        And '$(Configuration)'=='Debug'">
+    <DefineConstants>DEBUG;NO_SERIALIZABLE;TRACE;NO_MATHF;NO_SPAN;NO_X86_INSTRINSICS</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(TargetFramework)'=='netstandard1.0'
+                        And '$(Configuration)'=='Release'">
+    <DefineConstants>TRACE;NO_SERIALIZABLE;NO_MATHF;NO_SPAN;NO_X86_INSTRINSICS</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="('$(TargetFramework)'=='netcoreapp1.0' Or '$(TargetFramework)'=='netstandard1.1') And '$(Configuration)'=='Debug'">
+    <DefineConstants>DEBUG;TRACE;NO_SERIALIZABLE;NO_MATHF;NO_X86_INSTRINSICS</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="('$(TargetFramework)'=='netcoreapp1.0' Or '$(TargetFramework)'=='netstandard1.1') And '$(Configuration)'=='Release'">
+    <DefineConstants>TRACE;NO_SERIALIZABLE;NO_MATHF;NO_X86_INSTRINSICS</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="('$(TargetFramework)'=='net45' Or '$(TargetFramework)'=='net461') And '$(Configuration)'=='Debug'">
+    <DefineConstants>DEBUG;TRACE;NO_MATHF;NO_X86_INSTRINSICS</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="('$(TargetFramework)'=='net45' Or '$(TargetFramework)'=='net461') And '$(Configuration)'=='Release'">
+    <DefineConstants>TRACE;NO_MATHF;NO_X86_INSTRINSICS</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="('$(TargetFramework)'=='netcoreapp2.0' Or '$(TargetFramework)'=='netcoreapp2.1' Or '$(TargetFramework)'=='netstandard2.1') And '$(Configuration)'=='Debug'">
+    <DefineConstants>DEBUG;TRACE;NO_X86_INSTRINSICS</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="('$(TargetFramework)'=='netcoreapp2.0' Or '$(TargetFramework)'=='netcoreapp2.1' Or '$(TargetFramework)'=='netstandard2.1') And '$(Configuration)'=='Release'">
+    <DefineConstants>TRACE;NO_X86_INSTRINSICS</DefineConstants>
+  </PropertyGroup>
+
   <ItemGroup>
     <Compile Include="..\Shipwreck.Phash.CrossCorrelation\CrossCorrelation.Core.cs" Link="CrossCorrelation.Core.cs" />
   </ItemGroup>
 
-  <ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)'=='net45'
+                     Or '$(TargetFramework)'=='net461'
+                     Or '$(TargetFramework)'=='netcoreapp1.0'
+                     Or '$(TargetFramework)'=='netcoreapp2.0'
+                     Or '$(TargetFramework)'=='netstandard1.0'
+                     Or '$(TargetFramework)'=='netstandard1.1'">
     <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
   </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)'!='netcoreapp2.1'">
+  <ItemGroup Condition="'$(TargetFramework)'=='net45'
+                     Or '$(TargetFramework)'=='net461'
+                     Or '$(TargetFramework)'=='netcoreapp1.0'
+                     Or '$(TargetFramework)'=='netcoreapp2.0'
+                     Or '$(TargetFramework)'=='netstandard1.1'">
     <PackageReference Include="System.Memory" Version="4.5.3" />
   </ItemGroup>
 
