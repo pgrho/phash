@@ -216,6 +216,31 @@ namespace Shipwreck.Phash.Imaging
             return r;
         }
 
+        public FloatImage MatrixMultiply(FloatImage other)
+        {
+            if (Width != other.Height)
+            {
+                throw new InvalidOperationException();
+            }
+
+            var r = new FloatImage(other.Width, Height);
+
+            for (int y = 0; y < Height; y++)
+            {
+                for (int x = 0; x < other.Width; x++)
+                {
+                    var v = 0f;
+                    for (var i = 0; i < Width; i++)
+                    {
+                        v += this[i, y] * other[x, i];
+                    }
+                    r[x, y] = v;
+                }
+            }
+
+            return r;
+        }
+
         public static FloatImage CreateGaussian(int radius, float sigma)
         {
             var r = radius > 0 ? radius : (int)MathF.Round(3 * sigma);

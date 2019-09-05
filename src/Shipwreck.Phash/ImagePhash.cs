@@ -171,7 +171,7 @@ namespace Shipwreck.Phash
             var resized = img.Resize(32, 32);
             var C = CreateDctMatrix(32);
             var Ctransp = C.Transpose();
-            var dctImage = C.Multiply(resized).Multiply(Ctransp);
+            var dctImage = C.MatrixMultiply(resized).MatrixMultiply(Ctransp);
 
             var median = GetMedianOf64(dctImage);
 
