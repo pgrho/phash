@@ -1,10 +1,7 @@
 # priHash #
 
-<!-- Personal Rough Implementation of pHASH -->
-
 C# Implementation of pHash (<http://phash.org>).
 Based on phash-0.9.4 for Windows.
-
 
 ## NuGet packages ##
 
@@ -20,6 +17,13 @@ There are some more packages for uncommon usage.
 
 - [Shipwreck.Phash.Data](https://www.nuget.org/packages/Shipwreck.Phash.Data/) - Provides Stored Function Implementations for pHash Digests
 - [Shipwreck.Phash.CrossCorrelation](https://www.nuget.org/packages/Shipwreck.Phash.CrossCorrelation/) - C# Implementation of phash-0.9.4 that provides Only GetCrossCorrelation functionality. Intended to be referenced from SQL CLR.
+
+## Compatibility Notice ##
+
+Following methods contains breaking changes at versions below.
+ Hashes computed by older versions cannot be compared with the new one:
+
+- `ImagePhash.ComputeDctHash`: at `0.5.0`.
 
 ## Hashing an image (Bitmap) ##
 
