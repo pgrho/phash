@@ -216,25 +216,76 @@ namespace Shipwreck.Phash.Imaging
             return r;
         }
 
-        public FloatImage MatrixMultiply(FloatImage other)
+        public unsafe FloatImage MatrixMultiply(FloatImage other, bool isTransposed = false)
         {
-            if (Width != other.Height)
+            if (Width != (isTransposed ? other.Width : other.Height))
             {
                 throw new InvalidOperationException();
             }
 
-            var r = new FloatImage(other.Width, Height);
-
-            for (int y = 0; y < Height; y++)
+            var r = new FloatImage(isTransposed ? other.Height : other.Width, Height);
+            var vc = Vector<float>.Count;
+            if (Width >= vc
+                && vc > 1
+                && Vector.IsHardwareAccelerated)
             {
-                for (int x = 0; x < other.Width; x++)
+                var transp = isTransposed ? other : other.Transpose();
+
+                for (int y = 0; y < Height; y++)
                 {
-                    var v = 0f;
-                    for (var i = 0; i < Width; i++)
+                    for (int x = 0; x < transp.Height; x++)
                     {
-                        v += this[i, y] * other[x, i];
+                        var v = 0f;
+                        for (var i = 0; i < Width;)
+                        {
+                            var ni = i + vc;
+                            if (ni <= Width)
+                            {
+                                v += Vector.Dot(
+                                        new Vector<float>(Array, y * Width + i),
+                                        new Vector<float>(transp.Array, x * Width + i));
+
+                                i = ni;
+                            }
+                            else
+                            {
+                                v += this[i, y] * transp[i, x];
+                                i++;
+                            }
+                        }
+
+                        r[x, y] = v;
                     }
-                    r[x, y] = v;
+                }
+            }
+            else if (isTransposed)
+            {
+                for (int y = 0; y < Height; y++)
+                {
+                    for (int x = 0; x < other.Height; x++)
+                    {
+                        var v = 0f;
+                        for (var i = 0; i < Width; i++)
+                        {
+                            v += this[i, y] * other[i, x];
+                        }
+                        r[x, y] = v;
+                    }
+                }
+            }
+            else
+            {
+                for (int y = 0; y < Height; y++)
+                {
+                    for (int x = 0; x < other.Width; x++)
+                    {
+                        var v = 0f;
+                        for (var i = 0; i < Width; i++)
+                        {
+                            v += this[i, y] * other[x, i];
+                        }
+                        r[x, y] = v;
+                    }
                 }
             }
 

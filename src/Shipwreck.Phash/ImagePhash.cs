@@ -159,6 +159,8 @@ namespace Shipwreck.Phash
 
         #region ComputeDctHash
 
+        private static FloatImage _DctMatrix;
+
         /// <summary>
         /// compute dct robust image hash
         /// </summary>
@@ -169,9 +171,8 @@ namespace Shipwreck.Phash
             var img = image.Convolve(new FloatImage(7, 7, 1));
 
             var resized = img.Resize(32, 32);
-            var C = CreateDctMatrix(32);
-            var Ctransp = C.Transpose();
-            var dctImage = C.MatrixMultiply(resized).MatrixMultiply(Ctransp);
+            var coeff = _DctMatrix ?? (_DctMatrix = CreateDctMatrix(32));
+            var dctImage = coeff.MatrixMultiply(resized).MatrixMultiply(coeff, isTransposed: true);
 
             var median = GetMedianOf64(dctImage);
 
@@ -341,8 +342,10 @@ namespace Shipwreck.Phash
             => CrossCorrelation.GetCrossCorrelationCore(coefficients1, coefficients2, 40);
 
 #if !NO_SPAN
+
         public static float GetCrossCorrelation(Span<byte> coefficients1, Span<byte> coefficients2)
             => CrossCorrelation.GetCrossCorrelationCore(coefficients1, coefficients2, Math.Min(coefficients1.Length, coefficients2.Length));
+
 #endif
 
         internal static FloatImage CreateMHKernel(float alpha, float level)
