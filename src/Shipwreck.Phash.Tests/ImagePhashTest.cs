@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using Shipwreck.Phash.Imaging;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -9,6 +11,7 @@ namespace Shipwreck.Phash
     public class ImagePhashTest
     {
         private readonly ITestOutputHelper _Output;
+
         public ImagePhashTest(ITestOutputHelper output)
         {
             _Output = output;
@@ -100,6 +103,40 @@ namespace Shipwreck.Phash
             }
 
             return Math.Sqrt(max);
+        }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(3)]
+        [InlineData(4)]
+        [InlineData(5)]
+        [InlineData(6)]
+        [InlineData(7)]
+        [InlineData(8)]
+        [InlineData(9)]
+        public void GetMedianOf64Test(int seed)
+        {
+            var r = new Random(seed);
+            var img = new FloatImage(9, 9);
+            var list = new List<float>(64);
+            for (var c = 0; c < 100; c++)
+            {
+                list.Clear();
+                for (int y = 1; y <= 8; y++)
+                {
+                    for (int x = 1; x <= 8; x++)
+                    {
+                        var v = (float)r.NextDouble();
+                        img[x, y] = v;
+                        list.Add(v);
+                    }
+                }
+                list.Sort();
+
+                Assert.Equal(list[31], ImagePhash.GetMedianOf64(img));
+            }
         }
     }
 }

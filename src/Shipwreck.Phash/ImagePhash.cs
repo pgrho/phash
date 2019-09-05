@@ -173,26 +173,46 @@ namespace Shipwreck.Phash
             var Ctransp = C.Transpose();
             var dctImage = C.Multiply(resized).Multiply(Ctransp);
 
-            var sum = 0f;
-            for (var y = 0; y < 8; y++)
-            {
-                for (var x = 0; x < 8; x++)
-                {
-                    sum += dctImage[x, y];
-                }
-            }
+            var median = GetMedianOf64(dctImage);
 
-            var median = sum / 64f;
             var r = 0ul;
             for (var y = 0; y < 8; y++)
             {
                 for (var x = 0; x < 8; x++)
                 {
-                    r |= dctImage[x, y] > median ? (1ul << (x + 8 * y)) : 0;
+                    r |= dctImage[x + 1, y + 1] > median ? (1ul << (x + 8 * y)) : 0;
                 }
             }
 
             return r;
+        }
+
+        internal static float GetMedianOf64(FloatImage dctImage)
+        {
+            var buf = new float[32];
+            var count = 0;
+            for (var y = 1; y <= 8; y++)
+            {
+                for (var x = 1; x <= 8; x++)
+                {
+                    var v = dctImage[x, y];
+                    var i = Array.BinarySearch(buf, 0, count, v);
+                    if (i < 0)
+                    {
+                        i = ~i;
+                    }
+                    if (i < buf.Length)
+                    {
+                        for (var j = Math.Min(count - 1, buf.Length - 2); j >= i; j--)
+                        {
+                            buf[j + 1] = buf[j];
+                        }
+                        buf[i] = v;
+                        count = Math.Min(buf.Length, count + 1);
+                    }
+                }
+            }
+            return buf[buf.Length - 1];
         }
 
         #endregion ComputeDctHash
