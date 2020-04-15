@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net45;net461;netcoreapp1.0;netcoreapp2.0;netcoreapp2.1;netcoreapp3.0;netstandard1.0;netstandard1.1;netstandard2.1</TargetFrameworks>
+    <TargetFrameworks>net45;net461;netcoreapp1.0;netcoreapp2.0;netcoreapp2.1;netcoreapp3.0;netcoreapp3.1;netstandard1.0;netstandard1.1;netstandard2.1</TargetFrameworks>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Description>C# Implementation of phash-0.9.4.</Description>
@@ -55,7 +55,7 @@
                      Or '$(TargetFramework)'=='netcoreapp1.0'
                      Or '$(TargetFramework)'=='netcoreapp2.0'
                      Or '$(TargetFramework)'=='netstandard1.1'">
-    <PackageReference Include="System.Memory" Version="4.5.3" />
+    <PackageReference Include="System.Memory" Version="4.5.4" />
   </ItemGroup>
 
   <ItemGroup>

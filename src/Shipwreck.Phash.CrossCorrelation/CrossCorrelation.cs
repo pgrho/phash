@@ -7,6 +7,9 @@ namespace Shipwreck.Phash
         public static float GetCrossCorrelation(byte[] coefficients1, byte[] coefficients2)
             => GetCrossCorrelationCore(coefficients1, coefficients2, Math.Min(coefficients1.Length, coefficients2.Length));
 
+        public static float GetCrossCorrelation(byte[] coefficients1, byte[] coefficients2, int length)
+            => GetCrossCorrelationCore(coefficients1, coefficients2, length);
+
         public static int GetHammingDistance(long x, long y)
             => GetHammingDistance(x ^ y);
 

@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
   <PropertyGroup>
-    <TargetFrameworks>net45;net461;netcoreapp3.0</TargetFrameworks>
+    <TargetFrameworks>net45;net461;netcoreapp3.0;netcoreapp3.1</TargetFrameworks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Description>C# Implementation of phash-0.9.4 for PresentationCore.dll</Description>
     <UseWpf>true</UseWpf>
